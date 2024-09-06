@@ -15,7 +15,7 @@ STOPSIGNAL SIGKILL
 ENTRYPOINT [ \
 	"deno", "run",\
 	# Allow access to the environment variables
-	"--env", "--allow-env", \
+	"--allow-env", \
 	# Enable to Deno KV Storage (currently "unstable")
 	"--unstable-kv",\
 	# Allow write access to the /data directory
