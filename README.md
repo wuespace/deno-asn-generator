@@ -1,5 +1,7 @@
 # Deno ASN Generator
 
+[License (MIT)](./LICENSE) · [Contributing](./CONTRIBUTING.md)
+
 An environment for collaboratively creating ASN numbers to be used in the
 Paperless-NGX based document management system at WüSpace e. V.
 
@@ -57,8 +59,8 @@ $$ n \in [r_{min}, r]; n = r_{min} + t \mod (r - r_{min}) $$
   - [ ] Analyze time between ASNs, providing the possibility to specify a
         duration and a maximum collision probability for the bump (e.g. 1 hour,
         0.1%), which calculates the bump counter accordingly
-- [ ] Documentation
-- [ ] Publish on JSR
+- [x] Documentation
+- [x] Publish on JSR
 - [ ] Publish on Docker Hub
 - [x] Publish on GitHub Container Registry
 - [x] UI for quickly searching for ASNs in a DMS
