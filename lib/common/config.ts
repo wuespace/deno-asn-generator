@@ -4,7 +4,7 @@ import { getDB } from "$common/db.ts";
 /**
  * The application configuration.
  */
-interface Config {
+export interface Config {
   /**
    * The port the server should listen on.
    * @default 8080
