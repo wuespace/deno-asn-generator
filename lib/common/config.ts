@@ -30,8 +30,34 @@ export interface Config {
    */
   ASN_NAMESPACE_RANGE: number;
 
+  /**
+   * The URL to use for the ASN lookup. The URL must contain the `{asn}` placeholder which will be replaced with the ASN.
+   * If not set, the lookup feature will be disabled.
+   * 
+   * If `ASN_LOOKUP_INCLUDE_PREFIX` is `false`, the prefix will be excluded from the ASN.
+   * This is necessary for compatibility with some systems like paperless-ngx, where the ASN is purely numeric.
+   * 
+   * @example "https://dms.example.com/documents?asn={asn}"
+   * @see {@link ASN_LOOKUP_INCLUDE_PREFIX}
+   */
   ASN_LOOKUP_URL?: string;
+  /**
+   * Whether to include the prefix in the ASN when looking up the ASN.
+   * This is necessary for compatibility with some systems like paperless-ngx, where the ASN is purely numeric.
+   * 
+   * @default `false`
+   */
   ASN_LOOKUP_INCLUDE_PREFIX: boolean;
+
+  /**
+   * The type of barcode to use for the ASN.
+   * Options are 
+   * - `"CODE128"`, 
+   * - `"CODE39"`, and 
+   * - `"CODE93"`.
+   * 
+   * @default "CODE128"
+   */
   ASN_BARCODE_TYPE: string;
 }
 
