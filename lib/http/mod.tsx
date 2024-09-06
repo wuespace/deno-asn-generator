@@ -18,6 +18,20 @@ import { createBarcodeSVG } from "$http/barcode-svg.ts";
 import { z } from "@collinhacks/zod";
 import { getLookupURL } from "$http/lookup-url.ts";
 
+export * from "$http/lookup-url.ts";
+export * from "$http/barcode-svg.ts";
+
+/**
+ * The main HTTP server of the web application.
+ * This server is responsible for serving the web application and the API.
+ * 
+ * @see <https://hono.dev/>
+ * 
+ * @example
+ * ```ts
+ * Deno.serve(httpApp.fetch);
+ * ```
+ */
 export const httpApp: Hono = new Hono();
 
 httpApp.use(logger());

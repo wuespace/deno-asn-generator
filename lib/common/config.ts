@@ -1,11 +1,33 @@
-import { z, ZodObject } from "@collinhacks/zod";
+import { z } from "@collinhacks/zod";
 import { getDB } from "$common/db.ts";
 
+/**
+ * The application configuration.
+ */
 interface Config {
+  /**
+   * The port the server should listen on.
+   * @default 8080
+   */
   PORT: number;
+
+  /**
+   * The prefix for generated ASNs.
+   * Can only contain uppercase letters A-Z. Must be at least 1 character long. Max length is 10.
+   *
+   * The prefix must not change after the first run.
+   * @example "ASN"
+   */
   ASN_PREFIX: string;
-  // e.g., if it's 600, the range for generated ASNs would be 100 - 599;
-  // 600 - 999 are reserved for user defined namespaces (e.g., manually pre-printed ASN codes)
+
+  /**
+   * The range of the ASN namespace part. For example, if it's 600, the range for generated ASNs would be 100 - 599.
+   * 600 - 999 would then be reserved for user defined namespaces (e.g., manually pre-printed ASN codes).
+   *
+   * The number of digits must not change after the first run.
+   * 
+   * @see For more information on the namespacing, take a look at {@link generateASN} or the `README.md`.
+   */
   ASN_NAMESPACE_RANGE: number;
 
   ASN_LOOKUP_URL?: string;
@@ -30,9 +52,24 @@ const configSchema = z.object({
 
 z.string().transform((v) => v.trim());
 
+/**
+ * The current application configuration, based on environment variables, `.env` files, and defaults.
+ * @see {@link Config}
+ */
 export const CONFIG: Config = configSchema.parse(Deno.env.toObject());
 
 const DB_CONFIG_KEY = "config";
+
+/**
+ * Validates the current configuration against the one used the last time (stored in the database).
+ * 1. If the configuration has changed in an incompatible way, the returned promise will reject.
+ * 2. If the configuration has changed in a compatible, but unexpected way, a warning will be logged.
+ * 3. If the database has no configuration (i.e., first run), the current configuration will be stored.
+ * If there are no issues, current configuration will be stored in the database and the promise will resolve.
+ *
+ * @returns A promise that resolves if the database configuration is valid.
+ * @throws {Error} If the configuration has changed in an incompatible way.
+ */
 export async function validateDB(): Promise<void> {
   const db = await getDB();
 
