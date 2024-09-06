@@ -38,7 +38,8 @@ export async function validateDB(): Promise<void> {
 
   const dbConfigRes = await db.get([DB_CONFIG_KEY]);
   if (!dbConfigRes.value) {
-    return db.set([DB_CONFIG_KEY], CONFIG);
+    await db.set([DB_CONFIG_KEY], CONFIG);
+    return;
   }
 
   const dbConfig = configSchema.parse(dbConfigRes.value);
