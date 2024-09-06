@@ -3,6 +3,7 @@
   "packages": {
     "specifiers": {
       "jsr:@hono/hono@^4.5.11": "jsr:@hono/hono@4.5.11",
+      "jsr:@std/cli@^1.0.5": "jsr:@std/cli@1.0.5",
       "npm:@types/node": "npm:@types/node@18.16.19",
       "npm:bwip-js@^4.5.1": "npm:bwip-js@4.5.1",
       "npm:zod@^3.23.8": "npm:zod@3.23.8"
@@ -10,6 +11,9 @@
     "jsr": {
       "@hono/hono@4.5.11": {
         "integrity": "5bd6b1a3a503efb746fdcf0aae3ac536dd09229d372988bde5db0798ef64ae4f"
+      },
+      "@std/cli@1.0.5": {
+        "integrity": "c93cce26ffd26f617c15a12874e1bfeabc90b1eee86017c9639093734c2bf587"
       }
     },
     "npm": {
@@ -31,6 +35,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@hono/hono@^4.5.11",
+      "jsr:@std/cli@^1.0.5",
       "jsr:@std/datetime@^0.225.2",
       "npm:bwip-js@^4.5.1",
       "npm:zod@^3.23.8"

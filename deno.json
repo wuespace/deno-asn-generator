@@ -8,13 +8,14 @@
   },
   "imports": {
     "$/": "./",
+    "$cli/": "./lib/cli/",
     "$common/": "./lib/common/",
     "$http/": "./lib/http/",
-    "$cli/": "./lib/cli/",
-    "@hono/hono": "jsr:@hono/hono@^4.5.11",
-    "@std/datetime": "jsr:@std/datetime@^0.225.2",
     "@collinhacks/zod": "npm:zod@^3.23.8",
-    "@metafloor/bwip-js": "npm:bwip-js@^4.5.1"
+    "@hono/hono": "jsr:@hono/hono@^4.5.11",
+    "@metafloor/bwip-js": "npm:bwip-js@^4.5.1",
+    "@std/cli": "jsr:@std/cli@^1.0.5",
+    "@std/datetime": "jsr:@std/datetime@^0.225.2"
   },
   "compilerOptions": {
     "jsx": "precompile",

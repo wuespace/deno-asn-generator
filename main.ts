@@ -1,20 +1,24 @@
-import { getFormatDescription } from "./lib/common/asn.ts";
-import { CONFIG, logPaths, validateDB } from "$common/mod.ts";
-import { httpApp } from "./lib/http/mod.tsx";
-import metadata from "./deno.json" with { type: "json" };
+import { parseArgs } from "@std/cli/parse-args";
+import { validateDB } from "$common/mod.ts";
+
+import { runServer } from "$cli/server.ts";
+import { printHelp } from "$cli/help.ts";
+import { runGenerate } from "$cli/generate.ts";
 
 if (import.meta.main) {
-  console.log(`Running ${metadata.name} v${metadata.version}`);
-  console.log();
-
-  logPaths();
-
-  console.log();
-
   await validateDB();
-  console.log(getFormatDescription());
+  const args = parseArgs(Deno.args);
 
-  console.log();
+  if (args.help) {
+    printHelp();
+    Deno.exit();
+  }
 
-  Deno.serve({ port: CONFIG.PORT }, httpApp.fetch);
+  if (args._[0] === "generate") {
+    await runGenerate(args);
+  }
+
+  if (args._[0] === "server" || args._.length === 0) {
+    await runServer(args);
+  }
 }

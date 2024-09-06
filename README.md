@@ -51,7 +51,7 @@ $$ n \in [r_{min}, r]; n = r_{min} + t \mod (r - r_{min}) $$
 - [x] Connection to a database
 - [x] REST API
 - [x] Visual Web Interface
-- [ ] CLI
+- [x] CLI
   - [ ] Bump counter to avoid collissions after restoring backups (where ASNs
         could have been generated after the time of the backup)
   - [ ] Analyze time between ASNs, providing the possibility to specify a
@@ -61,4 +61,4 @@ $$ n \in [r_{min}, r]; n = r_{min} + t \mod (r - r_{min}) $$
 - [ ] Publish on JSR
 - [ ] Publish on Docker Hub
 - [x] Publish on GitHub Container Registry
-- [ ] UI for quickly searching for ASNs in a DMS
+- [x] UI for quickly searching for ASNs in a DMS
