@@ -1,6 +1,6 @@
 export function printHelp() {
-	const cmd = Deno.args[0];
-	console.log(`
+  const cmd = Deno.args[0];
+  console.log(`
 Usage: ${cmd} [command] [options]
 
 Commands:
