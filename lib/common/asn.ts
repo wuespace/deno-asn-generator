@@ -2,6 +2,14 @@ import { CONFIG } from "$common/config.ts";
 import { performAtomicTransaction } from "$common/db.ts";
 import { ensureFileContent, getCounterPath } from "$common/path.ts";
 
+export interface ASNData {
+  asn: string;
+  namespace: number;
+  prefix: string;
+  counter: number;
+  metadata: Record<string, unknown>;
+}
+
 function getCurrentNamespace(): number {
   const date = Date.now();
   const range = getRange();
@@ -19,7 +27,7 @@ function getRange() {
  * The ASN is composed of a prefix, a namespace, and a counter.
  * @returns a new ASN (Alphanumeric Serial Number)
  */
-export async function generateASN(metadata: Record<string, unknown> = {}) {
+export async function generateASN(metadata: Record<string, unknown> = {}): Promise<ASNData> {
   metadata = { ...metadata, generatedAt: new Date().toISOString() };
   const namespace = getCurrentNamespace();
   let counter = 0;
@@ -80,4 +88,10 @@ export function getFormatDescription(): string {
     } is reserved for user defined namespaces.\n` +
     `    The user defined namespace can be used for pre-printed ASN barcodes and the like.\n` +
     `(3) Counter, starting from 001, incrementing with each new ASN in the namespace.`;
+}
+
+export function validateASN(asn: string): boolean {
+  return new RegExp(
+    `^${CONFIG.ASN_PREFIX}(\\d{${`${CONFIG.ASN_NAMESPACE_RANGE}`.length}})(\\d{3})\\d*$`,
+  ).test(asn);
 }

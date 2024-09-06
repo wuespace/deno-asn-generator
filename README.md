@@ -50,7 +50,7 @@ $$ n \in [r_{min}, r]; n = r_{min} + t \mod (r - r_{min}) $$
 - [ ] Log generated ASNs to the file system
 - [x] Connection to a database
 - [x] REST API
-- [ ] Visual Web Interface
+- [x] Visual Web Interface
 - [ ] CLI
   - [ ] Bump counter to avoid collissions after restoring backups (where ASNs
         could have been generated after the time of the backup)
@@ -61,3 +61,4 @@ $$ n \in [r_{min}, r]; n = r_{min} + t \mod (r - r_{min}) $$
 - [ ] Publish on JSR
 - [ ] Publish on Docker Hub
 - [x] Publish on GitHub Container Registry
+- [ ] UI for quickly searching for ASNs in a DMS

@@ -11,7 +11,7 @@ interface Config {
 
 const configSchema = z.object({
   PORT: z.number({ coerce: true }).default(8080),
-  ASN_PREFIX: z.string().min(1),
+  ASN_PREFIX: z.string().min(1).max(10).regex(/^[A-Z]+$/),
   ASN_NAMESPACE_RANGE: z.number({ coerce: true }),
 });
 

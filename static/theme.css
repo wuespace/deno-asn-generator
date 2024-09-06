@@ -2,3 +2,11 @@
 	--primary-color: #452897;
 	--font-family: 'Roboto', Arial, sans-serif;
 }
+
+body {
+	font-family: var(--font-family);
+}
+
+a {
+	color: var(--primary-color);
+}

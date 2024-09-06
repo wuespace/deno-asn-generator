@@ -6,12 +6,30 @@ background: var(--primary-color);
 display: grid;
 place-items: center;
 align-content: center;
-`
+margin: 0;
+padding: 1rem;
+
+@media print {
+	background: transparent;
+	height: 100%;
+	align-content: stretch;
+	place-items: stretch;
+}
+`;
 
 const mainClass = css`
 background: white;
 font-family: var(--font-family);
-`
+width: clamp(0px, 100%, 20rem);
+overflow-x: hidden;
+padding: 1rem;
+
+@media print {
+	width: 100%;
+	height: 100%;
+	border: 1px solid var(--primary-color);
+}
+`;
 
 export function Wrapper({ children }: { children?: Child }) {
 	return (
@@ -19,16 +37,23 @@ export function Wrapper({ children }: { children?: Child }) {
 			<head>
 				<title>Wrapper</title>
 				<link rel="stylesheet" href="/static/theme.css" />
-				<Style>{css`
+				<Style>
+					{css`
 				* {
 					box-sizing: border-box;
 				}
-				`}</Style>
+
+				html, body {
+					height: 100%;
+				}
+				`}
+				</Style>
 			</head>
 			<body class={cx(bodyClass)}>
 				<main class={mainClass}>
-				{children}
+					{children}
 				</main>
+				<script src="/static/main.js"></script>
 			</body>
 		</html>
 	);
