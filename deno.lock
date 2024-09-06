@@ -41,6 +41,7 @@
       "jsr:@hono/hono@^4.5.11",
       "jsr:@std/cli@^1.0.5",
       "jsr:@std/datetime@^0.225.2",
+      "jsr:@std/dotenv@^0.225.2",
       "npm:bwip-js@^4.5.1",
       "npm:zod@^3.23.8"
     ]
