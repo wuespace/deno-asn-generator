@@ -1,13 +1,20 @@
-import { generateASN, getFormatDescription } from "./lib/common/asn.ts";
-import { CONFIG, getCounterPath, validateDB } from "$common/mod.ts";
+import { getFormatDescription } from "./lib/common/asn.ts";
+import { CONFIG, logPaths, validateDB } from "$common/mod.ts";
 import { httpApp } from "./lib/http/mod.tsx";
+import metadata from "./deno.json" with { type: "json" };
 
 if (import.meta.main) {
+  console.log(`Running ${metadata.name} v${metadata.version}`);
+  console.log();
+
+  logPaths();
+
+  console.log();
+
   await validateDB();
-  const asn = await Promise.all([generateASN(), generateASN(), generateASN()]);
-  console.log(asn);
-  console.log(getCounterPath(asn[2].namespace, asn[2].counter));
   console.log(getFormatDescription());
+
+  console.log();
 
   Deno.serve({ port: CONFIG.PORT }, httpApp.fetch);
 }

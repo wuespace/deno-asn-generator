@@ -11,8 +11,10 @@ const DB_FILE_NAME = z.string().min(1).default("denokv.sqlite3").parse(
 export const DATA_PATH: string = resolve(DATA_DIR);
 export const DB_FILE_PATH: string = resolve(DATA_PATH, DB_FILE_NAME);
 
-console.log(`DATA_PATH: ${DATA_PATH}`);
-console.log(`DB_FILE_PATH: ${DB_FILE_PATH}`);
+export function logPaths() {
+  console.log(`DATA_PATH: ${DATA_PATH}`);
+  console.log(`DB_FILE_PATH: ${DB_FILE_PATH}`);
+}
 
 export function getCounterPath(namespace: number, counter: number): string {
   return resolve(
