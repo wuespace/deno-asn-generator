@@ -1,5 +1,6 @@
 import { z } from "@collinhacks/zod";
 import { getDB } from "$common/db.ts";
+import "@std/dotenv/load";
 
 /**
  * The application configuration.

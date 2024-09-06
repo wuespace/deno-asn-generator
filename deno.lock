@@ -4,6 +4,7 @@
     "specifiers": {
       "jsr:@hono/hono@^4.5.11": "jsr:@hono/hono@4.5.11",
       "jsr:@std/cli@^1.0.5": "jsr:@std/cli@1.0.5",
+      "jsr:@std/dotenv@^0.225.2": "jsr:@std/dotenv@0.225.2",
       "npm:@types/node": "npm:@types/node@18.16.19",
       "npm:bwip-js@^4.5.1": "npm:bwip-js@4.5.1",
       "npm:zod@^3.23.8": "npm:zod@3.23.8"
@@ -14,6 +15,9 @@
       },
       "@std/cli@1.0.5": {
         "integrity": "c93cce26ffd26f617c15a12874e1bfeabc90b1eee86017c9639093734c2bf587"
+      },
+      "@std/dotenv@0.225.2": {
+        "integrity": "e2025dce4de6c7bca21dece8baddd4262b09d5187217e231b033e088e0c4dd23"
       }
     },
     "npm": {
