@@ -25,7 +25,7 @@ interface Config {
    * 600 - 999 would then be reserved for user defined namespaces (e.g., manually pre-printed ASN codes).
    *
    * The number of digits must not change after the first run.
-   * 
+   *
    * @see For more information on the namespacing, take a look at {@link generateASN} or the `README.md`.
    */
   ASN_NAMESPACE_RANGE: number;

@@ -14,7 +14,7 @@ export async function getDB(): Promise<Deno.Kv> {
  * Only commits the transaction if the atomic operation was successful.
  * Retries the transaction if the database is locked or if the operation fails.
  * @param fn the function to execute atomically
- * 
+ *
  * @example
  * ```ts
  * await performAtomicTransaction(async (db) => {
@@ -26,7 +26,7 @@ export async function getDB(): Promise<Deno.Kv> {
  *     .commit();
  * });
  * ```
- * 
+ *
  * @see This follows the principles described by <https://docs.deno.com/deploy/kv/manual/transactions/>
  */
 export async function performAtomicTransaction(

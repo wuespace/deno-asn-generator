@@ -8,7 +8,7 @@ import { ensureFileContent, getCounterPath } from "$common/path.ts";
 export interface ASNData {
   /**
    * The full ASN.
-   * 
+   *
    * Consists of the prefix, the namespace, and the counter (which gets padded to at least three digits).
    * @example "ASN123456789"
    */
@@ -46,11 +46,11 @@ function getRange() {
 /**
  * Generates a new Alphanumeric Serial Number (ASN) based on the configuration.
  * The ASN is composed of a prefix, a namespace, and a counter.
- * 
+ *
  * The prefix is specified in the configuration and must not change after the first run.
- * 
+ *
  * The namespace is a number that always has the same number of digits.
- * 
+ *
  * The counter is a three-digit number that increments with each new ASN in the namespace.
  * When the counter reaches 999, another digit gets added.
  * Therefore, additional digits are only ever added to the counter, not the namespace.

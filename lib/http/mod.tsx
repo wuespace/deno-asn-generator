@@ -24,9 +24,9 @@ export * from "$http/barcode-svg.ts";
 /**
  * The main HTTP server of the web application.
  * This server is responsible for serving the web application and the API.
- * 
+ *
  * @see <https://hono.dev/>
- * 
+ *
  * @example
  * ```ts
  * Deno.serve(httpApp.fetch);
