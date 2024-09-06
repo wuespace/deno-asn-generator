@@ -41,14 +41,19 @@ export async function generateASN(metadata: Record<string, unknown> = {}) {
   });
 
   const asnData = {
-    asn: `${CONFIG.ASN_PREFIX}${namespace}${counter.toString().padStart(3, "0")}`,
+    asn: `${CONFIG.ASN_PREFIX}${namespace}${
+      counter.toString().padStart(3, "0")
+    }`,
     namespace,
     prefix: CONFIG.ASN_PREFIX,
     counter,
-    metadata
+    metadata,
   };
 
-  await ensureFileContent(getCounterPath(namespace, counter), JSON.stringify(asnData, null, 2));
+  await ensureFileContent(
+    getCounterPath(namespace, counter),
+    JSON.stringify(asnData, null, 2),
+  );
 
   return asnData;
 }
@@ -60,7 +65,9 @@ export async function generateASN(metadata: Record<string, unknown> = {}) {
  */
 export function getFormatDescription(): string {
   return `Format:\n` +
-    `${CONFIG.ASN_PREFIX.padEnd(4)} - ${getRange().toString().padEnd(4)} - 001\n` +
+    `${CONFIG.ASN_PREFIX.padEnd(4)} - ${
+      getRange().toString().padEnd(4)
+    } - 001\n` +
     `(1)  - (2)  - (3)\n` +
     `\n` +
     `(1) Prefix specified in configuration (${CONFIG.ASN_PREFIX}).\n` +

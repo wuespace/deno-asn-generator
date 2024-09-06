@@ -6,7 +6,7 @@ export async function getDB(): Promise<Deno.Kv> {
 }
 
 export async function performAtomicTransaction(
-  fn: (db: Deno.Kv) =>  Promise<Deno.KvCommitResult | Deno.KvCommitError>
+  fn: (db: Deno.Kv) => Promise<Deno.KvCommitResult | Deno.KvCommitError>,
 ) {
   const db = await getDB();
   let res = { ok: false };
@@ -14,9 +14,9 @@ export async function performAtomicTransaction(
     try {
       res = await fn(db);
     } catch (e: unknown) {
-      if (e instanceof TypeError && e.message.includes('database is locked')) {
+      if (e instanceof TypeError && e.message.includes("database is locked")) {
         await new Promise((resolve) => setTimeout(resolve, 10));
-        continue
+        continue;
       }
       throw e;
     }
