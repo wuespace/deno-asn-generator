@@ -1,0 +1,13 @@
+{
+  "name": "@wuespace/asn-generator",
+  "version": "0.1.0",
+  "exports": "./mod.ts",
+  "tasks": {
+    "dev": "deno run --watch main.ts"
+  },
+  "imports": {
+    "@hono/hono": "jsr:@hono/hono@^4.5.11",
+    "@std/datetime": "jsr:@std/datetime@^0.225.2",
+    "@collinhacks/zod": "npm:zod@^3.23.8"
+  }
+}
