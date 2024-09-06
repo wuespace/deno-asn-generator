@@ -27,7 +27,6 @@ padding: 1rem;
 @media print {
 	width: 100%;
 	height: 100%;
-	border: 1px solid var(--primary-color);
 }
 `;
 

@@ -12,10 +12,11 @@ text-align: center;
 `;
 
 const mainClass = css`
+height: 100%;
 display: flex;
 flex-direction: column;
 gap: 0rem;
-justify-content: stretch;
+justify-content: center;
 align-items: stretch;
 `;
 
@@ -45,8 +46,15 @@ display: grid;
 place-items: center;
 align-items: center;
 
-&:hover, &:active {
-	background: #ddd;
+transition: background 0.2s ease-out;
+&:hover {
+	background: #f3f3f3;
+	transition: none;
+}
+
+&:active {
+	background: #dfdfdf;
+	transition: none;
 }
 `;
 
@@ -58,7 +66,12 @@ export async function IndexPage() {
 			<script dangerouslySetInnerHTML={script}></script>
 			<header class={cx(hideOnPrint)}>
 				<nav class={buttonRowClass}>
-					<button autofocus class={buttonClass} onclick={"globalThis.copy()"} title="Copy ASN to clipboard">
+					<button
+						autofocus
+						class={buttonClass}
+						onclick={"globalThis.copy()"}
+						title="Copy ASN to clipboard"
+					>
 						<div className="material-symbols-outlined">
 							content_copy
 						</div>
@@ -72,12 +85,21 @@ export async function IndexPage() {
 							refresh
 						</span>
 					</button>
-					<button class={buttonClass} onclick={"globalThis.print()"} title="Print ASN Barcode">
+					<button
+						class={buttonClass}
+						onclick={"globalThis.print()"}
+						title="Print ASN Barcode"
+					>
 						<span class="material-symbols-outlined">
 							print
 						</span>
 					</button>
-					<a class={buttonClass} href={`/svg/${asn.asn}`} download title="Download ASN Barcode">
+					<a
+						class={buttonClass}
+						href={`/svg/${asn.asn}`}
+						download
+						title="Download ASN Barcode"
+					>
 						<div className="material-symbols-outlined">
 							barcode
 						</div>
