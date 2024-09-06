@@ -1,6 +1,6 @@
 import { generateASN, getFormatDescription } from "./lib/common/asn.ts";
-import { validateDB } from "./lib/common/config.ts";
-import { getCounterPath } from "./lib/common/mod.ts";
+import { CONFIG, getCounterPath, validateDB } from "$common/mod.ts";
+import { httpApp } from "./lib/http/mod.tsx";
 
 if (import.meta.main) {
   await validateDB();
@@ -8,4 +8,6 @@ if (import.meta.main) {
   console.log(asn);
   console.log(getCounterPath(asn[2].namespace, asn[2].counter));
   console.log(getFormatDescription());
+
+  Deno.serve({port: CONFIG.PORT}, httpApp.fetch);
 }

@@ -49,7 +49,7 @@ $$ n \in [r_{min}, r]; n = r_{min} + t \mod (r - r_{min}) $$
 - [x] Configurability through environment variables
 - [ ] Log generated ASNs to the file system
 - [x] Connection to a database
-- [ ] REST API
+- [x] REST API
 - [ ] Visual Web Interface
 - [ ] CLI
   - [ ] Bump counter to avoid collissions after restoring backups (where ASNs
@@ -60,3 +60,4 @@ $$ n \in [r_{min}, r]; n = r_{min} + t \mod (r - r_{min}) $$
 - [ ] Documentation
 - [ ] Publish on JSR
 - [ ] Publish on Docker Hub
+- [x] Publish on GitHub Container Registry

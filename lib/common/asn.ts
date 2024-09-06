@@ -1,6 +1,6 @@
-import { CONFIG } from "./config.ts";
-import { performAtomicTransaction } from "./db.ts";
-import { ensureFileContent, getCounterPath } from "./path.ts";
+import { CONFIG } from "$common/config.ts";
+import { performAtomicTransaction } from "$common/db.ts";
+import { ensureFileContent, getCounterPath } from "$common/path.ts";
 
 function getCurrentNamespace(): number {
   const date = Date.now();

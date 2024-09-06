@@ -1,5 +1,5 @@
 import { z } from "@collinhacks/zod";
-import { getDB } from "./db.ts";
+import { getDB } from "$common/db.ts";
 
 interface Config {
   PORT: number;

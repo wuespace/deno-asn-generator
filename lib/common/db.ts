@@ -1,4 +1,4 @@
-import { DB_FILE_PATH, ensureParentDirExists } from "./path.ts";
+import { DB_FILE_PATH, ensureParentDirExists } from "$common/path.ts";
 
 export async function getDB(): Promise<Deno.Kv> {
   await ensureParentDirExists(DB_FILE_PATH);
