@@ -9,7 +9,7 @@ init()
   .catch((err) =>
     console.error(
       "🛑 An error occured while initializing Interactive Elements",
-      err
+      err,
     )
   );
 
@@ -30,7 +30,7 @@ async function init() {
 
   globalThis.downloadBarcode = () => {
     // TODO: Implement barcode download
-  }
+  };
 
   await Promise.resolve();
 }

@@ -27,7 +27,9 @@ function getRange() {
  * The ASN is composed of a prefix, a namespace, and a counter.
  * @returns a new ASN (Alphanumeric Serial Number)
  */
-export async function generateASN(metadata: Record<string, unknown> = {}): Promise<ASNData> {
+export async function generateASN(
+  metadata: Record<string, unknown> = {},
+): Promise<ASNData> {
   metadata = { ...metadata, generatedAt: new Date().toISOString() };
   const namespace = getCurrentNamespace();
   let counter = 0;
@@ -92,6 +94,8 @@ export function getFormatDescription(): string {
 
 export function isValidASN(asn: string): boolean {
   return new RegExp(
-    `^${CONFIG.ASN_PREFIX}(\\d{${`${CONFIG.ASN_NAMESPACE_RANGE}`.length}})(\\d{3})\\d*$`,
+    `^${CONFIG.ASN_PREFIX}(\\d{${
+      `${CONFIG.ASN_NAMESPACE_RANGE}`.length
+    }})(\\d{3})\\d*$`,
   ).test(asn);
 }

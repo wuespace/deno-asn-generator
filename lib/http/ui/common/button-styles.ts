@@ -23,4 +23,4 @@ transition: background 0.2s ease-out;
 	background: #dfdfdf;
 	transition: none;
 }
-`
+`;

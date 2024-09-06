@@ -33,17 +33,17 @@ border-radius: 0.5rem;
 `;
 
 export function Wrapper({ children }: { children?: Child }) {
-	return (
-		<html>
-			<head>
-				<title>Wrapper</title>
-				<link
-					rel="stylesheet"
-					href="/static/material-symbols/style.css"
-				/>
-				<link rel="stylesheet" href="/static/theme.css" />
-				<Style>
-					{css`
+  return (
+    <html>
+      <head>
+        <title>Wrapper</title>
+        <link
+          rel="stylesheet"
+          href="/static/material-symbols/style.css"
+        />
+        <link rel="stylesheet" href="/static/theme.css" />
+        <Style>
+          {css`
 				* {
 					box-sizing: border-box;
 				}
@@ -56,14 +56,14 @@ export function Wrapper({ children }: { children?: Child }) {
 					outline-color: var(--primary-color);
 				}
 				`}
-				</Style>
-			</head>
-			<body class={cx(bodyClass)}>
-				<main class={mainClass}>
-					{children}
-				</main>
-				<script src="/static/main.js"></script>
-			</body>
-		</html>
-	);
+        </Style>
+      </head>
+      <body class={cx(bodyClass)}>
+        <main class={mainClass}>
+          {children}
+        </main>
+        <script src="/static/main.js"></script>
+      </body>
+    </html>
+  );
 }

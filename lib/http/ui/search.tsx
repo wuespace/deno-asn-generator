@@ -53,28 +53,28 @@ border: 1px solid var(--primary-color);
 `;
 
 export function Search() {
-	return (
-		<form class={formStyle} target="_blank" method="post" action="/lookup">
-			<span class={prefixStyle}>{CONFIG.ASN_PREFIX}</span>
-			<input
-				class={inputStyle}
-				disabled={!isLookupEnabled}
-				type="number"
-				pattern="[0-9]+"
-				required
-				name="asn"
-				placeholder={isLookupEnabled ? "ASN" : "ASN Lookup Disabled"}
-			/>
-			<button
-				type="submit"
-				class={submitStyle}
-				disabled={!isLookupEnabled}
-				title="Lookup ASN"
-			>
-				<div className="material-symbols-outlined">
-					feature_search
-				</div>
-			</button>
-		</form>
-	);
+  return (
+    <form class={formStyle} target="_blank" method="post" action="/lookup">
+      <span class={prefixStyle}>{CONFIG.ASN_PREFIX}</span>
+      <input
+        class={inputStyle}
+        disabled={!isLookupEnabled}
+        type="number"
+        pattern="[0-9]+"
+        required
+        name="asn"
+        placeholder={isLookupEnabled ? "ASN" : "ASN Lookup Disabled"}
+      />
+      <button
+        type="submit"
+        class={submitStyle}
+        disabled={!isLookupEnabled}
+        title="Lookup ASN"
+      >
+        <div className="material-symbols-outlined">
+          feature_search
+        </div>
+      </button>
+    </form>
+  );
 }

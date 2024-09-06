@@ -9,5 +9,5 @@ if (import.meta.main) {
   console.log(getCounterPath(asn[2].namespace, asn[2].counter));
   console.log(getFormatDescription());
 
-  Deno.serve({port: CONFIG.PORT}, httpApp.fetch);
+  Deno.serve({ port: CONFIG.PORT }, httpApp.fetch);
 }

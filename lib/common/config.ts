@@ -17,7 +17,7 @@ const configSchema = z.object({
   ASN_PREFIX: z.string().min(1).max(10).regex(/^[A-Z]+$/),
   ASN_NAMESPACE_RANGE: z.number({ coerce: true }),
   ASN_LOOKUP_URL: z.string().regex(/^https?\:\/\/.*\{asn\}.*$/).optional(),
-  ASN_LOOKUP_INCLUDE_PREFIX: z.boolean({coerce: true}).default(false),
+  ASN_LOOKUP_INCLUDE_PREFIX: z.boolean({ coerce: true }).default(false),
 });
 
 export const CONFIG: Config = configSchema.parse(Deno.env.toObject());
