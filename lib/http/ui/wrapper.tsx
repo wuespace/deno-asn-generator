@@ -22,7 +22,9 @@ background: white;
 font-family: var(--font-family);
 width: clamp(0px, 100%, 20rem);
 overflow-x: hidden;
+
 padding: 1rem;
+border-radius: 0.5rem;
 
 @media print {
 	width: 100%;
@@ -48,6 +50,10 @@ export function Wrapper({ children }: { children?: Child }) {
 
 				html, body {
 					height: 100%;
+				}
+
+				:focus {
+					outline-color: var(--primary-color);
 				}
 				`}
 				</Style>

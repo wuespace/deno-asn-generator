@@ -2,13 +2,21 @@ import { Hono } from "@hono/hono";
 import { logger } from "@hono/hono/logger";
 import { jsxRenderer } from "@hono/hono/jsx-renderer";
 import { serveStatic } from "@hono/hono/deno";
+import { validator } from "@hono/hono/validator";
 
-import { generateASN, getFormatDescription, validateASN } from "$common/mod.ts";
+import {
+	CONFIG,
+	generateASN,
+	getFormatDescription,
+	isValidASN,
+} from "$common/mod.ts";
 import metadata from "$/deno.json" with { type: "json" };
 
 import { Wrapper } from "$http/ui/wrapper.tsx";
 import { IndexPage } from "$http/ui/index.tsx";
 import { createBarcodeSVG } from "$http/barcode-svg.ts";
+import { z } from "@collinhacks/zod";
+import { getLookupURL } from "$http/lookup-url.ts";
 
 export const httpApp = new Hono();
 
@@ -19,6 +27,45 @@ httpApp.get(
 );
 httpApp.get("/format", (c) => c.text(getFormatDescription()));
 httpApp.get("/json", async (c) => c.json(await generateASN()));
+
+httpApp.post(
+	"/lookup",
+	validator("form", (value, c) => {
+		const parsed = z.object({
+			asn: z.string({ coerce: true }).min(1).regex(/^\d+$/),
+		}).safeParse(value);
+
+		if (!parsed.success) {
+			return c.text("Invalid ASN. " + parsed.error.message, 400);
+		}
+
+		return parsed.data;
+	}),
+	(c) => {
+		const asn = CONFIG.ASN_PREFIX + c.req.valid("form").asn;
+		return c.redirect("/go/" + asn);
+	},
+);
+
+httpApp.get(
+	"/go/:asn",
+	validator("param", (value, c) => {
+		if (!value || !isValidASN(value.asn)) {
+			return c.text("Invalid ASN", 400);
+		}
+		return value;
+	}),
+	(c) => {
+		const asn = c.req.valid("param").asn;
+
+		if (!CONFIG.ASN_LOOKUP_URL) {
+			return c.text("ASN Lookup is disabled", 400);
+		}
+
+		return c.redirect(getLookupURL(asn));
+	},
+);
+
 httpApp.get("/static/*", serveStatic({ root: "." }));
 
 httpApp.get("/svg/:asn", (c) => {
@@ -28,7 +75,7 @@ httpApp.get("/svg/:asn", (c) => {
 		return c.text("No ASN provided", 400);
 	}
 
-	if (!validateASN(requestedASN)) {
+	if (!isValidASN(requestedASN)) {
 		return c.text("Invalid ASN provided", 400);
 	}
 

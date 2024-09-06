@@ -47,7 +47,7 @@ $$ n \in [r_{min}, r]; n = r_{min} + t \mod (r - r_{min}) $$
 ## Ideas / Roadmap
 
 - [x] Configurability through environment variables
-- [ ] Log generated ASNs to the file system
+- [x] Log generated ASNs to the file system
 - [x] Connection to a database
 - [x] REST API
 - [x] Visual Web Interface

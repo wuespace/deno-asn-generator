@@ -7,5 +7,5 @@ services:
     ports:
       - "127.0.0.1:8080:8080"
     environment:
-      ASN_NAMESPACE_RANGE: 600
-      ASN_PREFIX: WUE
+      ASN_NAMESPACE_RANGE: 50
+      ASN_PREFIX: WBD

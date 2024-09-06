@@ -1,5 +1,7 @@
 import { css, cx } from "@hono/hono/css";
 import { generateASN } from "$common/asn.ts";
+import { Search } from "$http/ui/search.tsx";
+import { BUTTON_STYLE } from "$http/ui/common/button-styles.ts";
 
 const hideOnPrint = css`
 @media print {
@@ -7,8 +9,9 @@ const hideOnPrint = css`
 }
 `;
 
-const centerClass = css`
+const asnTextClass = css`
 text-align: center;
+user-select: all;
 `;
 
 const mainClass = css`
@@ -29,33 +32,14 @@ justify-content: end;
 const buttonClass = css`
 display: block;
 aspect-ratio: 1 / 1;
-cursor: pointer;
 width: 3rem;
 padding: .25rem;
 border-radius: .25rem;
 overflow: hidden;
 
-background: transparent;
 border: none;
 
-color: var(--primary-color);
-font-size: 0.8rem;
-text-decoration: none;
-
-display: grid;
-place-items: center;
-align-items: center;
-
-transition: background 0.2s ease-out;
-&:hover {
-	background: #f3f3f3;
-	transition: none;
-}
-
-&:active {
-	background: #dfdfdf;
-	transition: none;
-}
+${BUTTON_STYLE}
 `;
 
 export async function IndexPage() {
@@ -105,13 +89,14 @@ export async function IndexPage() {
 						</div>
 					</a>
 				</nav>
+				<Search />
 			</header>
 			<main class={mainClass}>
 				<p class={hideOnPrint}>
 					New ASN:
 				</p>
 				<img src={`/svg/${asn.asn}?embed=true`} alt="Barcode" />
-				<p class={centerClass}>{asn.asn}</p>
+				<p class={asnTextClass}>{asn.asn}</p>
 			</main>
 			<footer class={cx(hideOnPrint)}>
 				<a href="/about">About</a> <a href="/format">ASN Format</a>

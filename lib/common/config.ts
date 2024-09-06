@@ -7,12 +7,17 @@ interface Config {
   // e.g., if it's 600, the range for generated ASNs would be 100 - 599;
   // 600 - 999 are reserved for user defined namespaces (e.g., manually pre-printed ASN codes)
   ASN_NAMESPACE_RANGE: number;
+
+  ASN_LOOKUP_URL?: string;
+  ASN_LOOKUP_INCLUDE_PREFIX: boolean;
 }
 
 const configSchema = z.object({
   PORT: z.number({ coerce: true }).default(8080),
   ASN_PREFIX: z.string().min(1).max(10).regex(/^[A-Z]+$/),
   ASN_NAMESPACE_RANGE: z.number({ coerce: true }),
+  ASN_LOOKUP_URL: z.string().regex(/^https?\:\/\/.*\{asn\}.*$/).optional(),
+  ASN_LOOKUP_INCLUDE_PREFIX: z.boolean({coerce: true}).default(false),
 });
 
 export const CONFIG: Config = configSchema.parse(Deno.env.toObject());

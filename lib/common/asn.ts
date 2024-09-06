@@ -90,7 +90,7 @@ export function getFormatDescription(): string {
     `(3) Counter, starting from 001, incrementing with each new ASN in the namespace.`;
 }
 
-export function validateASN(asn: string): boolean {
+export function isValidASN(asn: string): boolean {
   return new RegExp(
     `^${CONFIG.ASN_PREFIX}(\\d{${`${CONFIG.ASN_NAMESPACE_RANGE}`.length}})(\\d{3})\\d*$`,
   ).test(asn);
