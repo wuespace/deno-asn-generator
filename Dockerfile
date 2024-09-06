@@ -20,10 +20,10 @@ ENTRYPOINT [ \
 	"--unstable-kv",\
 	# Allow write access to the /data directory
 	"--allow-write=/data",\
-	# Allow read access to the /data directory and static files
-	"--allow-read=/data,/app/static",\
+	# Allow read access to the /data directory, `.env` (if it exists), and static files
+	"--allow-read=/data,/app/static,.env",\
 	# Allow network access for the HTTP server
 	"--allow-net",\
 	"main.ts" \
 ]
-CMD [ "" ]
+CMD [ "server" ]
