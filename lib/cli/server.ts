@@ -8,6 +8,12 @@ const serverArgs = z.object({
   host: z.string().default("localhost"),
 });
 
+/**
+ * Runs the web server.
+ * @param args the arguments to the command
+ * @param args.port the port to listen on (default: the PORT environment variable)
+ * @param args.host the hostname to listen on (default: localhost)
+ */
 export function runServer(args: unknown) {
   console.log(`Running ${metadata.name} v${metadata.version}`);
   console.log();

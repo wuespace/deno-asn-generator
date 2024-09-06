@@ -1,3 +1,6 @@
+/**
+ * Print the help message to the console.
+ */
 export function printHelp() {
   const cmd = Deno.args[0];
   console.log(`
