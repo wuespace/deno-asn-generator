@@ -10,14 +10,20 @@ ENV PORT=8080
 
 RUN deno cache --unstable-kv --no-check main.ts
 
+STOPSIGNAL SIGKILL
+
 ENTRYPOINT [ \
 	"deno", "run",\
 	# Allow access to the environment variables
 	"--env", "--allow-env", \
 	# Enable to Deno KV Storage (currently "unstable")
 	"--unstable-kv",\
-	# Allow read- and write-access to the /data directory
-	"--allow-write=/data", "--allow-read=/data",\
+	# Allow write access to the /data directory
+	"--allow-write=/data",\
+	# Allow read access to the /data directory and static files
+	"--allow-read=/data,/app/static",\
+	# Allow network access for the HTTP server
+	"--allow-net",\
 	"main.ts" \
 ]
 CMD [ "" ]

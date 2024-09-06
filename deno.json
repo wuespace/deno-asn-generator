@@ -3,11 +3,20 @@
   "version": "0.1.0",
   "exports": "./mod.ts",
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "dev": "deno run --watch --env --unstable-kv -A main.ts",
+    "version": "deno run --allow-read=. --allow-write=. --allow-run=git jsr:@utility/version"
   },
   "imports": {
+    "$/": "./",
+    "$common/": "./lib/common/",
+    "$http/": "./lib/http/",
+    "$cli/": "./lib/cli/",
     "@hono/hono": "jsr:@hono/hono@^4.5.11",
     "@std/datetime": "jsr:@std/datetime@^0.225.2",
     "@collinhacks/zod": "npm:zod@^3.23.8"
+  },
+  "compilerOptions": {
+    "jsx": "precompile",
+    "jsxImportSource": "@hono/hono/jsx"
   }
 }
