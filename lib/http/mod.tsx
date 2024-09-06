@@ -18,7 +18,7 @@ import { createBarcodeSVG } from "$http/barcode-svg.ts";
 import { z } from "@collinhacks/zod";
 import { getLookupURL } from "$http/lookup-url.ts";
 
-export const httpApp = new Hono();
+export const httpApp: Hono = new Hono();
 
 httpApp.use(logger());
 httpApp.get(

@@ -33,7 +33,7 @@ z.string().transform((v) => v.trim());
 export const CONFIG: Config = configSchema.parse(Deno.env.toObject());
 
 const DB_CONFIG_KEY = "config";
-export async function validateDB() {
+export async function validateDB(): Promise<void> {
   const db = await getDB();
 
   const dbConfigRes = await db.get([DB_CONFIG_KEY]);
