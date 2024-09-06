@@ -1,7 +1,7 @@
 {
   "name": "@wuespace/asn-generator",
   "version": "0.2.0",
-  "exports": "./mod.ts",
+  "exports": "./main.ts",
   "tasks": {
     "dev": "deno run --watch --env --unstable-kv -A main.ts",
     "version": "deno run --allow-read=. --allow-write=. --allow-run=git jsr:@utility/version"
