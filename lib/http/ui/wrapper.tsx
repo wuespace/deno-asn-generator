@@ -36,6 +36,10 @@ export function Wrapper({ children }: { children?: Child }) {
 		<html>
 			<head>
 				<title>Wrapper</title>
+				<link
+					rel="stylesheet"
+					href="/static/material-symbols/style.css"
+				/>
 				<link rel="stylesheet" href="/static/theme.css" />
 				<Style>
 					{css`
