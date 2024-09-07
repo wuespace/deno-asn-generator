@@ -2,6 +2,8 @@
 
 [`.env` Example](example.env) · [GHCR Docker Image](https://github.com/wuespace/deno-asn-generator/pkgs/container/deno-asn-generator) · Docker Hub Docker Image (coming soon) · [JSR Package](https://jsr.io/@wuespace/asn-generator) · [GitHub Repository](https://github.com/wuespace/deno-asn-generator)
 
+---
+
 The app can be deployed in multiple ways, each with its own advantages and disadvantages. The following are the most common ways to deploy the app:
 
 - [Docker](#docker): The app can be deployed using Docker and Docker Compose. This is the easiest way to deploy the app.
