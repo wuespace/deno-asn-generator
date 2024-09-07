@@ -18,15 +18,15 @@ const TIME_STATS_KEY = "timeStats";
 
 /**
  * Statistics about the time between registrations of numbers in a namespace.
- * 
+ *
  * This class is immutable. To update the statistics, use the {@link TimeStats.withNewTimestamp} method.
- * 
+ *
  * Statistics are calculated incrementally, causing minimal database overhead.
  */
-export class TimeStats implements z.infer<typeof TimeStatsSchema> {
+export class TimeStats {
 	/**
-	 * Creates a new TimeStats object. Use {@link TimeStats.empty} to create an empty object. 
-	 * Use {@link TimeStats.fromObject} to create an object from a serialized object. 
+	 * Creates a new TimeStats object. Use {@link TimeStats.empty} to create an empty object.
+	 * Use {@link TimeStats.fromObject} to create an object from a serialized object.
 	 * Use {@link TimeStats.get} to get the statistics of a namespace from the database.
 	 * Use {@link TimeStats.withNewTimestamp} to update the statistics.
 	 * @param namespace the namespace the statistics are for
@@ -54,12 +54,12 @@ export class TimeStats implements z.infer<typeof TimeStatsSchema> {
 
 	/**
 	 * Updates the statistics with a new registration. This does not modify the current object.
-	 * Changes are only applied to the returned object. 
-	 * 
+	 * Changes are only applied to the returned object.
+	 *
 	 * For most use-cases, you should use {@link addTimestampToNamespaceStats} instead, as this
 	 * function also handles database transactions. This bare function is useful for testing and
 	 * potentially for other use-cases.
-	 * 
+	 *
 	 * @param timestamp the timestamp of the new registration. Defaults to the current time.
 	 * @returns new TimeStats object with the updated statistics
 	 */
@@ -95,26 +95,25 @@ export class TimeStats implements z.infer<typeof TimeStatsSchema> {
 	}
 
 	/**
-	 * Calculates the highest rate of registrations per millisecond that is expected to be exceeded 
+	 * Calculates the highest rate of registrations per millisecond that is expected to be exceeded
 	 * with a probability of less than the specified sigma level.
-	 * 
+	 *
 	 * Common sigma levels are:
 	 * - 1σ (68.27 %)
 	 * - 2σ (95.45 %)
 	 * - 3σ (99.73 %)
 	 * - 6σ (99.99 %)
-	 * 
-	 * Note that this assumes a normal distribution of the time differences between registrations. 
+	 *
+	 * Note that this assumes a normal distribution of the time differences between registrations.
 	 * This may or may not be the case, depending on the use-case. However, this is a good estimate
 	 * for most cases (and better than nothing when figuring out a bump rate after restoring a backup).
-	 * 
-	 * The primary use-case for this is bumping the namespaces after restoring a backup. 
-	 * Since additional ASNs could have been registered between the last backup and the restore, 
+	 *
+	 * The primary use-case for this is bumping the namespaces after restoring a backup.
+	 * Since additional ASNs could have been registered between the last backup and the restore,
 	 * the bump rate should be higher than the average rate to avoid conflicts with the new ASNs.
 	 * Estimating the distribution to be normal allows us this function to give system administrators
 	 * a good estimate of the bump rate, based on a confidence level of their choice.
-	 * 
-	 * 
+	 *
 	 * @param sigma the number of standard deviations to add to the average rate
 	 * @returns the highest rate of registrations per millisecond that is expected to be exceeded
 	 * with a probability of less than the specified sigma level.
