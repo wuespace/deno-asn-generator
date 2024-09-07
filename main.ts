@@ -1,11 +1,5 @@
-import { parseArgs } from "@std/cli/parse-args";
-import { validateDB } from "$common/mod.ts";
-
-import { runServer } from "$cli/server.ts";
-import { printHelp } from "$cli/help.ts";
-import { runGenerate } from "$cli/generate.ts";
-
 /**
+ * @module
  * Main entry point for the ASN Generator System.
  * 
  * Note that the system makes assumptions about configuration being present in the environment variables.
@@ -39,9 +33,13 @@ import { runGenerate } from "$cli/generate.ts";
  * 
  * Note that this only gets run when the module is the main module (`import.meta.main === true`).
  * Therefore, the CLI won't run by itself when you import this module in another module.
- * 
- * @module
  */
+import { parseArgs } from "@std/cli/parse-args";
+import { validateDB } from "$common/mod.ts";
+
+import { runServer } from "$cli/server.ts";
+import { printHelp } from "$cli/help.ts";
+import { runGenerate } from "$cli/generate.ts";
 
 export * from "$common/mod.ts";
 export * from "$http/mod.tsx";
