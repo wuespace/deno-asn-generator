@@ -40,6 +40,7 @@ import { validateDB } from "$common/mod.ts";
 import { runServer } from "$cli/server.ts";
 import { printHelp } from "$cli/help.ts";
 import { runGenerate } from "$cli/generate.ts";
+import { runStats } from "$cli/stats.ts";
 
 export * from "$common/mod.ts";
 export * from "$http/mod.tsx";
@@ -56,6 +57,10 @@ if (import.meta.main) {
 
   if (args._[0] === "generate") {
     await runGenerate(args);
+  }
+
+  if (args._[0] === "stats") {
+    await runStats(args);
   }
 
   if (args._[0] === "server" || args._.length === 0) {
