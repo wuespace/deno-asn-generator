@@ -5,7 +5,9 @@ import { DB_FILE_PATH, ensureParentDirExists } from "$common/path.ts";
  * @returns the key-value store for the application database.
  */
 export async function getDB(): Promise<Deno.Kv> {
-  await ensureParentDirExists(DB_FILE_PATH);
+  if (!DB_FILE_PATH.startsWith("http")) {
+    await ensureParentDirExists(DB_FILE_PATH);
+  }
   return Deno.openKv(DB_FILE_PATH);
 }
 

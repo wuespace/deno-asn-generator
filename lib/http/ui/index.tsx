@@ -1,8 +1,7 @@
 import { css, cx } from "@hono/hono/css";
-import { generateASN } from "$common/asn.ts";
 import { Search } from "$http/ui/search.tsx";
 import { BUTTON_STYLE } from "$http/ui/common/button-styles.ts";
-import { ASNData } from "$common/mod.ts";
+import type { ASNData } from "$common/mod.ts";
 
 const hideOnPrint = css`
 @media print {
@@ -43,7 +42,7 @@ border: none;
 ${BUTTON_STYLE}
 `;
 
-export async function IndexPage({asn}: {asn: ASNData}) {
+export function IndexPage({asn}: {asn: ASNData}) {
   const script = { __html: `globalThis.asn = ${JSON.stringify(asn)};` };
   return (
     <>
