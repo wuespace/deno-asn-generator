@@ -13,6 +13,11 @@
 An environment for collaboratively creating ASN numbers to be used in the
 Paperless-NGX based document management system at WüSpace e. V.
 
+<figure>
+<img src="screenshot.png" alt="Screenshot. UI in the center. At the top, there are buttons to copy, regenerate, print, and download the ASN barcode. Below that, there is a search bar. Below that, text: New ASN. A barcode with an ASN." />
+<figcaption>Screenshot of the Web UI.</figcaption>
+</figure>
+
 ## Core Requirements
 
 - **REQ-1**: The system must be able to generate unique ASN numbers.
