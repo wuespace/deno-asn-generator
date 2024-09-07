@@ -1,5 +1,6 @@
-import { generateASN } from "$common/asn.ts";
 import z from "@collinhacks/zod";
+import { generateASN } from "$common/asn.ts";
+import denojson from "$/deno.json" with { type: "json" };
 
 const generateArgs = z.object({
   count: z.number().default(1),
@@ -17,6 +18,7 @@ export async function runGenerate(args: unknown) {
     generateASN({
       client: "cli",
       generatedCount: parsedArgs.count,
+      denojson
     }).then((asn) => asn.asn)
   ).forEach(async (x) => console.log(await x));
 

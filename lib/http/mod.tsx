@@ -1,4 +1,4 @@
-import { Hono } from "@hono/hono";
+import { type Context, Hono } from "@hono/hono";
 import { logger } from "@hono/hono/logger";
 import { jsxRenderer } from "@hono/hono/jsx-renderer";
 import { serveStatic } from "@hono/hono/deno";
@@ -10,7 +10,7 @@ import {
   getFormatDescription,
   isValidASN,
 } from "$common/mod.ts";
-import metadata from "$/deno.json" with { type: "json" };
+import denojson from "$/deno.json" with { type: "json" };
 
 import { Wrapper } from "$http/ui/wrapper.tsx";
 import { IndexPage } from "$http/ui/index.tsx";
@@ -44,7 +44,7 @@ export const httpApp: Hono = new Hono();
 httpApp.use(logger());
 httpApp.get(
   "/about",
-  (c) => c.text(`${metadata.name} v${metadata.version} is running!`),
+  (c) => c.text(`${denojson.name} v${denojson.version} is running!`),
 );
 httpApp.get("/format", (c) => c.text(getFormatDescription()));
 httpApp.get("/json", async (c) => c.json(await generateASN()));
@@ -108,8 +108,11 @@ httpApp.get("/svg/:asn", (c) => {
   });
 });
 
-httpApp.get("/svg", (c) => {
-  const barcode = createBarcodeSVG("0123456789", !!c.req.query("embed"));
+httpApp.get("/svg", async (c) => {
+  const barcode = createBarcodeSVG(
+    (await generateASN(createMetadata(c))).asn,
+    !!c.req.query("embed"),
+  );
   return c.body(barcode ?? "", 200, {
     "Cache-Control": "no-cache",
     "Content-Type": "image/svg+xml",
@@ -117,4 +120,16 @@ httpApp.get("/svg", (c) => {
 });
 
 httpApp.use("*", jsxRenderer(Wrapper));
-httpApp.use("/", async (c) => await c.render(<IndexPage />));
+httpApp.use(
+  "/",
+  async (c) =>
+    await c.render(<IndexPage asn={await generateASN(createMetadata(c))} />),
+);
+
+function createMetadata(c: Context) {
+  return {
+    client: "web",
+    path: c.req.path,
+    denojson,
+  };
+}
