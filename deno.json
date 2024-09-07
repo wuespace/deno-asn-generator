@@ -4,6 +4,7 @@
   "exports": "./main.ts",
   "tasks": {
     "dev": "deno run --watch --env --unstable-kv -A main.ts",
+    "run": "deno run --env --unstable-kv -A main.ts",
     "version": "deno run --allow-read=. --allow-write=. --allow-run=git jsr:@utility/version"
   },
   "imports": {

@@ -1,6 +1,6 @@
 # Deno ASN Generator
 
-[License (MIT)](./LICENSE) · [Contributing](./CONTRIBUTING.md)
+[Deployment](DEPLOY.md) · [License (MIT)](./LICENSE) · [Contributing](./CONTRIBUTING.md)
 
 An environment for collaboratively creating ASN numbers to be used in the
 Paperless-NGX based document management system at WüSpace e. V.

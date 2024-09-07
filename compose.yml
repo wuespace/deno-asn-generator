@@ -1,5 +1,7 @@
+name: deno-asn-generator
+
 services:
-  asngenerator:
+  app:
     image: asngenerator
     build:
       context: .
