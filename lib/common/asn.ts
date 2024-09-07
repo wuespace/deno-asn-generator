@@ -1,6 +1,7 @@
 import { CONFIG } from "$common/config.ts";
 import { performAtomicTransaction } from "$common/db.ts";
 import { ensureFileContent, getCounterPath } from "$common/path.ts";
+import { addTimestampToNamespaceStats } from "$common/time-stats.ts";
 
 /**
  * Data structure for an Alphanumeric Serial Number (ASN).
@@ -112,6 +113,8 @@ export async function generateASN(
     getCounterPath(namespace, counter),
     JSON.stringify(asnData, null, 2),
   );
+
+  await addTimestampToNamespaceStats(namespace);
 
   return asnData;
 }

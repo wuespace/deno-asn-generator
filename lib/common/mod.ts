@@ -11,3 +11,4 @@ export * from "$common/db.ts";
 export * from "$common/path.ts";
 export * from "$common/config.ts";
 export * from "$common/additional-managed-namespaces.ts";
+export * from "$common/time-stats.ts";
