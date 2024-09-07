@@ -10,6 +10,8 @@
   "tasks": {
     "dev": "deno run --watch --env --unstable-kv -A main.ts",
     "run": "deno run --env --unstable-kv -A main.ts",
+    "test": "deno test --env --unstable-kv -A",
+    "lint": "deno lint",
     "version": "deno run --allow-read=. --allow-write=. --allow-run=git jsr:@utility/version"
   },
   "imports": {
@@ -20,6 +22,7 @@
     "@collinhacks/zod": "npm:zod@^3.23.8",
     "@hono/hono": "jsr:@hono/hono@^4.5.11",
     "@metafloor/bwip-js": "npm:bwip-js@^4.5.1",
+    "@std/assert": "jsr:@std/assert@^1.0.4",
     "@std/cli": "jsr:@std/cli@^1.0.5",
     "@std/datetime": "jsr:@std/datetime@^0.225.2",
     "@std/dotenv": "jsr:@std/dotenv@^0.225.2"

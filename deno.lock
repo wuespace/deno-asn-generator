@@ -3,8 +3,10 @@
   "packages": {
     "specifiers": {
       "jsr:@hono/hono@^4.5.11": "jsr:@hono/hono@4.5.11",
+      "jsr:@std/assert@^1.0.4": "jsr:@std/assert@1.0.4",
       "jsr:@std/cli@^1.0.5": "jsr:@std/cli@1.0.5",
       "jsr:@std/dotenv@^0.225.2": "jsr:@std/dotenv@0.225.2",
+      "jsr:@std/internal@^1.0.3": "jsr:@std/internal@1.0.3",
       "npm:@types/node": "npm:@types/node@18.16.19",
       "npm:bwip-js@^4.5.1": "npm:bwip-js@4.5.1",
       "npm:zod@^3.23.8": "npm:zod@3.23.8"
@@ -13,11 +15,20 @@
       "@hono/hono@4.5.11": {
         "integrity": "5bd6b1a3a503efb746fdcf0aae3ac536dd09229d372988bde5db0798ef64ae4f"
       },
+      "@std/assert@1.0.4": {
+        "integrity": "d4c767ea578e5bc09c15b6e503376003e5b2d1f4c0cdf08524a92101ff4d7b96",
+        "dependencies": [
+          "jsr:@std/internal@^1.0.3"
+        ]
+      },
       "@std/cli@1.0.5": {
         "integrity": "c93cce26ffd26f617c15a12874e1bfeabc90b1eee86017c9639093734c2bf587"
       },
       "@std/dotenv@0.225.2": {
         "integrity": "e2025dce4de6c7bca21dece8baddd4262b09d5187217e231b033e088e0c4dd23"
+      },
+      "@std/internal@1.0.3": {
+        "integrity": "208e9b94a3d5649bd880e9ca38b885ab7651ab5b5303a56ed25de4755fb7b11e"
       }
     },
     "npm": {
@@ -39,6 +50,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@hono/hono@^4.5.11",
+      "jsr:@std/assert@^1.0.4",
       "jsr:@std/cli@^1.0.5",
       "jsr:@std/datetime@^0.225.2",
       "jsr:@std/dotenv@^0.225.2",

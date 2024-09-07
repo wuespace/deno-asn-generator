@@ -1,6 +1,10 @@
 import { z } from "@collinhacks/zod";
 import { getDB } from "$common/db.ts";
 import "@std/dotenv/load";
+import {
+  type AdditionalManagedNamespace,
+  deserializeAdditionalManagedNamespaces,
+} from "./additional-managed-namespaces.ts";
 
 /**
  * The application configuration.
@@ -30,6 +34,18 @@ export interface Config {
    * @see For more information on the namespacing, take a look at {@link generateASN} or the `README.md`.
    */
   ASN_NAMESPACE_RANGE: number;
+
+  /**
+   * Additional managed namespaces outside the {@link ASN_NAMESPACE_RANGE} for which ASN codes can be generated.
+   * The format in the environmentvariable is `<namespace label><namespace label><namespace label>`.
+   * The label must be at least 1 character long.
+   * 
+   * If the array is empty, no additional namespaces will be managed, leaving only the default range
+   * specified by {@link ASN_NAMESPACE_RANGE}.
+   * 
+   * @example "<500 Internal Documents (Generic)><600 NDA-Covered Documents (Generic)>"
+   */
+  ADDITIONAL_MANAGED_NAMESPACES: AdditionalManagedNamespace[];
 
   /**
    * The URL to use for the ASN lookup. The URL must contain the `{asn}` placeholder which will be replaced with the ASN.
@@ -66,6 +82,9 @@ const configSchema = z.object({
   PORT: z.number({ coerce: true }).default(8080),
   ASN_PREFIX: z.string().min(1).max(10).regex(/^[A-Z]+$/),
   ASN_NAMESPACE_RANGE: z.number({ coerce: true }),
+  ADDITIONAL_MANAGED_NAMESPACES: z.string().default("").transform((v) =>
+    deserializeAdditionalManagedNamespaces(v)
+  ),
   ASN_LOOKUP_URL: z.string().regex(/^https?\:\/\/.*\{asn\}.*$/).optional(),
   ASN_LOOKUP_INCLUDE_PREFIX: z.boolean({ coerce: true }).default(false),
   ASN_BARCODE_TYPE: z.preprocess(
