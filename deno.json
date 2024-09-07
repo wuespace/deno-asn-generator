@@ -1,7 +1,12 @@
 {
   "name": "@wuespace/asn-generator",
   "version": "0.2.5",
-  "exports": "./main.ts",
+  "exports": {
+    ".": "./main.ts",
+    "./cli": "./lib/cli/mod.ts",
+    "./common": "./lib/common/mod.ts",
+    "./http": "./lib/http/mod.tsx"
+  },
   "tasks": {
     "dev": "deno run --watch --env --unstable-kv -A main.ts",
     "run": "deno run --env --unstable-kv -A main.ts",
