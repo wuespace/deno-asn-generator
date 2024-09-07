@@ -18,6 +18,13 @@ import { createBarcodeSVG } from "$http/barcode-svg.ts";
 import { z } from "@collinhacks/zod";
 import { getLookupURL } from "$http/lookup-url.ts";
 
+/**
+ * Various APIs surrounding the HTTP server / Web Application.
+ *
+ * {@link httpApp} is the main HTTP server of the web application.
+ *
+ * @module
+ */
 export * from "$http/lookup-url.ts";
 export * from "$http/barcode-svg.ts";
 

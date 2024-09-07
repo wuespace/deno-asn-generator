@@ -1,3 +1,10 @@
+/**
+ * Common functions and types shared between the various user interfaces.
+ *
+ * Most useful in terms of APIs.
+ * @module
+ */
+
 export * from "$common/asn.ts";
 export * from "$common/path.ts";
 export * from "$common/db.ts";

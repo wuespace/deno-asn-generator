@@ -1,15 +1,29 @@
 # Deployment
 
-[`.env` Example](example.env) · [GHCR Docker Image](https://github.com/wuespace/deno-asn-generator/pkgs/container/deno-asn-generator) · Docker Hub Docker Image (coming soon) · [JSR Package](https://jsr.io/@wuespace/asn-generator) · [GitHub Repository](https://github.com/wuespace/deno-asn-generator)
+[`.env` Example](example.env) ·
+[GHCR Docker Image](https://github.com/wuespace/deno-asn-generator/pkgs/container/deno-asn-generator)
+· Docker Hub Docker Image (coming soon) ·
+[JSR Package](https://jsr.io/@wuespace/asn-generator) ·
+[GitHub Repository](https://github.com/wuespace/deno-asn-generator)
 
 ---
 
-The app can be deployed in multiple ways, each with its own advantages and disadvantages. The following are the most common ways to deploy the app:
+The app can be deployed in multiple ways, each with its own advantages and
+disadvantages. The following are the most common ways to deploy the app:
 
-- [Docker](#docker): The app can be deployed using Docker and Docker Compose. This is the easiest way to deploy the app.
-- [Portainer](#portainer): Portainer is a lightweight management UI that allows you to easily manage your Docker host or Swarm cluster. There are some specific steps to deploy the app using Portainer, which is why it has its own section.
-- [Deno + JSR](#deno--jsr): The app can be deployed using Deno and JSR. Unfortunately, while most features will work, as the JSR currently doesn't support `.tsx` files, the UI in the web application won't work. **This is not recommended for production use due to current JSR limitations.**
-- [Deno + Git](#deno--git): The app can be deployed using Deno and Git. This is the most manual way to deploy the app, but also the most flexible. And it isn't that hard to do. **This is not recommended for production use.**
+- [Docker](#docker): The app can be deployed using Docker and Docker Compose.
+  This is the easiest way to deploy the app.
+- [Portainer](#portainer): Portainer is a lightweight management UI that allows
+  you to easily manage your Docker host or Swarm cluster. There are some
+  specific steps to deploy the app using Portainer, which is why it has its own
+  section.
+- [Deno + JSR](#deno--jsr): The app can be deployed using Deno and JSR.
+  Unfortunately, while most features will work, as the JSR currently doesn't
+  support `.tsx` files, the UI in the web application won't work. **This is not
+  recommended for production use due to current JSR limitations.**
+- [Deno + Git](#deno--git): The app can be deployed using Deno and Git. This is
+  the most manual way to deploy the app, but also the most flexible. And it
+  isn't that hard to do. **This is not recommended for production use.**
 
 ## Docker
 
@@ -22,7 +36,8 @@ The app can be deployed in multiple ways, each with its own advantages and disad
 
 In an installation directory of your choice, create a new directory for the app.
 
-In this directory, create a new file called `.env` and copy the contents of the [`.env` Example](env.example) into it.
+In this directory, create a new file called `.env` and copy the contents of the
+[`.env` Example](env.example) into it.
 
 Carefully adjust the values in the `.env` file to your needs.
 
@@ -45,7 +60,8 @@ volumes:
   app-data:
 ```
 
-To be safer, you can also specify the version of the app by replacing `latest` with the version you want to use.
+To be safer, you can also specify the version of the app by replacing `latest`
+with the version you want to use.
 
 ### Running the Web Application
 
@@ -95,7 +111,7 @@ Log into your Portainer instance and create a new stack.
 
 Enter a name for the stack, e.g., `asn-generator`.
 
-In the *Web Editor* section, paste the following contents:
+In the _Web Editor_ section, paste the following contents:
 
 ```yaml
 services:
@@ -112,15 +128,20 @@ volumes:
   app-data:
 ```
 
-Download the [`.env` Example](env.example). In the *Environment variables* section, select **Load variables from .env file** and upload the `example.env` file.
+Download the [`.env` Example](env.example). In the _Environment variables_
+section, select **Load variables from .env file** and upload the `example.env`
+file.
 
-Carefully adjust the environment variable values to your needs. You can find more information about the environment variables in the [`.env` Example](env.example).
+Carefully adjust the environment variable values to your needs. You can find
+more information about the environment variables in the
+[`.env` Example](env.example).
 
 Click **Deploy the stack**.
 
 ### Running the Web Application
 
-By deploying the stack, the web application should be available at the specified port.
+By deploying the stack, the web application should be available at the specified
+port.
 
 ### Running the CLI
 
@@ -128,7 +149,7 @@ In the Portainer UI, navigate to the container running the app.
 
 Click on **Exec Console**.
 
-As *Command*, choose `/bin/bash`.
+As _Command_, choose `/bin/bash`.
 
 Click **Connect**.
 
@@ -146,7 +167,7 @@ Once you're done, click **Disconnect**.
 
 In the Portainer UI, navigate to the stack running the app.
 
-Open the *Editor* tab.
+Open the _Editor_ tab.
 
 Without changing anything, at the bottom of the tab, click **Update the stack**.
 
@@ -162,19 +183,22 @@ The app should now be updated.
 
 ### Installation
 
-Create a new directory for the app. In this directory, create a new file called `.env` and copy the contents of the [`.env` Example](env.example) into it.
+Create a new directory for the app. In this directory, create a new file called
+`.env` and copy the contents of the [`.env` Example](env.example) into it.
 
 Carefully adjust the values in the `.env` file to your needs.
 
-> [!TIP]
->  Note that you can also adjust the commented out variables that you could not adjust in the Docker deployment method, such as `PORT` or `DATA_DIR`.
+> [!TIP] Note that you can also adjust the commented out variables that you
+> could not adjust in the Docker deployment method, such as `PORT` or
+> `DATA_DIR`.
 
 ### Running the Web Application
 
-> [!WARNING]
-> This deployment method is not recommended for production use due to current JSR limitations. The UI in the web application won't work.
+> [!WARNING] This deployment method is not recommended for production use due to
+> current JSR limitations. The UI in the web application won't work.
 >
-> If you want to use the web application, please use the Docker or  Deno + Git deployment method.
+> If you want to use the web application, please use the Docker or Deno + Git
+> deployment method.
 
 To start the app, run the following command in the installation directory:
 
@@ -200,7 +224,8 @@ You can specify the version of the app by appending `@<version>` to the JSR URL:
 deno run -A --unstable-kv jsr:@wuespace/asn-generator@0.2.1
 ```
 
-If the version is not downloaded yet, it will be downloaded and cached. To update the app, you can run the same command again with a different version.
+If the version is not downloaded yet, it will be downloaded and cached. To
+update the app, you can run the same command again with a different version.
 
 ## Deno + Git
 
@@ -220,7 +245,8 @@ git clone https://github.com/wuespace/deno-asn-generator.git \
   && cd deno-asn-generator
 ```
 
-Copy the contents of the [`.env` Example](env.example) into a new file called `.env`. You can easily do this by running the following command:
+Copy the contents of the [`.env` Example](env.example) into a new file called
+`.env`. You can easily do this by running the following command:
 
 ```sh
 cp env.example .env
@@ -228,8 +254,9 @@ cp env.example .env
 
 Carefully adjust the values in the `.env` file to your needs.
 
-> [!TIP]
-> Note that you can also adjust the commented out variables that you could not adjust in the Docker deployment method, such as `PORT` or `DATA_DIR`.
+> [!TIP] Note that you can also adjust the commented out variables that you
+> could not adjust in the Docker deployment method, such as `PORT` or
+> `DATA_DIR`.
 
 ### Running the Web Application
 
@@ -263,4 +290,5 @@ To pin the app to a specific version, you can checkout a specific tag:
 git checkout v0.2.1
 ```
 
-Note that your `.env` file and `./data` folder are not tracked by Git, so you don't have to worry about them being overwritten.
+Note that your `.env` file and `./data` folder are not tracked by Git, so you
+don't have to worry about them being overwritten.

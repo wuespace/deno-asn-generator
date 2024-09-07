@@ -5,7 +5,8 @@
 [![JSR Score](https://jsr.io/badges/@wuespace/asn-generator/score)](https://jsr.io/@wuespace/asn-generator)
 [![Docker](https://github.com/wuespace/deno-asn-generator/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/wuespace/deno-asn-generator/actions/workflows/docker-publish.yml)
 
-[Deployment](DEPLOY.md) · [License (MIT)](./LICENSE) · [Contributing](./CONTRIBUTING.md)
+[Deployment](DEPLOY.md) · [License (MIT)](./LICENSE) ·
+[Contributing](./CONTRIBUTING.md)
 
 ---
 

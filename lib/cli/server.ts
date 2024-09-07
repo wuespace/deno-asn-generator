@@ -5,7 +5,7 @@ import metadata from "$/deno.json" with { type: "json" };
 
 const serverArgs = z.object({
   port: z.number().default(CONFIG.PORT),
-  host: z.string().default('0.0.0.0'),
+  host: z.string().default("0.0.0.0"),
 });
 
 /**
