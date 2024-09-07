@@ -84,7 +84,10 @@ const configSchema = z.object({
   ASN_NAMESPACE_RANGE: z.number({ coerce: true }),
   ADDITIONAL_MANAGED_NAMESPACES: z.string().default("").transform((v) =>
     deserializeAdditionalManagedNamespaces(v)
-  ),
+  ).or(z.array(z.object({
+    namespace: z.number(),
+    label: z.string().min(1),
+  }))).default([]),
   ASN_LOOKUP_URL: z.string().regex(/^https?\:\/\/.*\{asn\}.*$/).optional(),
   ASN_LOOKUP_INCLUDE_PREFIX: z.boolean({ coerce: true }).default(false),
   ASN_BARCODE_TYPE: z.preprocess(
