@@ -10,7 +10,7 @@
   "tasks": {
     "dev": "deno run --watch --env --unstable-kv -A main.ts",
     "run": "deno run --env --unstable-kv -A main.ts",
-    "test": "deno test --env --unstable-kv -A",
+    "test": "DATA_DIR=data-test ASN_PREFIX=ASN ASN_NAMESPACE_RANGE=50 deno test --unstable-kv -A",
     "lint": "deno lint",
     "check": "deno check main.ts",
     "version": "deno run --allow-read=. --allow-write=. --allow-run=git jsr:@utility/version"
