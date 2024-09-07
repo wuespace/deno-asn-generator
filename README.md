@@ -3,6 +3,7 @@
 [![JSR Scope](https://jsr.io/badges/@wuespace)](https://jsr.io/@wuespace)
 [![JSR](https://jsr.io/badges/@wuespace/asn-generator)](https://jsr.io/@wuespace/asn-generator)
 [![JSR Score](https://jsr.io/badges/@wuespace/asn-generator/score)](https://jsr.io/@wuespace/asn-generator)
+[![Deno CI](https://github.com/wuespace/deno-asn-generator/actions/workflows/deno-ci.yml/badge.svg)](https://github.com/wuespace/deno-asn-generator/actions/workflows/deno-ci.yml)
 [![Docker](https://github.com/wuespace/deno-asn-generator/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/wuespace/deno-asn-generator/actions/workflows/docker-publish.yml)
 
 [Deployment](DEPLOY.md) · [License (MIT)](./LICENSE) ·
