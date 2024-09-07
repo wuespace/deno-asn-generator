@@ -12,6 +12,7 @@
     "run": "deno run --env --unstable-kv -A main.ts",
     "test": "deno test --env --unstable-kv -A",
     "lint": "deno lint",
+    "check": "deno check main.ts",
     "version": "deno run --allow-read=. --allow-write=. --allow-run=git jsr:@utility/version"
   },
   "imports": {
