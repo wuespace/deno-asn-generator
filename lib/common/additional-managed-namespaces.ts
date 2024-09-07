@@ -84,4 +84,3 @@ export function deserializeAdditionalManagedNamespaces(
   const matches = value.trim().match(/\<\d+ .+?\>[, ]*/g) || [];
   return matches.map(deserializeAdditionalManagedNamespace);
 }
-

@@ -1,105 +1,107 @@
-import { css, cx } from "@hono/hono/css";
+import { CONFIG, type Config } from "$common/mod.ts";
 import { Search } from "$http/ui/search.tsx";
+import { css, cx } from "@hono/hono/css";
 import { BUTTON_STYLE } from "$http/ui/common/button-styles.ts";
-import type { ASNData } from "$common/mod.ts";
+import type { Child } from "jsr:@hono/hono@^4.5.11/jsx";
 
-const hideOnPrint = css`
-@media print {
-	display: none;
-}
-`;
+const linkCardStyle = css`
+grid-template-columns: auto 1fr;
 
-const asnTextClass = css`
-text-align: center;
-user-select: all;
-`;
-
-const mainClass = css`
-height: 100%;
-display: flex;
-flex-direction: column;
-gap: 0rem;
-justify-content: center;
-align-items: stretch;
-`;
-
-const buttonRowClass = css`
-display: flex;
-gap: .25rem;
-justify-content: end;
-`;
-
-const buttonClass = css`
-display: block;
-aspect-ratio: 1 / 1;
-width: 3rem;
-padding: .25rem;
-border-radius: .25rem;
-overflow: hidden;
-
-border: none;
+border: 1px solid var(--primary-color);
+border-radius: 0.25rem;
 
 ${BUTTON_STYLE}
+place-items: start;
+grid-column-gap: .5rem;
+
+font-size: 1rem;
 `;
 
-export function IndexPage({asn}: {asn: ASNData}) {
-  const script = { __html: `globalThis.asn = ${JSON.stringify(asn)};` };
+const linkCardIconStyle = css`
+display: block;
+place-self: center;
+padding: .5rem;
+`;
+
+export function IndexPage({ config }: { config: Config }) {
+  const genericRangeStart = Number.parseInt(
+    "1" + "0".repeat(config.ASN_NAMESPACE_RANGE.toString().length - 1),
+  );
+  const genericRangeEnd = config.ASN_NAMESPACE_RANGE - 1;
   return (
     <>
-      <script dangerouslySetInnerHTML={script}></script>
-      <header class={cx(hideOnPrint)}>
-        <nav class={buttonRowClass}>
-          <button
-            autofocus
-            class={buttonClass}
-            onclick={"globalThis.copy()"}
-            title="Copy ASN to clipboard"
-          >
-            <div className="material-symbols-outlined">
-              content_copy
-            </div>
-          </button>
-          <button
-            class={buttonClass}
-            onclick={"globalThis.location.reload()"}
-            title="Generate a new ASN"
-          >
-            <span class="material-symbols-outlined">
-              refresh
-            </span>
-          </button>
-          <button
-            class={buttonClass}
-            onclick={"globalThis.print()"}
-            title="Print ASN Barcode"
-          >
-            <span class="material-symbols-outlined">
-              print
-            </span>
-          </button>
-          <a
-            class={buttonClass}
-            href={`/svg/${asn.asn}`}
-            download
-            title="Download ASN Barcode"
-          >
-            <div className="material-symbols-outlined">
-              barcode
-            </div>
-          </a>
-        </nav>
+      <header>
+        <h1>{config.ASN_PREFIX} Code Generator</h1>
+        <p>
+          Look up {config.ASN_PREFIX} codes in the DMS:
+        </p>
         <Search />
       </header>
-      <main class={mainClass}>
-        <p class={hideOnPrint}>
-          New ASN:
+      <main>
+        <p>
+          Generic {config.ASN_PREFIX}{" "}
+          codes are codes that are not assigned to any document and are
+          accessible to all members of the organization.
         </p>
-        <img src={`/svg/${asn.asn}?embed=true`} alt="Barcode" />
-        <p class={asnTextClass}>{asn.asn}</p>
+        <LinkCard icon={"add"} href="/asn" autofocus>
+          Generate generic {CONFIG.ASN_PREFIX} code
+          <br />
+          <small>
+            {config.ASN_PREFIX}
+            {genericRangeStart}XXX-
+            {config.ASN_PREFIX}
+            {genericRangeEnd}XXX
+          </small>
+        </LinkCard>
+        {CONFIG.ADDITIONAL_MANAGED_NAMESPACES.length
+          ? (
+            <p>
+              Manually generate {config.ASN_PREFIX}{" "}
+              codes for specific namespaces, such as namespaces for protected
+              documents:
+            </p>
+          )
+          : ""}
+        {CONFIG.ADDITIONAL_MANAGED_NAMESPACES.map(({ namespace, label }) => (
+          <LinkCard
+            icon={"note_add"}
+            href={`/asn?namespace=${namespace}`}
+          >
+            {label}
+            <br />
+            <small>
+              {config.ASN_PREFIX}
+              {namespace}XXX
+            </small>
+          </LinkCard>
+        ))}
+        <p>&nbsp;</p>
       </main>
-      <footer class={cx(hideOnPrint)}>
-        <a href="/about">About</a> <a href="/format">ASN Format</a>
-      </footer>
     </>
+  );
+}
+
+function LinkCard(
+  { children, icon, autofocus, href }: {
+    children: Child;
+    icon: string;
+    autofocus?: boolean;
+    href: string;
+  },
+) {
+  return (
+    <a href={href} class={linkCardStyle} autofocus={autofocus}>
+      <span
+        class={cx(
+          "icon material-symbols-outlined",
+          linkCardIconStyle,
+        )}
+      >
+        {icon}
+      </span>
+      <p class="title">
+        {children}
+      </p>
+    </a>
   );
 }

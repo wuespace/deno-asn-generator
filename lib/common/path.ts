@@ -20,17 +20,17 @@ export const DATA_PATH: string = resolve(DATA_DIR);
 /**
  * The name of the database file.
  * Can be either a local file path or a URL beginning with `http[s]://`.
- * 
- * If the database file is a URL, it gets used as a 
+ *
+ * If the database file is a URL, it gets used as a
  * [KV Connect URL](https://docs.deno.com/deploy/kv/manual/node/#kv-connect-urls).
  * This allows for use-cases where multiple instances of the application share the same database.
  * You can even use the programmatic APIs to build other applications on top of this system.
- * You can find more information about KV Connect URLs at 
+ * You can find more information about KV Connect URLs at
  * <https://github.com/denoland/denokv/blob/main/proto/kv-connect.md>.
- * 
+ *
  * If the database file is a local file path, it gets used as a SQLite database file.
  * The database file is then stored in the `DATA_PATH`.
- * 
+ *
  * By default, this is `denokv.sqlite3`.
  * Can be overridden by setting the `DB_FILE_NAME` environment variable.
  *

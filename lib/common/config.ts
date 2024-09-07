@@ -39,10 +39,10 @@ export interface Config {
    * Additional managed namespaces outside the {@link ASN_NAMESPACE_RANGE} for which ASN codes can be generated.
    * The format in the environmentvariable is `<namespace label><namespace label><namespace label>`.
    * The label must be at least 1 character long.
-   * 
+   *
    * If the array is empty, no additional namespaces will be managed, leaving only the default range
    * specified by {@link ASN_NAMESPACE_RANGE}.
-   * 
+   *
    * @example "<500 Internal Documents (Generic)><600 NDA-Covered Documents (Generic)>"
    */
   ADDITIONAL_MANAGED_NAMESPACES: AdditionalManagedNamespace[];

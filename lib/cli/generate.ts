@@ -18,7 +18,7 @@ export async function runGenerate(args: unknown) {
     generateASN({
       client: "cli",
       generatedCount: parsedArgs.count,
-      denojson
+      denojson,
     }).then((asn) => asn.asn)
   ).forEach(async (x) => console.log(await x));
 

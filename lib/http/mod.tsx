@@ -19,10 +19,11 @@ import {
 import denojson from "$/deno.json" with { type: "json" };
 
 import { Wrapper } from "$http/ui/wrapper.tsx";
-import { IndexPage } from "$http/ui/index.tsx";
+import { ASNPage } from "./ui/asn.tsx";
 import { createBarcodeSVG } from "$http/barcode-svg.ts";
 import { z } from "@collinhacks/zod";
 import { getLookupURL } from "$http/lookup-url.ts";
+import { IndexPage } from "$http/ui/index.tsx";
 
 export * from "$http/lookup-url.ts";
 export * from "$http/barcode-svg.ts";
@@ -119,10 +120,49 @@ httpApp.get("/svg", async (c) => {
 });
 
 httpApp.use("*", jsxRenderer(Wrapper));
+
 httpApp.use(
   "/",
   async (c) =>
-    await c.render(<IndexPage asn={await generateASN(createMetadata(c))} />),
+    await c.render(
+      <IndexPage config={CONFIG} />,
+    ),
+);
+
+httpApp.get(
+  "/asn",
+  validator("query", (value, c) => {
+    const res = z.object({
+      namespace: z.number({ coerce: true }).optional().refine((v) => {
+        if (v === undefined) return true;
+        if (
+          CONFIG.ADDITIONAL_MANAGED_NAMESPACES.find((n) => n.namespace === v)
+        ) {
+          return true;
+        }
+      }, {
+        message:
+          "Unregistered namespace. Please add it to the configuration's `ADDITIONAL_MANAGED_NAMESPACES` parameter.",
+      }),
+    }).safeParse(value);
+
+    if (!res.success) {
+      return c.text(res.error.message, 400);
+    }
+    return res.data;
+  }),
+  async (c) => {
+    const namespace = c.req.valid("query").namespace;
+
+    return await c.render(
+      <ASNPage
+        asn={await generateASN(
+          createMetadata(c),
+          namespace,
+        )}
+      />,
+    );
+  },
 );
 
 function createMetadata(c: Context) {

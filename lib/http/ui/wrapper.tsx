@@ -3,9 +3,9 @@ import { css, cx, Style } from "@hono/hono/css";
 
 const bodyClass = css`
 background: var(--primary-color);
-display: grid;
+/* display: grid;
 place-items: center;
-align-content: center;
+align-content: top; */
 margin: 0;
 padding: 1rem;
 
@@ -21,6 +21,7 @@ const mainClass = css`
 background: white;
 font-family: var(--font-family);
 width: clamp(0px, 100%, 20rem);
+margin: 0 auto;
 overflow-x: hidden;
 
 padding: 1rem;
@@ -29,6 +30,12 @@ border-radius: 0.5rem;
 @media print {
 	width: 100%;
 	height: 100%;
+}
+`;
+
+const hideOnPrint = css`
+@media print {
+	display: none;
 }
 `;
 
@@ -55,12 +62,19 @@ export function Wrapper({ children }: { children?: Child }) {
 				:focus {
 					outline-color: var(--primary-color);
 				}
+
+        h1 {
+          margin: 0;
+        }
 				`}
         </Style>
       </head>
       <body class={cx(bodyClass)}>
         <main class={mainClass}>
           {children}
+          <footer class={cx(hideOnPrint)}>
+            <a href="/about">About</a> <a href="/format">ASN Format</a>
+          </footer>
         </main>
         <script src="/static/main.js"></script>
       </body>

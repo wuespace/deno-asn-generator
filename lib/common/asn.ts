@@ -50,24 +50,24 @@ function getRange() {
  * The prefix is specified in the configuration and must not change after the first run.
  *
  * The namespace is a number that always has the same number of digits.
- * 
- * If no namespace is provided, the namespace is automatically generated based on the current 
+ *
+ * If no namespace is provided, the namespace is automatically generated based on the current
  * time and the generic `ASN_NAMESPACE_RANGE` in the configuration.
  *
  * The counter is a three-digit number that increments with each new ASN in the namespace.
  * When the counter reaches 999, another digit gets added.
  * Therefore, additional digits are only ever added to the counter, not the namespace.
- * 
+ *
  * @param metadata - additional metadata to store with the ASN
  * @param namespace - the namespace to use for the ASN. If not provided, a namespace is automatically generated.
  * @returns a new ASN (Alphanumeric Serial Number)
- * 
+ *
  * @example
  * ```ts
  * const asn = await generateASN({ name: "John Doe" });
  * console.log(asn.asn); // "ASN123456789"
  * ```
- * 
+ *
  * @example
  * ```ts
  * const asn = await generateASN({ name: "John Doe" }, 123);
