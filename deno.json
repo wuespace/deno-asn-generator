@@ -1,6 +1,6 @@
 {
   "name": "@wuespace/asn-generator",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "exports": "./main.ts",
   "tasks": {
     "dev": "deno run --watch --env --unstable-kv -A main.ts",
