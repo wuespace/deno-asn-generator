@@ -1,6 +1,6 @@
 {
   "name": "@wuespace/asn-generator",
-  "version": "0.3.0-pre.0",
+  "version": "0.3.0-pre.1",
   "exports": {
     ".": "./main.ts",
     "./cli": "./lib/cli/mod.ts",
