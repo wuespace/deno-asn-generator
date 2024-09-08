@@ -20,7 +20,7 @@ padding: 1rem;
 const mainClass = css`
 background: white;
 font-family: var(--font-family);
-width: clamp(0px, 100%, 20rem);
+width: clamp(0px, 100%, 30rem);
 margin: 0 auto;
 overflow-x: hidden;
 
