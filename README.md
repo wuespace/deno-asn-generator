@@ -1,3 +1,4 @@
+
 # Deno ASN Generator
 
 [![JSR Scope](https://jsr.io/badges/@wuespace)](https://jsr.io/@wuespace)
@@ -17,6 +18,11 @@ Paperless-NGX based document management system at WüSpace e. V.
 <figure>
 <img src="screenshot.png" alt="Screenshot. UI in the center. At the top, there are buttons to copy, regenerate, print, and download the ASN barcode. Below that, there is a search bar. Below that, text: New ASN. A barcode with an ASN." />
 <figcaption>Screenshot of the Web UI.</figcaption>
+</figure>
+
+<figure>
+<img src="static/asn-generator-logo.png" alt="Diagonal purple ellipse. In it, a page with a barcode on the top-right hand corner and the letters A S N in the middle." />
+<figcaption>Application Logo.</figcaption>
 </figure>
 
 ## Core Requirements

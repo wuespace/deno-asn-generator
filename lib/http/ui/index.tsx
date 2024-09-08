@@ -31,20 +31,20 @@ export function IndexPage({ config }: { config: Config }) {
   return (
     <>
       <header>
-        <h1>{config.ASN_PREFIX} Code Generator</h1>
+        <h1>{config.ASN_PREFIX} Number Generator</h1>
         <p>
-          Look up {config.ASN_PREFIX} codes in the DMS:
+          Look up {config.ASN_PREFIX} numbers in the DMS:
         </p>
         <Search />
       </header>
       <main>
         <p>
-          Generic {config.ASN_PREFIX}{" "}
-          codes are codes that are not assigned to any document and are
-          accessible to all members of the organization.
+          Generic {config.ASN_PREFIX} numbers are numbers that are 
+          not assigned to any document and are accessible to all 
+          members of the organization.
         </p>
         <LinkCard icon={"add"} href="/asn" autofocus>
-          Generate generic {CONFIG.ASN_PREFIX} code
+          Generate generic {CONFIG.ASN_PREFIX} number
           <br />
           <small>
             {config.ASN_PREFIX}
@@ -56,9 +56,8 @@ export function IndexPage({ config }: { config: Config }) {
         {CONFIG.ADDITIONAL_MANAGED_NAMESPACES.length
           ? (
             <p>
-              Manually generate {config.ASN_PREFIX}{" "}
-              codes for specific namespaces, such as namespaces for protected
-              documents:
+              Manually generate {config.ASN_PREFIX} numbers for specific
+              namespaces, such as namespaces for protected documents:
             </p>
           )
           : ""}

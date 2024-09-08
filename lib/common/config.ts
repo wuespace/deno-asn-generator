@@ -29,7 +29,7 @@ export interface Config {
 
   /**
    * The range of the ASN namespace part. For example, if it's 600, the range for generated ASNs would be 100 - 599.
-   * 600 - 999 would then be reserved for user defined namespaces (e.g., manually pre-printed ASN codes).
+   * 600 - 999 would then be reserved for user defined namespaces (e.g., manually pre-printed ASNs).
    *
    * The number of digits must not change after the first run.
    *
@@ -53,7 +53,7 @@ export interface Config {
   ASN_ENABLE_NAMESPACE_EXTENSION: boolean;
 
   /**
-   * Additional managed namespaces outside the {@link ASN_NAMESPACE_RANGE} for which ASN codes can be generated.
+   * Additional managed namespaces outside the {@link ASN_NAMESPACE_RANGE} for which ASNs can be generated.
    * The format in the environmentvariable is `<namespace label><namespace label><namespace label>`.
    * The label must be at least 1 character long.
    *

@@ -46,6 +46,12 @@ export function Wrapper({ children }: { children?: Child }) {
       <head>
         <title>{CONFIG.ASN_PREFIX} Number Generator</title>
         <link
+          rel="icon"
+          type="image/svg+xml"
+          href="/static/asn-generator-logo.svg"
+        />
+        <link rel="icon" type="image/png" href="/static/asn-generator-logo.png" />
+        <link
           rel="stylesheet"
           href="/static/material-symbols/style.css"
         />
