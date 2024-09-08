@@ -1,6 +1,6 @@
 import { z } from "@collinhacks/zod";
 import { CONFIG, logPaths } from "$common/mod.ts";
-import { httpApp } from "$http/mod.tsx";
+import { httpApp } from "../http/mod.ts";
 import metadata from "$/deno.json" with { type: "json" };
 
 const serverArgs = z.object({

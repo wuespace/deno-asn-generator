@@ -44,7 +44,7 @@ import { runStats } from "$cli/stats.ts";
 import { runBump } from "$cli/bump.ts";
 
 export * from "$common/mod.ts";
-export * from "$http/mod.tsx";
+export * from "./lib/http/mod.ts";
 export * from "$cli/mod.ts";
 
 if (import.meta.main) {

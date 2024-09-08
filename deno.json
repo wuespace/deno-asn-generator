@@ -5,7 +5,7 @@
     ".": "./main.ts",
     "./cli": "./lib/cli/mod.ts",
     "./common": "./lib/common/mod.ts",
-    "./http": "./lib/http/mod.tsx"
+    "./http": "./lib/http/mod.ts"
   },
   "tasks": {
     "dev": "deno run --watch --env --unstable-kv -A main.ts",
