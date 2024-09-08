@@ -15,26 +15,26 @@ export const uiRoutes = new Hono();
 uiRoutes.use("*", jsxRenderer(Wrapper));
 
 uiRoutes.get(
-	"/",
-	async (c) =>
-		await c.render(
-			<IndexPage config={CONFIG} />,
-		),
+  "/",
+  async (c) =>
+    await c.render(
+      <IndexPage config={CONFIG} />,
+    ),
 );
 
 uiRoutes.get(
-	"/asn",
-	optionalQueryNamespaceValidator,
-	async (c) => {
-		const namespace = c.req.valid("query").namespace;
+  "/asn",
+  optionalQueryNamespaceValidator,
+  async (c) => {
+    const namespace = c.req.valid("query").namespace;
 
-		return await c.render(
-			<ASNPage
-				asn={await generateASN(
-					createMetadata(c),
-					namespace,
-				)}
-			/>,
-		);
-	},
+    return await c.render(
+      <ASNPage
+        asn={await generateASN(
+          createMetadata(c),
+          namespace,
+        )}
+      />,
+    );
+  },
 );

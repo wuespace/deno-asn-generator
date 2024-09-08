@@ -9,39 +9,39 @@ import { getLookupURL } from "$http/mod.ts";
 export const lookupRoutes = new Hono();
 
 lookupRoutes.post(
-	"/lookup",
-	validator("form", (value, c) => {
-		const parsed = z.object({
-			asn: z.string({ coerce: true }).min(1).regex(/^\d+$/),
-		}).safeParse(value);
+  "/lookup",
+  validator("form", (value, c) => {
+    const parsed = z.object({
+      asn: z.string({ coerce: true }).min(1).regex(/^\d+$/),
+    }).safeParse(value);
 
-		if (!parsed.success) {
-			return c.text("Invalid ASN. " + parsed.error.message, 400);
-		}
+    if (!parsed.success) {
+      return c.text("Invalid ASN. " + parsed.error.message, 400);
+    }
 
-		return parsed.data;
-	}),
-	(c) => {
-		const asn = CONFIG.ASN_PREFIX + c.req.valid("form").asn;
-		return c.redirect("/go/" + asn);
-	},
+    return parsed.data;
+  }),
+  (c) => {
+    const asn = CONFIG.ASN_PREFIX + c.req.valid("form").asn;
+    return c.redirect("/go/" + asn);
+  },
 );
 
 lookupRoutes.get(
-	"/go/:asn",
-	validator("param", (value, c) => {
-		if (!value || !isValidASN(value.asn)) {
-			return c.text("Invalid ASN", 400);
-		}
-		return value;
-	}),
-	(c) => {
-		const asn = c.req.valid("param").asn;
+  "/go/:asn",
+  validator("param", (value, c) => {
+    if (!value || !isValidASN(value.asn)) {
+      return c.text("Invalid ASN", 400);
+    }
+    return value;
+  }),
+  (c) => {
+    const asn = c.req.valid("param").asn;
 
-		if (!CONFIG.ASN_LOOKUP_URL) {
-			return c.text("ASN Lookup is disabled", 400);
-		}
+    if (!CONFIG.ASN_LOOKUP_URL) {
+      return c.text("ASN Lookup is disabled", 400);
+    }
 
-		return c.redirect(getLookupURL(asn));
-	},
+    return c.redirect(getLookupURL(asn));
+  },
 );
