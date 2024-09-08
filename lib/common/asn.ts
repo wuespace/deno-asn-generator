@@ -78,19 +78,28 @@ function getRange() {
 export async function generateASN(
   metadata: Record<string, unknown> = {},
   namespace?: number,
+  deltaCounter = 1,
 ): Promise<ASNData> {
+  if (deltaCounter < 1) {
+    throw new Error("Delta counter must be at least 1");
+  }
+
+  if (deltaCounter % 1 !== 0) {
+    throw new Error("Delta counter must be an integer");
+  }
+
   metadata = { ...metadata, generatedAt: new Date().toISOString() };
   namespace = namespace ?? getCurrentNamespace();
   let counter = 0;
 
   await performAtomicTransaction(async (db) => {
     const counterRes = await db.get<number>(["namespace", namespace]);
-    counter = counterRes.value ?? 1;
+    counter = (counterRes.value ?? 0) + deltaCounter;
     return db.atomic()
       .check(counterRes)
       .set(
         ["namespace", namespace],
-        counter + 1,
+        counter,
       )
       .set(
         ["metadata", namespace, counter],
@@ -105,7 +114,7 @@ export async function generateASN(
     }`,
     namespace,
     prefix: CONFIG.ASN_PREFIX,
-    counter,
+    counter: counter,
     metadata,
   };
 

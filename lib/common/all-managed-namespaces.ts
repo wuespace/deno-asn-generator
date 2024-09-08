@@ -6,10 +6,8 @@ import { CONFIG } from "$common/mod.ts";
  * @returns all managed namespaces
  */
 export function allManagedNamespaces() {
-  const minGeneric = Number.parseInt(
-    "1" + "0".repeat(CONFIG.ASN_NAMESPACE_RANGE.toString().length - 1),
-  );
-  const maxGeneric = CONFIG.ASN_NAMESPACE_RANGE - 1;
+  const minGeneric = getMinimumGenericRangeNamespace();
+  const maxGeneric = getMaximumGenericRangeNamespace();
 
   return [
     ...Array.from(
@@ -18,4 +16,26 @@ export function allManagedNamespaces() {
     ),
     ...CONFIG.ADDITIONAL_MANAGED_NAMESPACES.map((v) => v.namespace),
   ];
+}
+
+function getMaximumGenericRangeNamespace() {
+  return CONFIG.ASN_NAMESPACE_RANGE - 1;
+}
+
+function getMinimumGenericRangeNamespace() {
+  return Number.parseInt(
+    "1" + "0".repeat(CONFIG.ASN_NAMESPACE_RANGE.toString().length - 1),
+  );
+}
+
+export function isManagedNamespace(namespace: number) {
+  if (namespace < getMinimumGenericRangeNamespace()) {
+    return false;
+  }
+  if (namespace <= getMaximumGenericRangeNamespace()) {
+    return true;
+  }
+  return CONFIG.ADDITIONAL_MANAGED_NAMESPACES.some((v) =>
+    v.namespace === namespace
+  );
 }

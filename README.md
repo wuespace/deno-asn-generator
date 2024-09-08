@@ -68,7 +68,7 @@ $$ n \in [r_{min}, r]; n = r_{min} + t \mod (r - r_{min}) $$
 - [x] REST API
 - [x] Visual Web Interface
 - [x] CLI
-  - [ ] Bump counter to avoid collissions after restoring backups (where ASNs
+  - [x] Bump counter to avoid collissions after restoring backups (where ASNs
         could have been generated after the time of the backup)
   - [x] Analyze time between ASNs, providing the possibility to specify a
         duration and a maximum collision probability for the bump (e.g. 1 hour,
