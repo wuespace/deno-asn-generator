@@ -18,16 +18,35 @@ export function allManagedNamespaces() {
   ];
 }
 
+/**
+ * The maximum namespace value for the generic range.
+ * This is the maximum value smaller than the `ASN_NAMESPACE_RANGE` configuration parameter.
+ * @returns the maximum namespace value for the generic range
+ */
 function getMaximumGenericRangeNamespace() {
   return CONFIG.ASN_NAMESPACE_RANGE - 1;
 }
 
+/**
+ * The minimum namespace value for the generic range.
+ * This is the minimum value with the same number of digits as
+ * the `ASN_NAMESPACE_RANGE` configuration parameter.
+ * @returns the minimum namespace value for the generic range
+ */
 function getMinimumGenericRangeNamespace() {
   return Number.parseInt(
     "1" + "0".repeat(CONFIG.ASN_NAMESPACE_RANGE.toString().length - 1),
   );
 }
 
+/**
+ * Checks if a namespace is a managed namespace.
+ * A managed namespace is any namespace that fulfills one of the following conditions:
+ * - The namespace is within the generic range (`ASN_NAMESPACE_RANGE`), or
+ * - The namespace is within the additional managed namespaces (`ADDITIONAL_MANAGED_NAMESPACES`)
+ * @param namespace the namespace to check
+ * @returns `true` if the namespace is managed by the system, `false` otherwise
+ */
 export function isManagedNamespace(namespace: number) {
   if (namespace < getMinimumGenericRangeNamespace()) {
     return false;
