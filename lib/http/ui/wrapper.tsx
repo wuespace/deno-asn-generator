@@ -50,7 +50,11 @@ export function Wrapper({ children }: { children?: Child }) {
           type="image/svg+xml"
           href="/static/asn-generator-logo.svg"
         />
-        <link rel="icon" type="image/png" href="/static/asn-generator-logo.png" />
+        <link
+          rel="icon"
+          type="image/png"
+          href="/static/asn-generator-logo.png"
+        />
         <link
           rel="stylesheet"
           href="/static/material-symbols/style.css"

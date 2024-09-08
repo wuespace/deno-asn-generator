@@ -39,9 +39,9 @@ export function IndexPage({ config }: { config: Config }) {
       </header>
       <main>
         <p>
-          Generic {config.ASN_PREFIX} numbers are numbers that are 
-          not assigned to any document and are accessible to all 
-          members of the organization.
+          Generic {config.ASN_PREFIX}{" "}
+          numbers are numbers that are not assigned to any document and are
+          accessible to all members of the organization.
         </p>
         <LinkCard icon={"add"} href="/asn" autofocus>
           Generate generic {CONFIG.ASN_PREFIX} number
@@ -56,8 +56,9 @@ export function IndexPage({ config }: { config: Config }) {
         {CONFIG.ADDITIONAL_MANAGED_NAMESPACES.length
           ? (
             <p>
-              Manually generate {config.ASN_PREFIX} numbers for specific
-              namespaces, such as namespaces for protected documents:
+              Manually generate {config.ASN_PREFIX}{" "}
+              numbers for specific namespaces, such as namespaces for protected
+              documents:
             </p>
           )
           : ""}
