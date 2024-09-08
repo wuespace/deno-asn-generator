@@ -21,3 +21,4 @@
 export * from "$cli/generate.ts";
 export * from "$cli/server.ts";
 export * from "$cli/help.ts";
+export * from "$cli/stats.ts";
