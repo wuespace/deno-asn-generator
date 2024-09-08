@@ -23,7 +23,7 @@ export function allManagedNamespaces(): number[] {
  * This is the maximum value smaller than the `ASN_NAMESPACE_RANGE` configuration parameter.
  * @returns the maximum namespace value for the generic range
  */
-function getMaximumGenericRangeNamespace(): number {
+export function getMaximumGenericRangeNamespace(): number {
   return CONFIG.ASN_NAMESPACE_RANGE - 1;
 }
 
@@ -33,7 +33,7 @@ function getMaximumGenericRangeNamespace(): number {
  * the `ASN_NAMESPACE_RANGE` configuration parameter.
  * @returns the minimum namespace value for the generic range
  */
-function getMinimumGenericRangeNamespace(): number {
+export function getMinimumGenericRangeNamespace(): number {
   return Number.parseInt(
     "1" + "0".repeat(CONFIG.ASN_NAMESPACE_RANGE.toString().length - 1),
   );

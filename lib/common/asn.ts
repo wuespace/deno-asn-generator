@@ -1,7 +1,12 @@
 import { CONFIG } from "$common/config.ts";
-import { performAtomicTransaction } from "$common/db.ts";
-import { ensureFileContent, getCounterPath } from "$common/path.ts";
-import { addTimestampToNamespaceStats } from "$common/time-stats.ts";
+import {
+  addTimestampToNamespaceStats,
+  ensureFileContent,
+  getCounterPath,
+  getMaximumGenericRangeNamespace,
+  getMinimumGenericRangeNamespace,
+  performAtomicTransaction,
+} from "$common/mod.ts";
 
 /**
  * Data structure for an Alphanumeric Serial Number (ASN).
@@ -34,14 +39,8 @@ export interface ASNData {
 
 function getCurrentNamespace(): number {
   const date = Date.now();
-  const range = getRange();
+  const range = getMinimumGenericRangeNamespace();
   return range + date % (CONFIG.ASN_NAMESPACE_RANGE - range);
-}
-
-function getRange() {
-  return Number.parseInt(
-    `1${"0".repeat(`${CONFIG.ASN_NAMESPACE_RANGE}`.length - 1)}`,
-  );
 }
 
 /**
@@ -134,22 +133,65 @@ export async function generateASN(
  * @remark The description is intended to be used in the console output or other monospaced text.
  */
 export function getFormatDescription(): string {
-  return `Format:\n` +
+  return `Configured ASN Format:\n` +
     `${CONFIG.ASN_PREFIX.padEnd(4)} - ${
-      getRange().toString().padEnd(4)
+      getMinimumGenericRangeNamespace().toString().padEnd(4)
     } - 001\n` +
     `(1)  - (2)  - (3)\n` +
     `\n` +
     `(1) Prefix specified in configuration (${CONFIG.ASN_PREFIX}).\n` +
     `(2) Numeric Namespace, whereas\n` +
-    `    - ${getRange()}-${
-      CONFIG.ASN_NAMESPACE_RANGE - 1
-    } is reserved for automatic generation, and\n` +
+    `    - ${getMinimumGenericRangeNamespace()}-${getMaximumGenericRangeNamespace()} is reserved for automatic generation, and\n` +
     `    - ${CONFIG.ASN_NAMESPACE_RANGE}-${
-      getRange() * 10 - 1
-    } is reserved for user defined namespaces.\n` +
+      getMinimumGenericRangeNamespace() * 10 - 1 -
+      (CONFIG.ASN_ENABLE_NAMESPACE_EXTENSION
+        ? getMinimumGenericRangeNamespace()
+        : 0)
+    }${
+      CONFIG.ASN_ENABLE_NAMESPACE_EXTENSION
+        ? ",\n" +
+          `    - ${
+            nthNinerExtensionRange(1, CONFIG.ASN_NAMESPACE_RANGE).join("-")
+          },\n` +
+          `    - ${
+            nthNinerExtensionRange(2, CONFIG.ASN_NAMESPACE_RANGE).join("-")
+          },\n` +
+          `    - ${
+            nthNinerExtensionRange(3, CONFIG.ASN_NAMESPACE_RANGE).join("-")
+          }, etc., are`
+        : " is"
+    } reserved for user defined namespaces.\n` +
     `    The user defined namespace can be used for pre-printed ASN barcodes and the like.\n` +
-    `(3) Counter, starting from 001, incrementing with each new ASN in the namespace.`;
+    `(3) Counter, starting from 001, incrementing with each new ASN in the namespace.\n` +
+    `    After 999, another digit is added.`;
+}
+
+/**
+ * Calculates the range of the nth niner extension range (which can be enabled using `ASN_ENABLE_NAMESPACE_EXTENSION`).
+ * @param n the nth niner extension range
+ * @param baseRange the base range, as configured by {@link ASN_NAMESPACE_RANGE}
+ * @returns a tuple with the minimum and maximum values of the nth niner extension range
+ */
+export function nthNinerExtensionRange(
+  n: number,
+  baseRange: number,
+): [number, number] {
+  if (n < 1) {
+    throw new Error("n must be at least 1");
+  }
+  if (n > 1) {
+    const [start, end] = nthNinerExtensionRange(n - 1, baseRange);
+    return [Number.parseInt(`9${start}`), Number.parseInt(`9${end}`)];
+  }
+
+  const bl = `${baseRange}`.length;
+
+  const min = `9${"0".repeat(bl)}`;
+  const max = `98${`9`.repeat(bl - 1)}`;
+  return [
+    Number.parseInt(min),
+    Number.parseInt(max),
+  ];
 }
 
 /**
