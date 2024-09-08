@@ -1,3 +1,5 @@
+import { CONFIG } from "$common/mod.ts";
+
 /**
  * An additional managed namespace outside of the default range.
  */
@@ -83,4 +85,20 @@ export function deserializeAdditionalManagedNamespaces(
 ): AdditionalManagedNamespace[] {
   const matches = value.trim().match(/\<\d+ .+?\>[, ]*/g) || [];
   return matches.map(deserializeAdditionalManagedNamespace);
+}
+
+export function isValidAdditionalManagedNamespace(
+  namespace: number,
+): boolean {
+  let sNamespace = namespace.toString();
+
+  if (CONFIG.ASN_ENABLE_NAMESPACE_EXTENSION) {
+    // strip leading 9s
+    sNamespace = sNamespace.replace(/^9+/, "");
+  }
+
+  return (
+    sNamespace.length === CONFIG.ASN_NAMESPACE_RANGE.toString().length &&
+    namespace >= CONFIG.ASN_NAMESPACE_RANGE
+  );
 }

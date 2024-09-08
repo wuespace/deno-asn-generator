@@ -1,10 +1,12 @@
 import { z } from "@collinhacks/zod";
-import { getDB } from "$common/db.ts";
 import "@std/dotenv/load";
 import {
   type AdditionalManagedNamespace,
   deserializeAdditionalManagedNamespaces,
-} from "./additional-managed-namespaces.ts";
+  getDB,
+  isValidAdditionalManagedNamespace,
+  zBoolString,
+} from "$common/mod.ts";
 
 /**
  * The application configuration.
@@ -36,6 +38,21 @@ export interface Config {
   ASN_NAMESPACE_RANGE: number;
 
   /**
+   * Whether to enable the namespace extension feature.
+   *
+   * If `false` this is set to, no namespaces can have a different number of digits than the default range
+   * specified by {@link ASN_NAMESPACE_RANGE}.
+   *
+   * If `true`, a leading `9` will extend the namespace by a digit. This can be chained.
+   *
+   * For example, if the default range is 60, without the extension, the additional namespaces could be 6X-9X.
+   * With the extension, you could have 6X-8X, but also 90X-98X, 990X-998X, etc.
+   *
+   * Default is `false`.
+   */
+  ASN_ENABLE_NAMESPACE_EXTENSION: boolean;
+
+  /**
    * Additional managed namespaces outside the {@link ASN_NAMESPACE_RANGE} for which ASN codes can be generated.
    * The format in the environmentvariable is `<namespace label><namespace label><namespace label>`.
    * The label must be at least 1 character long.
@@ -58,6 +75,7 @@ export interface Config {
    * @see {@link ASN_LOOKUP_INCLUDE_PREFIX}
    */
   ASN_LOOKUP_URL?: string;
+
   /**
    * Whether to include the prefix in the ASN when looking up the ASN.
    * This is necessary for compatibility with some systems like paperless-ngx, where the ASN is purely numeric.
@@ -82,6 +100,7 @@ const configSchema = z.object({
   PORT: z.number({ coerce: true }).default(8080),
   ASN_PREFIX: z.string().min(1).max(10).regex(/^[A-Z]+$/),
   ASN_NAMESPACE_RANGE: z.number({ coerce: true }),
+  ASN_ENABLE_NAMESPACE_EXTENSION: zBoolString.default(false),
   ADDITIONAL_MANAGED_NAMESPACES: z.string().default("").transform((v) =>
     deserializeAdditionalManagedNamespaces(v)
   ).or(z.array(z.object({
@@ -89,7 +108,7 @@ const configSchema = z.object({
     label: z.string().min(1),
   }))).default([]),
   ASN_LOOKUP_URL: z.string().regex(/^https?\:\/\/.*\{asn\}.*$/).optional(),
-  ASN_LOOKUP_INCLUDE_PREFIX: z.boolean({ coerce: true }).default(false),
+  ASN_LOOKUP_INCLUDE_PREFIX: zBoolString.default(false),
   ASN_BARCODE_TYPE: z.preprocess(
     (v) => v && String(v).toUpperCase(),
     z.literal("CODE128")
@@ -98,8 +117,6 @@ const configSchema = z.object({
       .default("CODE128"),
   ).transform((v) => v.toLowerCase()),
 });
-
-z.string().transform((v) => v.trim());
 
 /**
  * The current application configuration, based on environment variables, `.env` files, and defaults.
@@ -148,6 +165,31 @@ export async function validateDB(): Promise<void> {
         `  Old: ${dbConfig.ASN_NAMESPACE_RANGE},\n` +
         `  New: ${CONFIG.ASN_NAMESPACE_RANGE}.\n` +
         `The number of digits must be the same.`,
+    );
+  }
+
+  if (
+    CONFIG.ASN_ENABLE_NAMESPACE_EXTENSION &&
+    CONFIG.ASN_NAMESPACE_RANGE.toString().charAt(0) === "9"
+  ) {
+    throw new Error(
+      `Semantic configuration error: ASN_NAMESPACE_RANGE includes namespaces with leading 9s.\n` +
+        `This is not allowed when ASN_ENABLE_NAMESPACE_EXTENSION is true.`,
+    );
+  }
+
+  if (
+    !CONFIG.ADDITIONAL_MANAGED_NAMESPACES.every((a) =>
+      isValidAdditionalManagedNamespace(a.namespace)
+    )
+  ) {
+    console.debug(CONFIG.ADDITIONAL_MANAGED_NAMESPACES);
+    throw new Error(
+      `Semantic configuration error: Additional managed namespaces contain invalid namespace numbers.\n` +
+        `The namespace numbers must have the same amount of digits as ASN_NAMESPACE_RANGE.\n` +
+        `If ASN_ENABLE_NAMESPACE_EXTENSION is true, the leading 9s are stripped from this calculation.\n` +
+        `For example, if your ASN_NAMESPACE_RANGE has two digits, instead of only XX, you can then also have 9XX, 99XX, etc.\n` +
+        `Note that in this case, 9X would not be valid.`,
     );
   }
 
