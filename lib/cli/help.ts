@@ -14,6 +14,8 @@ Commands:
     --count <n>     Number of ASNs to generate (defaults to 1)
   stats             Show statistics about the rate of ASN registrations
     --namespace <n> Show statistics for a specific namespace. Omit to show all.
+  bump <n>          Bump the counters for the given namespace by n
+    --namespace <n> Namespace to bump. Omit to bump all.
 
 Options:
   --help  Show this help message
