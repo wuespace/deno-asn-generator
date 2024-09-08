@@ -159,7 +159,7 @@ export function getFormatDescription(): string {
  */
 export function isValidASN(asn: string): boolean {
   return new RegExp(
-    `^${CONFIG.ASN_PREFIX}(\\d{${
+    `^(${CONFIG.ASN_PREFIX})?(\\d{${
       `${CONFIG.ASN_NAMESPACE_RANGE}`.length
     }})(\\d{3})\\d*$`,
   ).test(asn);
