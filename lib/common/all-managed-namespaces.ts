@@ -5,7 +5,7 @@ import { CONFIG } from "$common/mod.ts";
  * This includes the generic namespaces and the additional managed namespaces.
  * @returns all managed namespaces
  */
-export function allManagedNamespaces() {
+export function allManagedNamespaces(): number[] {
   const minGeneric = getMinimumGenericRangeNamespace();
   const maxGeneric = getMaximumGenericRangeNamespace();
 
@@ -23,7 +23,7 @@ export function allManagedNamespaces() {
  * This is the maximum value smaller than the `ASN_NAMESPACE_RANGE` configuration parameter.
  * @returns the maximum namespace value for the generic range
  */
-function getMaximumGenericRangeNamespace() {
+function getMaximumGenericRangeNamespace(): number {
   return CONFIG.ASN_NAMESPACE_RANGE - 1;
 }
 
@@ -33,7 +33,7 @@ function getMaximumGenericRangeNamespace() {
  * the `ASN_NAMESPACE_RANGE` configuration parameter.
  * @returns the minimum namespace value for the generic range
  */
-function getMinimumGenericRangeNamespace() {
+function getMinimumGenericRangeNamespace(): number {
   return Number.parseInt(
     "1" + "0".repeat(CONFIG.ASN_NAMESPACE_RANGE.toString().length - 1),
   );
@@ -47,7 +47,7 @@ function getMinimumGenericRangeNamespace() {
  * @param namespace the namespace to check
  * @returns `true` if the namespace is managed by the system, `false` otherwise
  */
-export function isManagedNamespace(namespace: number) {
+export function isManagedNamespace(namespace: number): boolean {
   if (namespace < getMinimumGenericRangeNamespace()) {
     return false;
   }
