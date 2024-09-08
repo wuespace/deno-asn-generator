@@ -100,7 +100,7 @@ const configSchema = z.object({
   PORT: z.number({ coerce: true }).default(8080),
   ASN_PREFIX: z.string().min(1).max(10).regex(/^[A-Z]+$/),
   ASN_NAMESPACE_RANGE: z.number({ coerce: true }),
-  ASN_ENABLE_NAMESPACE_EXTENSION: zBoolString.default(false),
+  ASN_ENABLE_NAMESPACE_EXTENSION: zBoolString().default(false),
   ADDITIONAL_MANAGED_NAMESPACES: z.string().default("").transform((v) =>
     deserializeAdditionalManagedNamespaces(v)
   ).or(z.array(z.object({
@@ -108,7 +108,7 @@ const configSchema = z.object({
     label: z.string().min(1),
   }))).default([]),
   ASN_LOOKUP_URL: z.string().regex(/^https?\:\/\/.*\{asn\}.*$/).optional(),
-  ASN_LOOKUP_INCLUDE_PREFIX: zBoolString.default(false),
+  ASN_LOOKUP_INCLUDE_PREFIX: zBoolString().default(false),
   ASN_BARCODE_TYPE: z.preprocess(
     (v) => v && String(v).toUpperCase(),
     z.literal("CODE128")
