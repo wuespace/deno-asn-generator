@@ -1,5 +1,6 @@
 import type { Child } from "@hono/hono/jsx";
 import { css, cx, Style } from "@hono/hono/css";
+import { CONFIG } from "$common/config.ts";
 
 const bodyClass = css`
 background: var(--primary-color);
@@ -43,7 +44,7 @@ export function Wrapper({ children }: { children?: Child }) {
   return (
     <html>
       <head>
-        <title>Wrapper</title>
+        <title>{CONFIG.ASN_PREFIX} Number Generator</title>
         <link
           rel="stylesheet"
           href="/static/material-symbols/style.css"
