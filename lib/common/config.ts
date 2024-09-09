@@ -1,5 +1,4 @@
 import { z } from "@collinhacks/zod";
-import "@std/dotenv/load";
 import {
   type AdditionalManagedNamespace,
   deserializeAdditionalManagedNamespaces,

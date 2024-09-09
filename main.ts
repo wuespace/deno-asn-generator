@@ -34,6 +34,7 @@
  * Note that this only gets run when the module is the main module (`import.meta.main === true`).
  * Therefore, the CLI won't run by itself when you import this module in another module.
  */
+import "@std/dotenv/load";
 import { parseArgs } from "@std/cli/parse-args";
 import { validateDB } from "$common/mod.ts";
 

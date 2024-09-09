@@ -8,8 +8,8 @@
     "./http": "./lib/http/mod.ts"
   },
   "tasks": {
-    "dev": "deno run --watch --env --unstable-kv -A main.ts",
-    "run": "deno run --env --unstable-kv -A main.ts",
+    "dev": "deno run --watch --unstable-kv -A main.ts",
+    "run": "deno run --unstable-kv -A main.ts",
     "test": "DATA_DIR=data-test ASN_PREFIX=ASN ASN_NAMESPACE_RANGE=50 ASN_ENABLE_NAMESPACE_EXTANSION=1 deno test --unstable-kv -A",
     "lint": "deno lint",
     "check": "deno check main.ts",
