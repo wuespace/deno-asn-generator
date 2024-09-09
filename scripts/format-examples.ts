@@ -23,8 +23,8 @@ const md = (
   enableExtension: boolean,
   output: string,
 ) => `
-## Range ${range} ${
-  enableExtension ? "with ASN_ENABLE_NAMESPACE_EXTENSION" : ""
+## Range ${range}${
+  enableExtension ? " with ASN_ENABLE_NAMESPACE_EXTENSION" : ""
 }
 
 Configuration (Environment Variables):
@@ -40,7 +40,6 @@ Format Description:
 \`\`\`text
 ${output}
 \`\`\`
-
 `;
 
 let content = `<!-- deno-fmt-ignore-file -->
@@ -49,7 +48,6 @@ let content = `<!-- deno-fmt-ignore-file -->
 # ASN Format Examples
 
 [Back to README](./README.md)
-
 
 ---
 `;

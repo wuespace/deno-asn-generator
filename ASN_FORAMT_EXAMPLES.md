@@ -5,10 +5,9 @@
 
 [Back to README](./README.md)
 
-
 ---
 
-## Range 3 
+## Range 3
 
 Configuration (Environment Variables):
 
@@ -33,7 +32,6 @@ ASN  - 1    - 001
 (3) Counter, starting from 001, incrementing with each new ASN in the namespace.
     After 999, another digit is added.
 ```
-
 
 ## Range 3 with ASN_ENABLE_NAMESPACE_EXTENSION
 
@@ -64,8 +62,7 @@ ASN  - 1    - 001
     After 999, another digit is added.
 ```
 
-
-## Range 30 
+## Range 30
 
 Configuration (Environment Variables):
 
@@ -90,7 +87,6 @@ ASN  - 10   - 001
 (3) Counter, starting from 001, incrementing with each new ASN in the namespace.
     After 999, another digit is added.
 ```
-
 
 ## Range 30 with ASN_ENABLE_NAMESPACE_EXTENSION
 
@@ -121,8 +117,7 @@ WBD  - 10   - 001
     After 999, another digit is added.
 ```
 
-
-## Range 300 
+## Range 300
 
 Configuration (Environment Variables):
 
@@ -147,7 +142,6 @@ WBD  - 100  - 001
 (3) Counter, starting from 001, incrementing with each new ASN in the namespace.
     After 999, another digit is added.
 ```
-
 
 ## Range 300 with ASN_ENABLE_NAMESPACE_EXTENSION
 
@@ -177,4 +171,3 @@ WBD  - 100  - 001
 (3) Counter, starting from 001, incrementing with each new ASN in the namespace.
     After 999, another digit is added.
 ```
-
