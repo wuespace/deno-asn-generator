@@ -19,6 +19,8 @@ const TEST_CONFIG: Config = {
   ASN_ENABLE_NAMESPACE_EXTENSION: true,
   ASN_LOOKUP_INCLUDE_PREFIX: true,
   ASN_BARCODE_TYPE: "",
+  DATA_DIR: "",
+  DB_FILE_NAME: ""
 };
 
 Deno.test("nthNinerExtensionRange()", async (t) => {

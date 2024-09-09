@@ -12,8 +12,8 @@
     "run": "deno run --unstable-kv -A main.ts",
     "test": "DATA_DIR=data-test ASN_PREFIX=ASN ASN_NAMESPACE_RANGE=50 ASN_ENABLE_NAMESPACE_EXTANSION=1 deno test --unstable-kv -A",
     "docs": "deno doc --unstable-kv --reload --html main.ts",
-    "lint": "deno lint && deno doc --lint main.ts",
-    "check": "deno check main.ts",
+    "lint": "deno lint && deno doc --lint main.ts lib/*/mod.ts",
+    "check": "deno check main.ts lib/**/*.ts",
     "version": "deno run --allow-read=. --allow-write=. --allow-run=git jsr:@utility/version"
   },
   "imports": {
