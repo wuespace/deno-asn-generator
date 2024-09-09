@@ -1,4 +1,4 @@
-import { CONFIG } from "$common/mod.ts";
+import { CONFIG, isValidNamespace } from "$common/mod.ts";
 
 /**
  * An additional managed namespace outside of the default range.
@@ -87,18 +87,26 @@ export function deserializeAdditionalManagedNamespaces(
   return matches.map(deserializeAdditionalManagedNamespace);
 }
 
+/**
+ * Checks if a namespace is a valid additional managed namespace according to the configuration.
+ * Note that "valid" does not necessarily mean "managed".
+ * A valid additional managed namespace is any namespace that fulfills the following conditions:
+ * - The namespace is a safe integer, and
+ * - The namespace has a compatible number of digits based on the configuration, and
+ * - The namespace is greater than or equal to the `ASN_NAMESPACE_RANGE` configuration parameter.
+ *
+ * Any managed namespace must be a valid namespace, but not all valid namespaces are managed.
+ *
+ * @param namespace the namespace to check
+ * @returns `true` if the namespace is a valid additional managed namespace, `false` otherwise
+ */
 export function isValidAdditionalManagedNamespace(
   namespace: number,
+  config = CONFIG,
 ): boolean {
-  let sNamespace = namespace.toString();
-
-  if (CONFIG.ASN_ENABLE_NAMESPACE_EXTENSION) {
-    // strip leading 9s
-    sNamespace = sNamespace.replace(/^9+/, "");
+  if (!isValidNamespace(namespace, config)) {
+    return false;
   }
 
-  return (
-    sNamespace.length === CONFIG.ASN_NAMESPACE_RANGE.toString().length &&
-    namespace >= CONFIG.ASN_NAMESPACE_RANGE
-  );
+  return namespace >= config.ASN_NAMESPACE_RANGE;
 }

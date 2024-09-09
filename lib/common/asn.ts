@@ -5,6 +5,7 @@ import {
   getCounterPath,
   getMaximumGenericRangeNamespace,
   getMinimumGenericRangeNamespace,
+  isValidNamespace,
   performAtomicTransaction,
 } from "$common/mod.ts";
 
@@ -37,10 +38,10 @@ export interface ASNData {
   metadata: Record<string, unknown>;
 }
 
-function getCurrentNamespace(): number {
+function getCurrentNamespace(config = CONFIG): number {
   const date = Date.now();
-  const range = getMinimumGenericRangeNamespace();
-  return range + date % (CONFIG.ASN_NAMESPACE_RANGE - range);
+  const range = getMinimumGenericRangeNamespace(config);
+  return range + date % (config.ASN_NAMESPACE_RANGE - range);
 }
 
 /**
@@ -108,9 +109,7 @@ export async function generateASN(
   });
 
   const asnData = {
-    asn: `${CONFIG.ASN_PREFIX}${namespace}${
-      counter.toString().padStart(3, "0")
-    }`,
+    asn: formatASN(namespace, counter),
     namespace,
     prefix: CONFIG.ASN_PREFIX,
     counter: counter,
@@ -128,39 +127,84 @@ export async function generateASN(
 }
 
 /**
+ * Validates a counter to ensure it is a valid counter to use in an ASN.
+ * A valid counter is a safe integer greater than or equal to 0.
+ * @param counter the counter to validate
+ * @param config the configuration to use for validation. Defaults to the global configuration.
+ * @returns `true` if the counter is valid, `false` otherwise
+ */
+export function isValidCounter(counter: number): boolean {
+  return counter >= 0 && Number.isSafeInteger(counter);
+}
+
+/**
+ * Formats a namespace and a counter into a full ASN string.
+ * @param namespace the namespace number
+ * @param counter the counter number
+ * @param config The configuration to use for formatting. Defaults to the global configuration.
+ * @returns the full ASN string including the configured prefix
+ */
+export function formatASN(
+  namespace: number,
+  counter: number,
+  config = CONFIG,
+): string {
+  if (!isValidNamespace(namespace, config)) {
+    throw new Error("Invalid namespace: " + namespace);
+  }
+
+  if (!isValidCounter(counter)) {
+    throw new Error(
+      "Invalid counter: " + counter +
+        " (must be a safe integer >= 0)",
+    );
+  }
+
+  return `${config.ASN_PREFIX}${namespace}${
+    counter.toString().padStart(3, "0")
+  }`;
+}
+
+/**
  * Returns a human-readable description of the ASN format.
+ * @param config The configuration to use for the description. Defaults to the global configuration.
  * @returns a human-readable description of the ASN format that explains the prefix, the namespace, and the counter.
  * @remark The description is intended to be used in the console output or other monospaced text.
  */
-export function getFormatDescription(): string {
+export function getFormatDescription(config = CONFIG): string {
+  const {
+    ASN_PREFIX,
+    ASN_NAMESPACE_RANGE,
+    ASN_ENABLE_NAMESPACE_EXTENSION,
+  } = config;
+  const minimumGenericNamespace = getMinimumGenericRangeNamespace(config);
+  const maximumGenericNamespace = getMaximumGenericRangeNamespace(config);
+
+  const paddedPrefix = ASN_PREFIX.padEnd(4);
+  const paddedNamespace = minimumGenericNamespace
+    .toString()
+    .padEnd(4);
+
+  const manualNamespaceEnd = minimumGenericNamespace * 10 - 1 -
+    (ASN_ENABLE_NAMESPACE_EXTENSION ? minimumGenericNamespace : 0);
+
+  const namespaceExtensionRanges = ASN_ENABLE_NAMESPACE_EXTENSION
+    ? ",\n" +
+      `    - ${nthNinerExtensionRange(1, ASN_NAMESPACE_RANGE).join("-")},\n` +
+      `    - ${nthNinerExtensionRange(2, ASN_NAMESPACE_RANGE).join("-")},\n` +
+      `    - ${
+        nthNinerExtensionRange(3, ASN_NAMESPACE_RANGE).join("-")
+      }, etc., are`
+    : " is";
+
   return `Configured ASN Format:\n` +
-    `${CONFIG.ASN_PREFIX.padEnd(4)} - ${
-      getMinimumGenericRangeNamespace().toString().padEnd(4)
-    } - 001\n` +
+    `${paddedPrefix} - ${paddedNamespace} - 001\n` +
     `(1)  - (2)  - (3)\n` +
     `\n` +
-    `(1) Prefix specified in configuration (${CONFIG.ASN_PREFIX}).\n` +
+    `(1) Prefix specified in configuration (${ASN_PREFIX}).\n` +
     `(2) Numeric Namespace, whereas\n` +
-    `    - ${getMinimumGenericRangeNamespace()}-${getMaximumGenericRangeNamespace()} is reserved for automatic generation, and\n` +
-    `    - ${CONFIG.ASN_NAMESPACE_RANGE}-${
-      getMinimumGenericRangeNamespace() * 10 - 1 -
-      (CONFIG.ASN_ENABLE_NAMESPACE_EXTENSION
-        ? getMinimumGenericRangeNamespace()
-        : 0)
-    }${
-      CONFIG.ASN_ENABLE_NAMESPACE_EXTENSION
-        ? ",\n" +
-          `    - ${
-            nthNinerExtensionRange(1, CONFIG.ASN_NAMESPACE_RANGE).join("-")
-          },\n` +
-          `    - ${
-            nthNinerExtensionRange(2, CONFIG.ASN_NAMESPACE_RANGE).join("-")
-          },\n` +
-          `    - ${
-            nthNinerExtensionRange(3, CONFIG.ASN_NAMESPACE_RANGE).join("-")
-          }, etc., are`
-        : " is"
-    } reserved for user defined namespaces.\n` +
+    `    - ${minimumGenericNamespace}-${maximumGenericNamespace} is reserved for automatic generation, and\n` +
+    `    - ${ASN_NAMESPACE_RANGE}-${manualNamespaceEnd}${namespaceExtensionRanges} reserved for user defined namespaces.\n` +
     `    The user defined namespace can be used for pre-printed ASN barcodes and the like.\n` +
     `(3) Counter, starting from 001, incrementing with each new ASN in the namespace.\n` +
     `    After 999, another digit is added.`;
@@ -197,12 +241,54 @@ export function nthNinerExtensionRange(
 /**
  * Validates an ASN to ensure it matches the format specified by the current configuration.
  * @param asn ASN to validate
+ * @param config The configuration to use for validation. Defaults to the global configuration.
  * @returns `true` if the ASN is valid, `false` otherwise
  */
-export function isValidASN(asn: string): boolean {
+export function isValidASN(asn: string, config = CONFIG): boolean {
   return new RegExp(
-    `^(${CONFIG.ASN_PREFIX})?(\\d{${
-      `${CONFIG.ASN_NAMESPACE_RANGE}`.length
+    `^(${config.ASN_PREFIX})?(\\d{${
+      `${config.ASN_NAMESPACE_RANGE}`.length
     }})(\\d{3})\\d*$`,
   ).test(asn);
+}
+
+/**
+ * Parses an ASN string into an {@link ASNData} object.
+ * The ASN string must match the format specified by the current configuration.
+ * The ASN prefix is optional and can be omitted.
+ *
+ * @throws Error if the ASN is invalid
+ * @param asn the ASN to parse
+ * @param config The configuration to use for parsing. Defaults to the global configuration.
+ * @returns An {@link ASNData} object with the parsed ASN data
+ */
+export function parseASN(asn: string, config = CONFIG): ASNData {
+  if (!isValidASN(asn, config)) {
+    throw new Error("Invalid ASN");
+  }
+
+  if (asn.startsWith(config.ASN_PREFIX)) {
+    asn = asn.slice(config.ASN_PREFIX.length);
+  }
+
+  let strNamespace = "";
+
+  while (config.ASN_ENABLE_NAMESPACE_EXTENSION && asn.startsWith("9")) {
+    strNamespace += asn[0];
+    asn = asn.slice(1);
+  }
+
+  strNamespace += asn.slice(0, `${config.ASN_NAMESPACE_RANGE}`.length);
+  asn = asn.slice(`${config.ASN_NAMESPACE_RANGE}`.length);
+
+  const namespace = Number.parseInt(strNamespace);
+  const counter = Number.parseInt(asn);
+
+  return {
+    asn: formatASN(namespace, counter, config),
+    prefix: CONFIG.ASN_PREFIX,
+    namespace,
+    counter,
+    metadata: {},
+  };
 }
