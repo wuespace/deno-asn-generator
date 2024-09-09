@@ -1,7 +1,7 @@
 import { validator } from "@hono/hono/validator";
 import { isValidASN } from "$common/mod.ts";
 
-export const paramASNValidator = validator("param", (value, c) => {
+export const paramValidASNValidator = validator("param", (value, c) => {
   const asn = value.asn;
 
   if (!asn) {
