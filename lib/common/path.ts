@@ -1,62 +1,53 @@
 import { resolve } from "node:path";
-import { z } from "@collinhacks/zod";
-
-const DATA_DIR = z.string().min(1).default("data").parse(
-  Deno.env.get("DATA_DIR"),
-);
-const DB_FILE_NAME = z.string().min(1).default("denokv.sqlite3").parse(
-  Deno.env.get("DB_FILE_NAME"),
-);
+import { CONFIG } from "$common/mod.ts";
 
 /**
- * The path to the directory where the data is stored.
- * By default, this is the `data` directory in the root of the project.
- * Can be overridden by setting the `DATA_DIR` environment variable.
- *
- * This is the central location for all data files.
- * Regular backups are strongly recommended.
+ * Resolves the full path to the {@link Config.DATA_DIR}.
+ * @param config The configuration object to use. Defaults to the global configuration.
+ * @returns Full path to the data directory.
  */
-export const DATA_PATH: string = resolve(DATA_DIR);
+export function getDataDirectoryPath(config = CONFIG): string {
+  return resolve(config.DATA_DIR);
+}
+
 /**
- * The name of the database file.
- * Can be either a local file path or a URL beginning with `http[s]://`.
- *
- * If the database file is a URL, it gets used as a
- * [KV Connect URL](https://docs.deno.com/deploy/kv/manual/node/#kv-connect-urls).
- * This allows for use-cases where multiple instances of the application share the same database.
- * You can even use the programmatic APIs to build other applications on top of this system.
- * You can find more information about KV Connect URLs at
- * <https://github.com/denoland/denokv/blob/main/proto/kv-connect.md>.
- *
- * If the database file is a local file path, it gets used as a SQLite database file.
- * The database file is then stored in the `DATA_PATH`.
- *
- * By default, this is `denokv.sqlite3`.
- * Can be overridden by setting the `DB_FILE_NAME` environment variable.
- *
- * @see {@link DATA_PATH}
+ * Resolves the full path to the database file.
+ * If the database file is a URL, the URL is returned as is.
+ * See {@link Config.DB_FILE_NAME} for more information.
+ * @param config The configuration object to use. Defaults to the global configuration.
+ * @returns Full path to the database file.
+ * 
  */
-export const DB_FILE_PATH: string = DB_FILE_NAME.startsWith("http")
-  ? DB_FILE_NAME
-  : resolve(DATA_PATH, DB_FILE_NAME);
+export function getDatabasePath(config = CONFIG): string {
+  if (config.DB_FILE_NAME.startsWith("http")) {
+    return config.DB_FILE_NAME;
+  }
+
+  return resolve(getDataDirectoryPath(config), config.DB_FILE_NAME);
+}
 
 /**
  * Logs relevant paths to the console.
  */
-export function logPaths() {
-  console.log(`DATA_PATH: ${DATA_PATH}`);
-  console.log(`DB_FILE_PATH: ${DB_FILE_PATH}`);
+export function logPaths(config = CONFIG) {
+  console.log(`DATA_PATH: ${getDataDirectoryPath(config)}`);
+  console.log(`DB_FILE_PATH: ${getDatabasePath(config)}`);
 }
 
 /**
  * Builds a path to a log file for the given ASN that contains the ASN data (if the ASN exists).
  * @param namespace the ASN namespace
  * @param counter the ASN counter
+ * @param config the configuration object to use. Defaults to the global configuration.
  * @returns a path to a log file for the given ASN that contains the ASN data (if the ASN exists).
  */
-export function getCounterPath(namespace: number, counter: number): string {
+export function getCounterPath(
+  namespace: number,
+  counter: number,
+  config = CONFIG,
+): string {
   return resolve(
-    DATA_PATH,
+    getDataDirectoryPath(config),
     namespace.toString(),
     `${counter.toString().padStart(8, "_")}.log`,
   );
@@ -65,10 +56,18 @@ export function getCounterPath(namespace: number, counter: number): string {
 /**
  * Builds a path to a log file for the given namespace that contains the metadata for the namespace.
  * @param namespace the ASN namespace
+ * @param config the configuration object to use. Defaults to the global configuration.
  * @returns a path to a log file for the given namespace that contains the metadata for the namespace.
  */
-export function getNamespaceMetadataPath(namespace: number): string {
-  return resolve(DATA_PATH, namespace.toString(), `${"_".repeat(8)}.log`);
+export function getNamespaceMetadataPath(
+  namespace: number,
+  config = CONFIG,
+): string {
+  return resolve(
+    getDataDirectoryPath(config),
+    namespace.toString(),
+    `${"_".repeat(8)}.log`,
+  );
 }
 
 /**

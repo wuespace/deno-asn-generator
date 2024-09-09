@@ -20,6 +20,8 @@ export * from "$http/lookup-url.ts";
 export * from "$http/barcode-svg.ts";
 export * from "$http/asn-metadata-from-context.ts";
 
+export type { Hono as HonoApp } from "@hono/hono";
+
 /**
  * The main HTTP server of the web application.
  * This server is responsible for serving the web application and the API.

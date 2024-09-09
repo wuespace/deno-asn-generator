@@ -13,18 +13,19 @@ import {
 export interface Config {
   /**
    * The port the server should listen on.
-   * @default 8080
+   * 
+   * Default: `8080`
    */
-  PORT: number;
+  readonly PORT: number;
 
   /**
    * The prefix for generated ASNs.
    * Can only contain uppercase letters A-Z. Must be at least 1 character long. Max length is 10.
    *
    * The prefix must not change after the first run.
-   * @example "ASN"
+   * @example `"ASN"`
    */
-  ASN_PREFIX: string;
+  readonly ASN_PREFIX: string;
 
   /**
    * The range of the ASN namespace part. For example, if it's 600, the range for generated ASNs would be 100 - 599.
@@ -32,9 +33,9 @@ export interface Config {
    *
    * The number of digits must not change after the first run.
    *
-   * @see For more information on the namespacing, take a look at {@link generateASN} or the `README.md`.
+   * For more information on the namespacing, take a look at {@link generateASN} or the `README.md`.
    */
-  ASN_NAMESPACE_RANGE: number;
+  readonly ASN_NAMESPACE_RANGE: number;
 
   /**
    * Whether to enable the namespace extension feature.
@@ -49,7 +50,7 @@ export interface Config {
    *
    * Default is `false`.
    */
-  ASN_ENABLE_NAMESPACE_EXTENSION: boolean;
+  readonly ASN_ENABLE_NAMESPACE_EXTENSION: boolean;
 
   /**
    * Additional managed namespaces outside the {@link ASN_NAMESPACE_RANGE} for which ASNs can be generated.
@@ -59,9 +60,9 @@ export interface Config {
    * If the array is empty, no additional namespaces will be managed, leaving only the default range
    * specified by {@link ASN_NAMESPACE_RANGE}.
    *
-   * @example "<500 Internal Documents (Generic)><600 NDA-Covered Documents (Generic)>"
+   * @example `"<500 Internal Documents (Generic)><600 NDA-Covered Documents (Generic)>"`
    */
-  ADDITIONAL_MANAGED_NAMESPACES: AdditionalManagedNamespace[];
+  readonly ADDITIONAL_MANAGED_NAMESPACES: AdditionalManagedNamespace[];
 
   /**
    * The URL to use for the ASN lookup. The URL must contain the `{asn}` placeholder which will be replaced with the ASN.
@@ -70,18 +71,19 @@ export interface Config {
    * If `ASN_LOOKUP_INCLUDE_PREFIX` is `false`, the prefix will be excluded from the ASN.
    * This is necessary for compatibility with some systems like paperless-ngx, where the ASN is purely numeric.
    *
-   * @example "https://dms.example.com/documents?asn={asn}"
-   * @see {@link ASN_LOOKUP_INCLUDE_PREFIX}
+   * @example `"https://dms.example.com/documents?asn={asn}"`
+   * 
+   * See also: {@link ASN_LOOKUP_INCLUDE_PREFIX}
    */
-  ASN_LOOKUP_URL?: string;
+  readonly ASN_LOOKUP_URL?: string;
 
   /**
    * Whether to include the prefix in the ASN when looking up the ASN.
    * This is necessary for compatibility with some systems like paperless-ngx, where the ASN is purely numeric.
    *
-   * @default `false`
+   * Default: `false`
    */
-  ASN_LOOKUP_INCLUDE_PREFIX: boolean;
+  readonly ASN_LOOKUP_INCLUDE_PREFIX: boolean;
 
   /**
    * The type of barcode to use for the ASN.
@@ -90,9 +92,50 @@ export interface Config {
    * - `"CODE39"`, and
    * - `"CODE93"`.
    *
-   * @default "CODE128"
+   * Default: `"CODE128"`
    */
-  ASN_BARCODE_TYPE: string;
+  readonly ASN_BARCODE_TYPE: string;
+
+  /**
+   * The path to the directory where the data is stored.
+   * Can be relative (to the current working directory) or absolute.
+   * By default, this is the `data` directory in the root of the project.
+   * It can be overridden by setting the `DATA_DIR` environment variable.
+   * 
+   * **Note:**
+   * In most cases, you will not access this directly, but use {@link getDataDirectoryPath} instead.
+   *
+   * This is the central location for all data files.
+   * Regular backups are strongly recommended.
+   *
+   * Default: `"data"`
+   */
+  readonly DATA_DIR: string;
+
+  /**
+   * The path to the database file.
+   * Can be either a local file path or a URL beginning with `http[s]://`.
+   * 
+   * **Note:**
+   * In most cases, you will not access this directly, but use {@link getDatabasePath} instead.
+   *
+   * If the database file is a URL, it gets used as a
+   * [KV Connect URL](https://docs.deno.com/deploy/kv/manual/node/#kv-connect-urls).
+   * This allows for use-cases where multiple instances of the application share the same database.
+   * You can even use the programmatic APIs to build other applications on top of this system.
+   * You can find more information about KV Connect URLs at
+   * <https://github.com/denoland/denokv/blob/main/proto/kv-connect.md>.
+   *
+   * If the database file is a local file path, it gets used as a SQLite database file.
+   * The path will be interpreted to be relative to the {@link DATA_DIR}.
+   * The database file is then stored in the `DATA_PATH`.
+   *
+   * By default, this is `denokv.sqlite3`.
+   * Can be overridden by setting the `DB_FILE_NAME` environment variable.
+   *
+   * Defaults to `"denokv.sqlite3"`
+   */
+  readonly DB_FILE_NAME: string;
 }
 
 const configSchema = z.object({
@@ -115,13 +158,17 @@ const configSchema = z.object({
       .or(z.literal("CODE93"))
       .default("CODE128"),
   ).transform((v) => v.toLowerCase()),
+  DATA_DIR: z.string().min(1).default("data"),
+  DB_FILE_NAME: z.string().min(1).default("denokv.sqlite3"),
 });
 
 /**
  * The current application configuration, based on environment variables, `.env` files, and defaults.
  * @see {@link Config}
  */
-export const CONFIG: Config = configSchema.parse(Deno.env.toObject());
+export const CONFIG: Config = Object.freeze(
+  configSchema.parse(Deno.env.toObject()),
+);
 
 const DB_CONFIG_KEY = "config";
 
