@@ -20,7 +20,7 @@ export async function getDB(config = CONFIG): Promise<Deno.Kv> {
  * Retries the transaction if the database is locked or if the operation fails.
  *
  * This follows the principles described by <https://docs.deno.com/deploy/kv/manual/transactions/>
- * 
+ *
  * @param fn the function to execute atomically
  * @param config The configuration object to use. Defaults to the global configuration.
  *
@@ -35,7 +35,6 @@ export async function getDB(config = CONFIG): Promise<Deno.Kv> {
  *     .commit();
  * });
  * ```
- *
  */
 export async function performAtomicTransaction(
   fn: (db: Deno.Kv) => Promise<Deno.KvCommitResult | Deno.KvCommitError>,

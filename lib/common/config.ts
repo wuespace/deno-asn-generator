@@ -13,7 +13,7 @@ import {
 export interface Config {
   /**
    * The port the server should listen on.
-   * 
+   *
    * Default: `8080`
    */
   readonly PORT: number;
@@ -72,7 +72,7 @@ export interface Config {
    * This is necessary for compatibility with some systems like paperless-ngx, where the ASN is purely numeric.
    *
    * @example `"https://dms.example.com/documents?asn={asn}"`
-   * 
+   *
    * See also: {@link ASN_LOOKUP_INCLUDE_PREFIX}
    */
   readonly ASN_LOOKUP_URL?: string;
@@ -101,7 +101,7 @@ export interface Config {
    * Can be relative (to the current working directory) or absolute.
    * By default, this is the `data` directory in the root of the project.
    * It can be overridden by setting the `DATA_DIR` environment variable.
-   * 
+   *
    * **Note:**
    * In most cases, you will not access this directly, but use {@link getDataDirectoryPath} instead.
    *
@@ -115,7 +115,7 @@ export interface Config {
   /**
    * The path to the database file.
    * Can be either a local file path or a URL beginning with `http[s]://`.
-   * 
+   *
    * **Note:**
    * In most cases, you will not access this directly, but use {@link getDatabasePath} instead.
    *

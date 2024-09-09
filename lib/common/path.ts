@@ -16,7 +16,6 @@ export function getDataDirectoryPath(config = CONFIG): string {
  * See {@link Config.DB_FILE_NAME} for more information.
  * @param config The configuration object to use. Defaults to the global configuration.
  * @returns Full path to the database file.
- * 
  */
 export function getDatabasePath(config = CONFIG): string {
   if (config.DB_FILE_NAME.startsWith("http")) {

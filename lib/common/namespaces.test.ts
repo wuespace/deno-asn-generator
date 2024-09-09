@@ -20,7 +20,7 @@ const TEST_CONFIG: Config = {
   ASN_LOOKUP_INCLUDE_PREFIX: true,
   ASN_BARCODE_TYPE: "",
   DATA_DIR: "",
-  DB_FILE_NAME: ""
+  DB_FILE_NAME: "",
 };
 
 Deno.test("getMaximumGenericRangeNamespace()", () => {
