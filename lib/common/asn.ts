@@ -257,7 +257,7 @@ export function isValidASN(asn: string, config = CONFIG): boolean {
  * The ASN string must match the format specified by the current configuration.
  * The ASN prefix is optional and can be omitted.
  *
- * @throws Error if the ASN is invalid
+ * @throws {Error} if the ASN is invalid
  * @param asn the ASN to parse
  * @param config The configuration to use for parsing. Defaults to the global configuration.
  * @returns An {@link ASNData} object with the parsed ASN data
