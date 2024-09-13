@@ -53,7 +53,7 @@ services:
     ports:
       - "127.0.0.1:${HOST_PORT}:8080"
     volumes:
-      - app-data:/app/data
+      - app-data:/data
     env_file: .env
 
 volumes:
@@ -121,7 +121,7 @@ services:
     ports:
       - "127.0.0.1:${HOST_PORT}:8080"
     volumes:
-      - app-data:/app/data
+      - app-data:/data
     env_file: stack.env
 
 volumes:
