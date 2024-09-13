@@ -160,6 +160,48 @@ const configSchema = z.object({
   ).transform((v) => v.toLowerCase()),
   DATA_DIR: z.string().min(1).default("data"),
   DB_FILE_NAME: z.string().min(1).default("denokv.sqlite3"),
+}).superRefine((config, ctx) => {
+  if (
+    config.ASN_ENABLE_NAMESPACE_EXTENSION &&
+    (config.ASN_NAMESPACE_RANGE - 1).toString().charAt(0) === "9"
+  ) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      params: {
+        ASN_NAMESPACE_RANGE: config.ASN_NAMESPACE_RANGE,
+        ASN_ENABLE_NAMESPACE_EXTENSION: config.ASN_ENABLE_NAMESPACE_EXTENSION,
+        invalidGenericNamespace: config.ASN_NAMESPACE_RANGE - 1,
+      },
+      message:
+        `Semantic configuration error: ASN_NAMESPACE_RANGE includes namespaces with leading 9s.\n` +
+        `This is not allowed when ASN_ENABLE_NAMESPACE_EXTENSION is true.`,
+    });
+  }
+
+  if (
+    !config.ADDITIONAL_MANAGED_NAMESPACES.every((a) =>
+      isValidAdditionalManagedNamespace(a.namespace, config)
+    )
+  ) {
+    console.debug(config.ADDITIONAL_MANAGED_NAMESPACES);
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      params: {
+        ASN_ENABLE_NAMESPACE_EXTENSION: config.ASN_ENABLE_NAMESPACE_EXTENSION,
+        ASN_NAMESPACE_RANGE: config.ASN_NAMESPACE_RANGE,
+        invalidAdditionalManagedNamespaces: config.ADDITIONAL_MANAGED_NAMESPACES
+          .filter(
+            (a) => !isValidAdditionalManagedNamespace(a.namespace, config),
+          ).map((v) => `${config.ASN_PREFIX}${v.namespace}XXX - ${v.label}`),
+      },
+      message:
+        `Semantic configuration error: Additional managed namespaces contain invalid namespace numbers.\n` +
+        `The namespace numbers must have the same amount of digits as ASN_NAMESPACE_RANGE.\n` +
+        `If ASN_ENABLE_NAMESPACE_EXTENSION is true, the leading 9s are stripped from this calculation.\n` +
+        `For example, if your ASN_NAMESPACE_RANGE has two digits, instead of only XX, you can then also have 9XX, 99XX, etc.\n` +
+        `Note that in this case, 9X would not be valid.`,
+    });
+  }
 });
 
 /**
@@ -211,31 +253,6 @@ export async function validateDB(): Promise<void> {
         `  Old: ${dbConfig.ASN_NAMESPACE_RANGE},\n` +
         `  New: ${CONFIG.ASN_NAMESPACE_RANGE}.\n` +
         `The number of digits must be the same.`,
-    );
-  }
-
-  if (
-    CONFIG.ASN_ENABLE_NAMESPACE_EXTENSION &&
-    CONFIG.ASN_NAMESPACE_RANGE.toString().charAt(0) === "9"
-  ) {
-    throw new Error(
-      `Semantic configuration error: ASN_NAMESPACE_RANGE includes namespaces with leading 9s.\n` +
-        `This is not allowed when ASN_ENABLE_NAMESPACE_EXTENSION is true.`,
-    );
-  }
-
-  if (
-    !CONFIG.ADDITIONAL_MANAGED_NAMESPACES.every((a) =>
-      isValidAdditionalManagedNamespace(a.namespace)
-    )
-  ) {
-    console.debug(CONFIG.ADDITIONAL_MANAGED_NAMESPACES);
-    throw new Error(
-      `Semantic configuration error: Additional managed namespaces contain invalid namespace numbers.\n` +
-        `The namespace numbers must have the same amount of digits as ASN_NAMESPACE_RANGE.\n` +
-        `If ASN_ENABLE_NAMESPACE_EXTENSION is true, the leading 9s are stripped from this calculation.\n` +
-        `For example, if your ASN_NAMESPACE_RANGE has two digits, instead of only XX, you can then also have 9XX, 99XX, etc.\n` +
-        `Note that in this case, 9X would not be valid.`,
     );
   }
 
