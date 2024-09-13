@@ -5,7 +5,7 @@ import { getFormatDescription } from "$common/mod.ts";
 const FILE_PATH = resolve(
   import.meta.dirname ?? "scripts",
   "..",
-  "ASN_FORAMT_EXAMPLES.md",
+  "ASN_FORMAT_EXAMPLES.md",
 );
 
 const EXAMPLES: [string, number, boolean][] = [
