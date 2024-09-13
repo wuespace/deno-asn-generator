@@ -69,15 +69,15 @@ export function ASNPage({ asn }: { asn: ASNData }) {
               content_copy
             </div>
           </button>
-          <a
+          <button
+            onclick={"location.reload()"}
             class={buttonClass}
-            href="/asn"
             title="Generate a new ASN"
           >
             <span class="material-symbols-outlined">
               refresh
             </span>
-          </a>
+          </button>
           <button
             class={buttonClass}
             onclick={"globalThis.print()"}
