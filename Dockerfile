@@ -16,8 +16,6 @@ ENV PORT=8080
 
 RUN deno cache --unstable-kv --no-check main.ts
 
-STOPSIGNAL SIGKILL
-
 ENTRYPOINT [ \
 	"deno", "run",\
 	# Allow access to the environment variables
