@@ -33,7 +33,8 @@ export function runServer(args: unknown): Promise<void> {
     ac.abort(signal);
   };
   (["SIGHUP", "SIGINT", "SIGTERM"] as Deno.Signal[]).forEach((signal) =>
-    Deno.addSignalListener(signal, () => handler(signal)));
+    Deno.addSignalListener(signal, () => handler(signal))
+  );
 
   console.log();
   const server = Deno.serve(
