@@ -38,8 +38,9 @@ Paperless-NGX based document management system at WüSpace e. V.
 ## Concept / ASN Format
 
 > [!NOTE]
-> The exact format of the ASN is configurable through environment variables.
-> See [ASN_FORMAT_EXAMPLES.md](./ASN_FORMAT_EXAMPLES.md) for a list of examples with different configurations.
+> The exact format of the ASN is configurable through environment variables. See
+> [ASN_FORMAT_EXAMPLES.md](./ASN_FORMAT_EXAMPLES.md) for a list of examples with
+> different configurations.
 
 ```text
 WUE  - 100  - 001
