@@ -12,6 +12,7 @@ export function createMetadata(c: Context): Record<string, unknown> {
   return {
     client: "web",
     path: c.req.path,
+    user: c.var.user,
     denojson,
   };
 }

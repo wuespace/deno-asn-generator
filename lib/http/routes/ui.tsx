@@ -9,6 +9,7 @@ import { Wrapper } from "$http/ui/wrapper.tsx";
 import { IndexPage } from "$http/ui/index.tsx";
 import { ASNPage } from "$http/ui/asn.tsx";
 import { optionalQueryNamespaceValidator } from "../validators/query/optional-namespace.ts";
+import { withUser } from "$http/middleware/oidc.ts";
 
 export const uiRoutes = new Hono();
 
@@ -25,6 +26,7 @@ uiRoutes.get(
 uiRoutes.get(
   "/asn",
   optionalQueryNamespaceValidator,
+  withUser,
   async (c) => {
     const namespace = c.req.valid("query").namespace;
 

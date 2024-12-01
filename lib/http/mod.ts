@@ -15,6 +15,7 @@ import { svgRoutes } from "$http/routes/svg.ts";
 import { uiRoutes } from "$http/routes/ui.tsx";
 import { apiRoutes } from "$http/routes/api.ts";
 import { lookupRoutes } from "$http/routes/lookup.ts";
+import { withUser } from "$http/middleware/oidc.ts";
 
 export * from "$http/lookup-url.ts";
 export * from "$http/barcode-svg.ts";
