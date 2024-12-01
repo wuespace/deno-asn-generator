@@ -1,4 +1,4 @@
-FROM denoland/deno:1.45.5
+FROM denoland/deno:2.1.2
 
 LABEL org.label-schema.name="deno-asn-generator"
 LABEL org.opencontainers.image.description="A Deno based system for generating / managing ASNs for documentat management systems in a collaborative environment."
