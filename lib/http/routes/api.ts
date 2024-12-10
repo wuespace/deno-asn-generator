@@ -4,12 +4,14 @@ import { generateASN } from "$common/mod.ts";
 
 import { createMetadata } from "$http/mod.ts";
 import { optionalQueryNamespaceValidator } from "$http/validators/query/optional-namespace.ts";
+import { withUser } from "$http/middleware/oidc.ts";
 
 export const apiRoutes = new Hono();
 
 apiRoutes.get(
   "/asn",
   optionalQueryNamespaceValidator,
+  withUser,
   async (c) =>
     c.json(
       await generateASN(

@@ -4,10 +4,11 @@ import { createBarcodeSVG } from "$http/barcode-svg.ts";
 import { createMetadata } from "../mod.ts";
 import { paramValidASNValidator } from "../validators/param/valid-asn.ts";
 import { optionalQueryNamespaceValidator } from "$http/validators/query/optional-namespace.ts";
+import { withUser } from "$http/middleware/oidc.ts";
 
 export const svgRoutes = new Hono();
 
-svgRoutes.get("/", optionalQueryNamespaceValidator, async (c) => {
+svgRoutes.get("/", optionalQueryNamespaceValidator, withUser, async (c) => {
   const barcode = createBarcodeSVG(
     (await generateASN(createMetadata(c), c.req.valid("query").namespace)).asn,
     !!c.req.query("embed"),

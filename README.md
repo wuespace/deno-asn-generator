@@ -2,7 +2,7 @@
 
 [![JSR Scope](https://jsr.io/badges/@wuespace)](https://jsr.io/@wuespace)
 [![JSR](https://jsr.io/badges/@wuespace/asn-generator)](https://jsr.io/@wuespace/asn-generator)
-[![JSR Score](https://jsr.io/badges/@wuespace/asn-generator/score)](https://jsr.io/@wuespace/asn-generator)
+[![JSR Score](https://jsr.io/badges/@wuespace/asn-generator/score)](https://jsr.io/badges/@wuespace/asn-generator/score)
 [![Deno CI](https://github.com/wuespace/deno-asn-generator/actions/workflows/deno-ci.yml/badge.svg)](https://github.com/wuespace/deno-asn-generator/actions/workflows/deno-ci.yml)
 [![Docker](https://github.com/wuespace/deno-asn-generator/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/wuespace/deno-asn-generator/actions/workflows/docker-publish.yml)
 
@@ -69,6 +69,29 @@ Furthermore, let $t$ be the number of milliseconds since the Unix epoch. We can
 calculate the current namespace $n$ as follows:
 
 $$ n \in [r_{min}, r]; n = r_{min} + t \mod (r - r_{min}) $$
+
+## OpenID Connect / Authentication
+
+The system can optionally be configured to use OpenID Connect for authentication.
+In this case, only authenticated users can generate ASNs. Read-only and lookup
+routes will still be available to all users.
+
+OpenID Connect is enabled when the `OIDC_ISSUER` environment variable is set.
+
+To configure the system to use OpenID Connect, set the following environment variables:
+
+- `OIDC_ISSUER`: The issuer URL of the OpenID Connect provider.
+- `OIDC_CLIENT_ID`: The client ID of the application.
+- `OIDC_CLIENT_SECRET`: The client secret of the application.
+- `OIDC_REDIRECT_URI`: The redirect URI of the application (`https://your-domain/oidc/callback`).
+- `OIDC_SCOPES`: The scopes to request from the OpenID Connect provider.
+- `OIDC_AUTH_SECRET`: A secret used to sign the session cookie. Must be at least 32 characters long.
+
+Optionally, you can set the following environment variables:
+
+- `OIDC_UID_CLAIM`: The claim in the ID token that contains the user's unique identifier. Defaults to `sub`.
+- `OIDC_NAME_CLAIM`: The claim in the ID token that contains the user's name. Defaults to `name`.
+- `OIDC_ROLES_CLAIM`: The claim in the ID token that contains the user's roles. Defaults to `groups`. While roles are currently not used by the generator, they may in the future be used for RBAC.
 
 ## Ideas / Roadmap
 
