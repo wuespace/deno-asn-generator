@@ -1,11 +1,14 @@
-import { z } from "@collinhacks/zod";
 import {
   type AdditionalManagedNamespace,
   deserializeAdditionalManagedNamespaces,
   getDB,
   isValidAdditionalManagedNamespace,
+  toBoolean,
+  toNumber,
   zBoolString,
 } from "$common/mod.ts";
+import { z, type ZodSchema } from "@collinhacks/zod";
+import { initVariable } from "@wuespace/envar";
 
 /**
  * The application configuration.
@@ -138,79 +141,146 @@ export interface Config {
   readonly DB_FILE_NAME: string;
 }
 
-const configSchema = z.object({
-  PORT: z.number({ coerce: true }).default(8080),
+const configSchema: ZodSchema<Config> = z.object({
+  PORT: z.number().positive().int(),
   ASN_PREFIX: z.string().min(1).max(10).regex(/^[A-Z]+$/),
-  ASN_NAMESPACE_RANGE: z.number({ coerce: true }),
-  ASN_ENABLE_NAMESPACE_EXTENSION: zBoolString().default(false),
-  ADDITIONAL_MANAGED_NAMESPACES: z.string().default("").transform((v) =>
-    deserializeAdditionalManagedNamespaces(v)
-  ).or(z.array(z.object({
-    namespace: z.number(),
+  ASN_NAMESPACE_RANGE: z.number().int().positive(),
+  ASN_ENABLE_NAMESPACE_EXTENSION: z.boolean(),
+  ADDITIONAL_MANAGED_NAMESPACES: z.array(z.object({
+    namespace: z.number().int().positive(),
     label: z.string().min(1),
-  }))).default([]),
-  ASN_LOOKUP_URL: z.string().regex(/^https?\:\/\/.*\{asn\}.*$/).optional(),
-  ASN_LOOKUP_INCLUDE_PREFIX: zBoolString().default(false),
-  ASN_BARCODE_TYPE: z.preprocess(
-    (v) => v && String(v).toUpperCase(),
-    z.literal("CODE128")
-      .or(z.literal("CODE39"))
-      .or(z.literal("CODE93"))
-      .default("CODE128"),
-  ).transform((v) => v.toLowerCase()),
-  DATA_DIR: z.string().min(1).default("data"),
-  DB_FILE_NAME: z.string().min(1).default("denokv.sqlite3"),
-}).superRefine((config, ctx) => {
+  })),
+  ASN_LOOKUP_URL: z.string().optional(),
+  ASN_LOOKUP_INCLUDE_PREFIX: z.boolean(),
+  ASN_BARCODE_TYPE: z.literal("CODE128")
+    .or(z.literal("CODE39"))
+    .or(z.literal("CODE93")),
+  DATA_DIR: z.string(),
+  DB_FILE_NAME: z.string(),
+});
+
+/**
+ * Initializes the environment variable based configuration, including validation and defaults.
+ * This function should be called at the start of the application, befor any calls to {@link getConfig}.
+ */
+export async function initConfig() {
+  await Promise.all([
+    initVariable("PORT", z.number({ coerce: true }).int().positive(), "8080"),
+    initVariable("ASN_PREFIX", z.string().min(1).max(10).regex(/^[A-Z]+$/)),
+    initVariable(
+      "ASN_NAMESPACE_RANGE",
+      z.number({ coerce: true }).int().positive(),
+    ),
+    initVariable("ASN_ENABLE_NAMESPACE_EXTENSION", zBoolString(), "false"),
+    initVariable(
+      "ADDITIONAL_MANAGED_NAMESPACES",
+      z.string().transform((v) => deserializeAdditionalManagedNamespaces(v)),
+      "",
+    ),
+    initVariable(
+      "ASN_LOOKUP_URL",
+      z.string().regex(/^https?\:\/\/.*\{asn\}.*$/).optional(),
+    ),
+    initVariable("ASN_LOOKUP_INCLUDE_PREFIX", zBoolString(), "false"),
+    initVariable(
+      "ASN_BARCODE_TYPE",
+      z.preprocess(
+        (s) => s && String(s).toUpperCase(),
+        z.literal("CODE128")
+          .or(z.literal("CODE39"))
+          .or(z.literal("CODE93")),
+      ),
+      "CODE128",
+    ),
+    initVariable("DATA_DIR", z.string().min(1), "data"),
+    initVariable("DB_FILE_NAME", z.string().min(1), "denokv.sqlite3"),
+    initVariable("DENO_KV_ACCESS_TOKEN", z.string().optional()),
+    // OIDC
+    initVariable("OIDC_ISSUER", z.string().url().optional()),
+    initVariable("OIDC_AUTH_SECRET", z.string().optional()),
+    initVariable("OIDC_CLIENT_ID", z.string().optional()),
+    initVariable("OIDC_CLIENT_SECRET", z.string().optional()),
+    initVariable("OIDC_REDIRECT_URI", z.string().url().optional()),
+    initVariable("OIDC_SCOPES", z.string().optional()),
+    initVariable("OIDC_UID_CLAIM", z.string(), "sub"),
+    initVariable("OIDC_NAME_CLAIM", z.string(), "name"),
+    initVariable("OIDC_ROLES_CLAIM", z.string(), "roles"),
+  ]);
+
+  // Additional checks
+  const config = getConfig();
+
   if (
     config.ASN_ENABLE_NAMESPACE_EXTENSION &&
     (config.ASN_NAMESPACE_RANGE - 1).toString().charAt(0) === "9"
   ) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      params: {
-        ASN_NAMESPACE_RANGE: config.ASN_NAMESPACE_RANGE,
-        ASN_ENABLE_NAMESPACE_EXTENSION: config.ASN_ENABLE_NAMESPACE_EXTENSION,
-        invalidGenericNamespace: config.ASN_NAMESPACE_RANGE - 1,
-      },
-      message:
-        `Semantic configuration error: ASN_NAMESPACE_RANGE includes namespaces with leading 9s.\n` +
+    throw new Error(
+      `Semantic configuration error: ASN_NAMESPACE_RANGE includes namespaces with leading 9s.\n` +
         `This is not allowed when ASN_ENABLE_NAMESPACE_EXTENSION is true.`,
-    });
+      {
+        cause: {
+          ASN_NAMESPACE_RANGE: config.ASN_NAMESPACE_RANGE,
+          ASN_ENABLE_NAMESPACE_EXTENSION: config.ASN_ENABLE_NAMESPACE_EXTENSION,
+          invalidGenericNamespace: config.ASN_NAMESPACE_RANGE - 1,
+        },
+      },
+    );
   }
 
-  if (
-    !config.ADDITIONAL_MANAGED_NAMESPACES.every((a) =>
+  const hasInvalidAdditionalNamespaces = !config
+    .ADDITIONAL_MANAGED_NAMESPACES.every((a) =>
       isValidAdditionalManagedNamespace(a.namespace, config)
-    )
+    );
+
+  if (
+    hasInvalidAdditionalNamespaces
   ) {
     console.debug(config.ADDITIONAL_MANAGED_NAMESPACES);
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      params: {
-        ASN_ENABLE_NAMESPACE_EXTENSION: config.ASN_ENABLE_NAMESPACE_EXTENSION,
-        ASN_NAMESPACE_RANGE: config.ASN_NAMESPACE_RANGE,
-        invalidAdditionalManagedNamespaces: config.ADDITIONAL_MANAGED_NAMESPACES
-          .filter(
-            (a) => !isValidAdditionalManagedNamespace(a.namespace, config),
-          ).map((v) => `${config.ASN_PREFIX}${v.namespace}XXX - ${v.label}`),
-      },
-      message:
-        `Semantic configuration error: Additional managed namespaces contain invalid namespace numbers.\n` +
+    throw new Error(
+      `Semantic configuration error: Additional managed namespaces contain invalid namespace numbers.\n` +
         `The namespace numbers must have the same amount of digits as ASN_NAMESPACE_RANGE.\n` +
         `If ASN_ENABLE_NAMESPACE_EXTENSION is true, the leading 9s are stripped from this calculation.\n` +
         `For example, if your ASN_NAMESPACE_RANGE has two digits, instead of only XX, you can then also have 9XX, 99XX, etc.\n` +
         `Note that in this case, 9X would not be valid.`,
-    });
+      {
+        cause: {
+          ASN_ENABLE_NAMESPACE_EXTENSION: config.ASN_ENABLE_NAMESPACE_EXTENSION,
+          ASN_NAMESPACE_RANGE: config.ASN_NAMESPACE_RANGE,
+          invalidAdditionalManagedNamespaces: config
+            .ADDITIONAL_MANAGED_NAMESPACES
+            .filter(
+              (a) => !isValidAdditionalManagedNamespace(a.namespace, config),
+            ).map((v) => `${config.ASN_PREFIX}${v.namespace}XXX - ${v.label}`),
+        },
+      },
+    );
   }
-});
+}
 
 /**
- * The current application configuration, based on environment variables, `.env` files, and defaults.
- * @see {@link Config}
+ * Returns the current configuration. Should only be called after initializing the configuration with {@link initConfig}.
+ * @returns The current configuration.
  */
-export const CONFIG: Config = Object.freeze(
-  configSchema.parse(Deno.env.toObject()),
-);
+export function getConfig(): Config {
+  return configSchema.parse({
+    PORT: toNumber(Deno.env.get("PORT")),
+    ASN_PREFIX: Deno.env.get("ASN_PREFIX"),
+    ASN_NAMESPACE_RANGE: toNumber(Deno.env.get("ASN_NAMESPACE_RANGE")),
+    ASN_ENABLE_NAMESPACE_EXTENSION: toBoolean(Deno.env.get(
+      "ASN_ENABLE_NAMESPACE_EXTENSION",
+    )),
+    ADDITIONAL_MANAGED_NAMESPACES: deserializeAdditionalManagedNamespaces(
+      z.string().parse(Deno.env.get("ADDITIONAL_MANAGED_NAMESPACES")),
+    ),
+    ASN_LOOKUP_URL: Deno.env.get("ASN_LOOKUP_URL"),
+    ASN_LOOKUP_INCLUDE_PREFIX: toBoolean(
+      Deno.env.get("ASN_LOOKUP_INCLUDE_PREFIX"),
+    ),
+    ASN_BARCODE_TYPE: Deno.env.get("ASN_BARCODE_TYPE")?.toUpperCase(),
+    DATA_DIR: Deno.env.get("DATA_DIR"),
+    DB_FILE_NAME: Deno.env.get("DB_FILE_NAME"),
+  }) satisfies Config;
+}
 
 const DB_CONFIG_KEY = "config";
 
@@ -224,46 +294,46 @@ const DB_CONFIG_KEY = "config";
  * @returns A promise that resolves if the database configuration is valid.
  * @throws {Error} If the configuration has changed in an incompatible way.
  */
-export async function validateDB(): Promise<void> {
+export async function validateDB(config = getConfig()): Promise<void> {
   const db = await getDB();
 
   const dbConfigRes = await db.get([DB_CONFIG_KEY]);
   if (!dbConfigRes.value) {
-    await db.set([DB_CONFIG_KEY], CONFIG);
+    await db.set([DB_CONFIG_KEY], config);
     return;
   }
 
   const dbConfig = configSchema.parse(dbConfigRes.value);
 
-  if (dbConfig.ASN_PREFIX !== CONFIG.ASN_PREFIX) {
+  if (dbConfig.ASN_PREFIX !== config.ASN_PREFIX) {
     throw new Error(
       `Database configuration mismatch: ASN_PREFIX.\n` +
         `  Old: ${dbConfig.ASN_PREFIX},\n` +
-        `  New: ${CONFIG.ASN_PREFIX}.\n` +
+        `  New: ${config.ASN_PREFIX}.\n` +
         `The prefix must be the same.`,
     );
   }
 
   if (
     dbConfig.ASN_NAMESPACE_RANGE?.toString().length !==
-      CONFIG.ASN_NAMESPACE_RANGE.toString().length
+      config.ASN_NAMESPACE_RANGE.toString().length
   ) {
     throw new Error(
       `Database configuration mismatch: ASN_NAMESPACE_RANGE.\n` +
         `  Old: ${dbConfig.ASN_NAMESPACE_RANGE},\n` +
-        `  New: ${CONFIG.ASN_NAMESPACE_RANGE}.\n` +
+        `  New: ${config.ASN_NAMESPACE_RANGE}.\n` +
         `The number of digits must be the same.`,
     );
   }
 
-  if (dbConfig.ASN_BARCODE_TYPE !== CONFIG.ASN_BARCODE_TYPE) {
+  if (dbConfig.ASN_BARCODE_TYPE !== config.ASN_BARCODE_TYPE) {
     console.warn(
       `Warning: ASN_BARCODE_TYPE has changed. This will affect the barcode generation.\n` +
         `  Old: ${dbConfig.ASN_BARCODE_TYPE},\n` +
-        `  New: ${CONFIG.ASN_BARCODE_TYPE}.\n` +
+        `  New: ${config.ASN_BARCODE_TYPE}.\n` +
         `Any future barcodes will be generated using the new barcode type which may not be compatible with the old ones.`,
     );
   }
 
-  await db.set([DB_CONFIG_KEY], CONFIG);
+  await db.set([DB_CONFIG_KEY], config);
 }

@@ -36,7 +36,7 @@
  */
 import "@std/dotenv/load";
 import { parseArgs } from "@std/cli/parse-args";
-import { validateDB } from "$common/mod.ts";
+import { initConfig, validateDB } from "$common/mod.ts";
 
 import { runServer } from "$cli/server.ts";
 import { printHelp } from "$cli/help.ts";
@@ -49,7 +49,11 @@ export * from "./lib/http/mod.ts";
 export * from "$cli/mod.ts";
 
 if (import.meta.main) {
+  // Load config
+  await initConfig();
   await validateDB();
+  
+  // CLI Stuff
   const args = parseArgs(Deno.args);
 
   if (args.help) {

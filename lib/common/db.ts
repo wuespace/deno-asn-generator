@@ -1,12 +1,12 @@
 import { ensureParentDirExists, getDatabasePath } from "$common/path.ts";
-import { CONFIG } from "$common/config.ts";
+import { getConfig } from "$common/config.ts";
 
 /**
  * Ensures that the database file exists and returns its API.
  * @param config The configuration object to use. Defaults to the global configuration.
  * @returns the key-value store for the application database.
  */
-export async function getDB(config = CONFIG): Promise<Deno.Kv> {
+export async function getDB(config = getConfig()): Promise<Deno.Kv> {
   const databasePath = getDatabasePath(config);
   if (!databasePath.startsWith("http")) {
     await ensureParentDirExists(databasePath);
@@ -38,7 +38,7 @@ export async function getDB(config = CONFIG): Promise<Deno.Kv> {
  */
 export async function performAtomicTransaction(
   fn: (db: Deno.Kv) => Promise<Deno.KvCommitResult | Deno.KvCommitError>,
-  config = CONFIG,
+  config = getConfig(),
 ) {
   const db = await getDB(config);
   let res = { ok: false };

@@ -1,4 +1,4 @@
-import { CONFIG } from "$common/config.ts";
+import { getConfig } from "$common/config.ts";
 import {
   addTimestampToNamespaceStats,
   ensureFileContent,
@@ -38,7 +38,7 @@ export interface ASNData {
   metadata: Record<string, unknown>;
 }
 
-function getCurrentNamespace(config = CONFIG): number {
+function getCurrentNamespace(config = getConfig()): number {
   const date = Date.now();
   const range = getMinimumGenericRangeNamespace(config);
   return range + date % (config.ASN_NAMESPACE_RANGE - range);
@@ -79,6 +79,7 @@ export async function generateASN(
   metadata: Record<string, unknown> = {},
   namespace?: number,
   deltaCounter = 1,
+  config = getConfig(),
 ): Promise<ASNData> {
   if (deltaCounter < 1) {
     throw new Error("Delta counter must be at least 1");
@@ -111,7 +112,7 @@ export async function generateASN(
   const asnData = {
     asn: formatASN(namespace, counter),
     namespace,
-    prefix: CONFIG.ASN_PREFIX,
+    prefix: config.ASN_PREFIX,
     counter: counter,
     metadata,
   };
@@ -147,7 +148,7 @@ export function isValidCounter(counter: number): boolean {
 export function formatASN(
   namespace: number,
   counter: number,
-  config = CONFIG,
+  config = getConfig(),
 ): string {
   if (!isValidNamespace(namespace, config)) {
     throw new Error("Invalid namespace: " + namespace);
@@ -171,7 +172,7 @@ export function formatASN(
  * @returns a human-readable description of the ASN format that explains the prefix, the namespace, and the counter.
  * @remark The description is intended to be used in the console output or other monospaced text.
  */
-export function getFormatDescription(config = CONFIG): string {
+export function getFormatDescription(config = getConfig()): string {
   const {
     ASN_PREFIX,
     ASN_NAMESPACE_RANGE,
@@ -244,7 +245,7 @@ export function nthNinerExtensionRange(
  * @param config The configuration to use for validation. Defaults to the global configuration.
  * @returns `true` if the ASN is valid, `false` otherwise
  */
-export function isValidASN(asn: string, config = CONFIG): boolean {
+export function isValidASN(asn: string, config = getConfig()): boolean {
   return new RegExp(
     `^(${config.ASN_PREFIX})?(\\d{${
       `${config.ASN_NAMESPACE_RANGE}`.length
@@ -262,7 +263,7 @@ export function isValidASN(asn: string, config = CONFIG): boolean {
  * @param config The configuration to use for parsing. Defaults to the global configuration.
  * @returns An {@link ASNData} object with the parsed ASN data
  */
-export function parseASN(asn: string, config = CONFIG): ASNData {
+export function parseASN(asn: string, config = getConfig()): ASNData {
   if (!isValidASN(asn, config)) {
     throw new Error("Invalid ASN");
   }
@@ -286,7 +287,7 @@ export function parseASN(asn: string, config = CONFIG): ASNData {
 
   return {
     asn: formatASN(namespace, counter, config),
-    prefix: CONFIG.ASN_PREFIX,
+    prefix: config.ASN_PREFIX,
     namespace,
     counter,
     metadata: {},

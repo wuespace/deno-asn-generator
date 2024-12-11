@@ -2,7 +2,7 @@ import { Hono } from "@hono/hono";
 import { validator } from "@hono/hono/validator";
 import { z } from "@collinhacks/zod";
 
-import { CONFIG, isValidASN } from "$common/mod.ts";
+import { getConfig, isValidASN } from "$common/mod.ts";
 
 import { getLookupURL } from "$http/mod.ts";
 
@@ -22,7 +22,7 @@ lookupRoutes.post(
     return parsed.data;
   }),
   (c) => {
-    const asn = CONFIG.ASN_PREFIX + c.req.valid("form").asn;
+    const asn = getConfig().ASN_PREFIX + c.req.valid("form").asn;
     return c.redirect("/go/" + asn);
   },
 );
@@ -38,7 +38,7 @@ lookupRoutes.get(
   (c) => {
     const asn = c.req.valid("param").asn;
 
-    if (!CONFIG.ASN_LOOKUP_URL) {
+    if (!getConfig().ASN_LOOKUP_URL) {
       return c.text("ASN Lookup is disabled", 400);
     }
 

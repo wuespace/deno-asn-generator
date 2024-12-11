@@ -6,7 +6,9 @@
 [![Deno CI](https://github.com/wuespace/deno-asn-generator/actions/workflows/deno-ci.yml/badge.svg)](https://github.com/wuespace/deno-asn-generator/actions/workflows/deno-ci.yml)
 [![Docker](https://github.com/wuespace/deno-asn-generator/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/wuespace/deno-asn-generator/actions/workflows/docker-publish.yml)
 
-[Deployment](DEPLOY.md) · [License (MIT)](./LICENSE) ·
+[Deployment](DEPLOY.md) ·
+[Configuration](env.md) ·
+[License (MIT)](./LICENSE) ·
 [Contributing](./CONTRIBUTING.md)
 
 ---

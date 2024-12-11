@@ -15,3 +15,21 @@ export function zBoolString(): z.ZodEffects<ZodBoolean, boolean, unknown> {
     return false;
   }, z.boolean());
 }
+
+export function toBoolean(value: string | undefined): boolean | undefined {
+  if (
+    value === undefined ||
+    value === ""
+  ) return undefined;
+
+  return ["1", "true", "yes", "on", "enabled"].includes(value.toLowerCase());
+}
+
+export function toNumber(value: string | undefined): number | undefined {
+  if (
+    value === undefined ||
+    value === ""
+  ) return undefined;
+
+  return Number(value);
+}

@@ -1,4 +1,4 @@
-import { CONFIG, type Config } from "$common/mod.ts";
+import type { Config } from "$common/mod.ts";
 import { Search } from "$http/ui/search.tsx";
 import { css, cx } from "@hono/hono/css";
 import { BUTTON_STYLE } from "$http/ui/common/button-styles.ts";
@@ -44,7 +44,7 @@ export function IndexPage({ config }: { config: Config }) {
           accessible to all members of the organization.
         </p>
         <LinkCard icon={"add"} href="/asn" autofocus>
-          Generate generic {CONFIG.ASN_PREFIX} number
+          Generate generic {config.ASN_PREFIX} number
           <br />
           <small>
             {config.ASN_PREFIX}
@@ -53,7 +53,7 @@ export function IndexPage({ config }: { config: Config }) {
             {genericRangeEnd}XXX
           </small>
         </LinkCard>
-        {CONFIG.ADDITIONAL_MANAGED_NAMESPACES.length
+        {config.ADDITIONAL_MANAGED_NAMESPACES.length
           ? (
             <p>
               Manually generate {config.ASN_PREFIX}{" "}
@@ -62,7 +62,7 @@ export function IndexPage({ config }: { config: Config }) {
             </p>
           )
           : ""}
-        {CONFIG.ADDITIONAL_MANAGED_NAMESPACES.map(({ namespace, label }) => (
+        {config.ADDITIONAL_MANAGED_NAMESPACES.map(({ namespace, label }) => (
           <LinkCard
             icon={"note_add"}
             href={`/asn?namespace=${namespace}`}

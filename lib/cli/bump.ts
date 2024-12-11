@@ -1,7 +1,7 @@
 import z from "@collinhacks/zod";
 import {
   allManagedNamespaces,
-  CONFIG,
+  getConfig,
   generateASN,
   isManagedNamespace,
 } from "$common/mod.ts";
@@ -17,6 +17,7 @@ const bumpArgs = z.object({
  * @param args.count the number of ASNs to generate (default: 1)
  */
 export async function runBump(args: unknown) {
+  const CONFIG = getConfig();
   const parsedParams = bumpArgs.parse(args);
 
   if (parsedParams.namespace && !isManagedNamespace(parsedParams.namespace)) {

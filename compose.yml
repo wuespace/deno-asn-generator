@@ -1,16 +1,36 @@
 name: deno-asn-generator
 
 services:
-  app:
-    image: asngenerator
+  asn-generator:
+    image: ghcr.io/wuespace/deno-asn-generator
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "127.0.0.1:8080:8080"
-    env_file:
-      - .env
+      - "127.0.0.1:8080:${PORT:-8080}"
+    volumes:
+      - asn-generator-data:/app/data
     environment:
-      ASN_NAMESPACE_RANGE: 50
-      ASN_PREFIX: WBD
-      ASN_BARCODE_TYPE: CODE128
+      - PORT=${PORT:-8080}
+      - ASN_PREFIX
+      - ASN_NAMESPACE_RANGE
+      - ASN_ENABLE_NAMESPACE_EXTENSION
+      - ADDITIONAL_MANAGED_NAMESPACES
+      - ASN_LOOKUP_URL
+      - ASN_LOOKUP_INCLUDE_PREFIX
+      - ASN_BARCODE_TYPE
+      - DATA_DIR
+      - DB_FILE_NAME
+      - DENO_KV_ACCESS_TOKEN
+      - OIDC_ISSUER
+      - OIDC_AUTH_SECRET
+      - OIDC_CLIENT_ID
+      - OIDC_CLIENT_SECRET
+      - OIDC_REDIRECT_URI
+      - OIDC_SCOPES
+      - OIDC_UID_CLAIM
+      - OIDC_NAME_CLAIM
+      - OIDC_ROLES_CLAIM
+
+volumes:
+  asn-generator-data:

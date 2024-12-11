@@ -1,11 +1,11 @@
-import { CONFIG } from "$common/mod.ts";
+import { getConfig } from "$common/mod.ts";
 
 /**
  * Returns a list of all managed namespaces.
  * This includes the generic namespaces and the additional managed namespaces.
  * @returns all managed namespaces
  */
-export function allManagedNamespaces(config = CONFIG): number[] {
+export function allManagedNamespaces(config = getConfig()): number[] {
   const minGeneric = getMinimumGenericRangeNamespace(config);
   const maxGeneric = getMaximumGenericRangeNamespace(config);
 
@@ -23,7 +23,7 @@ export function allManagedNamespaces(config = CONFIG): number[] {
  * This is the maximum value smaller than the `ASN_NAMESPACE_RANGE` configuration parameter.
  * @returns the maximum namespace value for the generic range
  */
-export function getMaximumGenericRangeNamespace(config = CONFIG): number {
+export function getMaximumGenericRangeNamespace(config = getConfig()): number {
   return config.ASN_NAMESPACE_RANGE - 1;
 }
 
@@ -33,7 +33,7 @@ export function getMaximumGenericRangeNamespace(config = CONFIG): number {
  * the `ASN_NAMESPACE_RANGE` configuration parameter.
  * @returns the minimum namespace value for the generic range
  */
-export function getMinimumGenericRangeNamespace(config = CONFIG): number {
+export function getMinimumGenericRangeNamespace(config = getConfig()): number {
   return Number.parseInt(
     "1" + "0".repeat(config.ASN_NAMESPACE_RANGE.toString().length - 1),
   );
@@ -54,7 +54,7 @@ export function getMinimumGenericRangeNamespace(config = CONFIG): number {
  * @param namespace the namespace to check
  * @returns `true` if the namespace is a valid namespace, `false` otherwise
  */
-export function isValidNamespace(namespace: number, config = CONFIG): boolean {
+export function isValidNamespace(namespace: number, config = getConfig()): boolean {
   if (
     !Number.isSafeInteger(namespace) ||
     namespace < getMinimumGenericRangeNamespace(config)
@@ -82,7 +82,7 @@ export function isValidNamespace(namespace: number, config = CONFIG): boolean {
  */
 export function isManagedNamespace(
   namespace: number,
-  config = CONFIG,
+  config = getConfig(),
 ): boolean {
   if (namespace < getMinimumGenericRangeNamespace(config)) {
     return false;

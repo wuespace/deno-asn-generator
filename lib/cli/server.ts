@@ -1,12 +1,7 @@
 import { z } from "@collinhacks/zod";
-import { CONFIG, logPaths } from "$common/mod.ts";
+import { getConfig, logPaths } from "$common/mod.ts";
 import { httpApp } from "../http/mod.ts";
 import metadata from "$/deno.json" with { type: "json" };
-
-const serverArgs = z.object({
-  port: z.number().default(CONFIG.PORT),
-  host: z.string().default("0.0.0.0"),
-});
 
 /**
  * Runs the web server.
@@ -15,6 +10,11 @@ const serverArgs = z.object({
  * @param args.host the hostname to listen on (default: 0.0.0.0)
  */
 export function runServer(args: unknown): Promise<void> {
+  const serverArgs = z.object({
+    port: z.number().default(getConfig().PORT),
+    host: z.string().default("0.0.0.0"),
+  });
+
   console.log(`Running ${metadata.name} v${metadata.version}`);
   console.log();
 
@@ -22,7 +22,7 @@ export function runServer(args: unknown): Promise<void> {
 
   console.log(`Starting server on ${parsedArgs.host}:${parsedArgs.port}`);
 
-  console.log("Environment Configuration:", CONFIG);
+  console.log("Environment Configuration:", getConfig());
   console.log("Arguments:", parsedArgs);
   console.log("Paths:");
   logPaths();
