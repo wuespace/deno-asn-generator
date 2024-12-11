@@ -1,6 +1,6 @@
 {
   "name": "@wuespace/asn-generator",
-  "version": "0.3.1",
+  "version": "0.0.0-replaced-by-ci",
   "exports": {
     ".": "./main.ts",
     "./cli": "./lib/cli/mod.ts",
@@ -13,8 +13,7 @@
     "test": "DATA_DIR=data-test ASN_PREFIX=ASN ASN_NAMESPACE_RANGE=50 ASN_ENABLE_NAMESPACE_EXTANSION=1 deno test -A",
     "docs": "deno doc --reload --html main.ts",
     "lint": "DENO_FUTURE=1 deno lint && deno doc --lint main.ts lib/*/mod.ts",
-    "check": "deno check main.ts lib/**/*.ts",
-    "version": "deno run --allow-read=. --allow-write=. --allow-run=git jsr:@utility/version"
+    "check": "deno check main.ts lib/**/*.ts"
   },
   "imports": {
     "$/": "./",
