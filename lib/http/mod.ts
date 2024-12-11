@@ -15,6 +15,7 @@ import { svgRoutes } from "$http/routes/svg.ts";
 import { uiRoutes } from "$http/routes/ui.tsx";
 import { apiRoutes } from "$http/routes/api.ts";
 import { lookupRoutes } from "$http/routes/lookup.ts";
+import { withUser } from "$http/middleware/oidc.ts";
 
 export * from "$http/lookup-url.ts";
 export * from "$http/barcode-svg.ts";
@@ -48,3 +49,8 @@ httpApp.route("/api", apiRoutes);
 httpApp.route("/svg", svgRoutes);
 httpApp.route("/", lookupRoutes);
 httpApp.route("/", uiRoutes);
+httpApp.get(
+  "/oidc/callback",
+  withUser,
+  (c) => c.text("OIDC not configured", 404),
+);
