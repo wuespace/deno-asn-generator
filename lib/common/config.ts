@@ -294,7 +294,7 @@ const DB_CONFIG_KEY = "config";
  * @returns A promise that resolves if the database configuration is valid.
  * @throws {Error} If the configuration has changed in an incompatible way.
  */
-export async function validateDB(config = getConfig()): Promise<void> {
+export async function validateDB(config: Config = getConfig()): Promise<void> {
   const db = await getDB();
 
   const dbConfigRes = await db.get([DB_CONFIG_KEY]);

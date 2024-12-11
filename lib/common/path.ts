@@ -1,12 +1,12 @@
 import { resolve } from "node:path";
-import { getConfig } from "$common/mod.ts";
+import { type Config, getConfig } from "$common/mod.ts";
 
 /**
  * Resolves the full path to the {@link Config.DATA_DIR}.
  * @param config The configuration object to use. Defaults to the global configuration.
  * @returns Full path to the data directory.
  */
-export function getDataDirectoryPath(config = getConfig()): string {
+export function getDataDirectoryPath(config: Config = getConfig()): string {
   return resolve(config.DATA_DIR);
 }
 
@@ -17,7 +17,7 @@ export function getDataDirectoryPath(config = getConfig()): string {
  * @param config The configuration object to use. Defaults to the global configuration.
  * @returns Full path to the database file.
  */
-export function getDatabasePath(config = getConfig()): string {
+export function getDatabasePath(config: Config = getConfig()): string {
   if (config.DB_FILE_NAME.startsWith("http")) {
     return config.DB_FILE_NAME;
   }
@@ -28,7 +28,7 @@ export function getDatabasePath(config = getConfig()): string {
 /**
  * Logs relevant paths to the console.
  */
-export function logPaths(config = getConfig()) {
+export function logPaths(config: Config = getConfig()) {
   console.log(`DATA_PATH: ${getDataDirectoryPath(config)}`);
   console.log(`DB_FILE_PATH: ${getDatabasePath(config)}`);
 }
@@ -43,7 +43,7 @@ export function logPaths(config = getConfig()) {
 export function getCounterPath(
   namespace: number,
   counter: number,
-  config = getConfig(),
+  config: Config = getConfig(),
 ): string {
   return resolve(
     getDataDirectoryPath(config),
@@ -60,7 +60,7 @@ export function getCounterPath(
  */
 export function getNamespaceMetadataPath(
   namespace: number,
-  config = getConfig(),
+  config: Config = getConfig(),
 ): string {
   return resolve(
     getDataDirectoryPath(config),
