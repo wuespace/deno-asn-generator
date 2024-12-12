@@ -1,5 +1,5 @@
 import z from "@collinhacks/zod";
-import { allManagedNamespaces, CONFIG, TimeStats } from "$common/mod.ts";
+import { allManagedNamespaces, getConfig, TimeStats } from "$common/mod.ts";
 
 const generateArgs = z.object({
   namespace: z.number({ coerce: true }).optional(),
@@ -26,7 +26,7 @@ export async function runStats(args: unknown) {
   );
 
   const strings = stats.map((stats) => {
-    return `${CONFIG.ASN_PREFIX}${stats.namespace}XXX: ` + stats.toString();
+    return `${getConfig().ASN_PREFIX}${stats.namespace}XXX: ` + stats.toString();
   });
 
   console.log(strings.join("\n"));
@@ -35,7 +35,7 @@ export async function runStats(args: unknown) {
     "Maximum Rate of ASN registrations per hour per namespace in the above namespaces:",
   );
   console.log(
-    `Filtered to only include namespaces with more than 3 ${CONFIG.ASN_PREFIX} numbers.`,
+    `Filtered to only include namespaces with more than 3 ${getConfig().ASN_PREFIX} numbers.`,
   );
 
   function maxHourlyRate(sigma: number) {
@@ -48,22 +48,22 @@ export async function runStats(args: unknown) {
   console.log(
     "1σ (68.27 %):",
     maxHourlyRate(1).toPrecision(5),
-    `registered ${CONFIG.ASN_PREFIX} numbers per namespace per hour`,
+    `registered ${getConfig().ASN_PREFIX} numbers per namespace per hour`,
   );
   console.log(
     "2σ (95.45 %):",
     maxHourlyRate(2).toPrecision(5),
-    `registered ${CONFIG.ASN_PREFIX} numbers per namespace per hour`,
+    `registered ${getConfig().ASN_PREFIX} numbers per namespace per hour`,
   );
   console.log(
     "3σ (99.73 %):",
     maxHourlyRate(3).toPrecision(5),
-    `registered ${CONFIG.ASN_PREFIX} numbers per namespace per hour`,
+    `registered ${getConfig().ASN_PREFIX} numbers per namespace per hour`,
   );
   console.log(
     "6σ (99.99 %):",
     maxHourlyRate(6).toPrecision(5),
-    `registered ${CONFIG.ASN_PREFIX} numbers per namespace per hour`,
+    `registered ${getConfig().ASN_PREFIX} numbers per namespace per hour`,
   );
 
   console.log(

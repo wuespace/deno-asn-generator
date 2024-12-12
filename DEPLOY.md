@@ -1,6 +1,7 @@
 # Deployment
 
 [`.env` Example](example.env) ·
+[Configuration Parameters](env.md) ·
 [GHCR Docker Image](https://github.com/wuespace/deno-asn-generator/pkgs/container/deno-asn-generator)
 · Docker Hub Docker Image (coming soon) ·
 [JSR Package](https://jsr.io/@wuespace/asn-generator) ·

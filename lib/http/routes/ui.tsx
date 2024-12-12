@@ -1,7 +1,7 @@
 import { Hono } from "@hono/hono";
 import { jsxRenderer } from "@hono/hono/jsx-renderer";
 
-import { CONFIG, generateASN } from "$common/mod.ts";
+import { getConfig, generateASN } from "$common/mod.ts";
 
 import { createMetadata } from "../mod.ts";
 
@@ -19,7 +19,7 @@ uiRoutes.get(
   "/",
   async (c) =>
     await c.render(
-      <IndexPage config={CONFIG} />,
+      <IndexPage config={getConfig()} />,
     ),
 );
 

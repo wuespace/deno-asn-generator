@@ -1,5 +1,5 @@
 import * as bwip from "@metafloor/bwip-js";
-import { CONFIG } from "$common/config.ts";
+import { getConfig } from "$common/config.ts";
 
 /**
  * Creates an SVG barcode for the given data and current configuration.
@@ -9,7 +9,7 @@ import { CONFIG } from "$common/config.ts";
  */
 export function createBarcodeSVG(data: string, embedded = false): string {
   return bwip.toSVG({
-    bcid: CONFIG.ASN_BARCODE_TYPE, // Barcode type
+    bcid: getConfig().ASN_BARCODE_TYPE, // Barcode type
     text: data, // Text to encode
     scale: 3, // 3x scaling factor
     height: 10, // Bar height, in millimeters

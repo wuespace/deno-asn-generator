@@ -1,8 +1,6 @@
-import { CONFIG } from "$common/mod.ts";
+import { getConfig } from "$common/mod.ts";
 import { css } from "@hono/hono/css";
 import { BUTTON_STYLE } from "$http/ui/common/button-styles.ts";
-
-const isLookupEnabled = Boolean(CONFIG.ASN_LOOKUP_URL);
 
 const formStyle = css`
 display: flex;
@@ -10,7 +8,8 @@ margin-block: 1rem;
 font-size: 1rem;
 `;
 
-const prefixStyle = css`
+const prefixStyle = (isLookupEnabled: boolean) =>
+  css`
 display: block;
 border: 1px solid var(--primary-color);
 padding: 0.5rem;
@@ -53,9 +52,10 @@ border: 1px solid var(--primary-color);
 `;
 
 export function Search() {
+  const isLookupEnabled = Boolean(getConfig().ASN_LOOKUP_URL);
   return (
     <form class={formStyle} target="_blank" method="post" action="/lookup">
-      <span class={prefixStyle}>{CONFIG.ASN_PREFIX}</span>
+      <span class={prefixStyle(isLookupEnabled)}>{getConfig().ASN_PREFIX}</span>
       <input
         class={inputStyle}
         disabled={!isLookupEnabled}

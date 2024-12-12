@@ -1,4 +1,4 @@
-import { CONFIG, isValidNamespace } from "$common/mod.ts";
+import { type Config, getConfig, isValidNamespace } from "$common/mod.ts";
 
 /**
  * An additional managed namespace outside of the default range.
@@ -102,7 +102,7 @@ export function deserializeAdditionalManagedNamespaces(
  */
 export function isValidAdditionalManagedNamespace(
   namespace: number,
-  config = CONFIG,
+  config: Config = getConfig(),
 ): boolean {
   if (!isValidNamespace(namespace, config)) {
     return false;
