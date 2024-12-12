@@ -9,7 +9,7 @@ import { getConfig } from "$common/config.ts";
  */
 export function createBarcodeSVG(data: string, embedded = false): string {
   return bwip.toSVG({
-    bcid: getConfig().ASN_BARCODE_TYPE, // Barcode type
+    bcid: getConfig().ASN_BARCODE_TYPE.toLowerCase(), // Barcode type
     text: data, // Text to encode
     scale: 3, // 3x scaling factor
     height: 10, // Bar height, in millimeters
