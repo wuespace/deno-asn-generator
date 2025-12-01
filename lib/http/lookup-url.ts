@@ -1,4 +1,4 @@
-import { type Config, getConfig, isValidASN } from "$common/mod.ts";
+import { type Config, getConfig, getLogger, isValidASN } from "$common/mod.ts";
 
 /**
  * Builds the URL to lookup the ASN based on the configuration.
@@ -10,19 +10,24 @@ export function getLookupURL(
   asn: string,
   config: Config = getConfig(),
 ): string {
+  const logger = getLogger("[getLookupURL]")
+    .withContext({ asn, config });
   const baseUrl = config.ASN_LOOKUP_URL;
 
   if (!baseUrl) {
+    logger.warn("ASN Lookup is disabled");
     throw new Error("ASN Lookup is disabled");
   }
 
   if (!isValidASN(asn)) {
+    logger.warn("Invalid ASN");
     throw new Error("Invalid ASN");
   }
 
   if (!config.ASN_LOOKUP_INCLUDE_PREFIX) {
     asn = asn.slice(config.ASN_PREFIX.length);
   }
+  logger.withContext({ asn });
 
   return baseUrl.replaceAll("{asn}", asn);
 }

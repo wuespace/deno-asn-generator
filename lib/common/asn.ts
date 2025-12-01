@@ -9,6 +9,7 @@ import {
   isValidNamespace,
   performAtomicTransaction,
 } from "$common/mod.ts";
+import { getLogger } from "./log.ts";
 
 /**
  * Data structure for an Alphanumeric Serial Number (ASN).
@@ -82,17 +83,25 @@ export async function generateASN(
   deltaCounter = 1,
   config: Config = getConfig(),
 ): Promise<ASNData> {
+  const logger = getLogger("[common/asn][generateASN]")
+    .withContext({ namespace, deltaCounter, metadata, config });
+
   if (deltaCounter < 1) {
+    logger.error("Delta counter must be at least 1");
     throw new Error("Delta counter must be at least 1");
   }
 
   if (deltaCounter % 1 !== 0) {
+    logger.error("Delta counter must be an integer");
     throw new Error("Delta counter must be an integer");
   }
 
   metadata = { ...metadata, generatedAt: new Date().toISOString() };
+  logger.withContext({ metadata });
   namespace = namespace ?? getCurrentNamespace();
+  logger.withContext({ namespace });
   let counter = 0;
+  logger.withContext({ counter });
 
   await performAtomicTransaction(async (db) => {
     const counterRes = await db.get<number>(["namespace", namespace]);
@@ -117,6 +126,7 @@ export async function generateASN(
     counter: counter,
     metadata,
   };
+  logger.withContext({ asnData });
 
   await ensureFileContent(
     getCounterPath(namespace, counter),
@@ -125,6 +135,7 @@ export async function generateASN(
 
   await addTimestampToNamespaceStats(namespace);
 
+  logger.info("Generated new ASN");
   return asnData;
 }
 

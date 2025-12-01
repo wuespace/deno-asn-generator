@@ -11,6 +11,7 @@ import {
 } from "@hono/oidc-auth";
 import { z } from "@collinhacks/zod";
 import { HTTPException } from "@hono/hono/http-exception";
+import { runWithLogContext } from "$common/log.ts";
 
 export const withUser = createMiddleware<{
   Variables: {
@@ -39,7 +40,10 @@ export const withUser = createMiddleware<{
     // "as User" is safe since we know "oidcClaimsHook" will return a User
     const authorizedUser = await getAuth(c as any) as unknown as User;
     c.set("user", authorizedUser);
-    return next();
+    return runWithLogContext({
+      userId: authorizedUser.id,
+      userRoles: authorizedUser.roles,
+    }, next);
   });
 });
 

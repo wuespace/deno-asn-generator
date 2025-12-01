@@ -1,7 +1,12 @@
-import { z } from "@collinhacks/zod";
-import { getConfig, logPaths } from "$common/mod.ts";
-import { httpApp } from "../http/mod.ts";
 import metadata from "$/deno.json" with { type: "json" };
+import { getLogger } from "$common/log.ts";
+import {
+  getConfig,
+  getDatabasePath,
+  getDataDirectoryPath,
+} from "$common/mod.ts";
+import { z } from "@collinhacks/zod";
+import { httpApp } from "../http/mod.ts";
 
 /**
  * Runs the web server.
@@ -10,36 +15,58 @@ import metadata from "$/deno.json" with { type: "json" };
  * @param args.host the hostname to listen on (default: 0.0.0.0)
  */
 export function runServer(args: unknown): Promise<void> {
-  const serverArgs = z.object({
-    port: z.number().default(getConfig().PORT),
-    host: z.string().default("0.0.0.0"),
-  });
+  const logger = getLogger("[cli/server]");
+  try {
+    const serverArgs = z.object({
+      port: z.number().default(getConfig().PORT),
+      host: z.string().default("0.0.0.0"),
+    });
+    logger.withContext({
+      args,
+      metadata: {
+        name: metadata.name,
+        version: metadata.version,
+      },
+    });
 
-  console.log(`Running ${metadata.name} v${metadata.version}`);
-  console.log();
+    const parsedArgs = serverArgs.parse(args);
+    logger.withContext({ parsedArgs });
 
-  const parsedArgs = serverArgs.parse(args);
+    const config = getConfig();
+    logger.withContext({ config });
 
-  console.log(`Starting server on ${parsedArgs.host}:${parsedArgs.port}`);
+    logger.withContext({
+      dataDirectoryPath: getDataDirectoryPath(config),
+      dbFilePath: getDatabasePath(config),
+    });
 
-  console.log("Environment Configuration:", getConfig());
-  console.log("Arguments:", parsedArgs);
-  console.log("Paths:");
-  logPaths();
+    const ac = new AbortController();
+    const handler = (signal: Deno.Signal) => {
+      getLogger().withMetadata({ signal }).info(
+        `Caught signal. Closing server...`,
+      );
+      ac.abort(signal);
+    };
+    (["SIGHUP", "SIGINT", "SIGTERM"] as Deno.Signal[]).forEach((signal) =>
+      Deno.addSignalListener(signal, () => handler(signal))
+    );
 
-  const ac = new AbortController();
-  const handler = (signal: Deno.Signal) => {
-    console.log(`Caught ${signal}. Closing server...`);
-    ac.abort(signal);
-  };
-  (["SIGHUP", "SIGINT", "SIGTERM"] as Deno.Signal[]).forEach((signal) =>
-    Deno.addSignalListener(signal, () => handler(signal))
-  );
-
-  console.log();
-  const server = Deno.serve(
-    { port: parsedArgs.port, hostname: parsedArgs.host, signal: ac.signal },
-    httpApp.fetch,
-  );
-  return server.finished;
+    const server = Deno.serve(
+      {
+        port: parsedArgs.port,
+        hostname: parsedArgs.host,
+        signal: ac.signal,
+        onListen: (listen) => {
+          logger.withMetadata({ listen }).info(
+            "Deno ASN Generator is running!",
+          );
+        },
+      },
+      httpApp.fetch,
+    );
+    return server.finished;
+  } catch (error) {
+    logger.withError(error).fatal("Failed to start server");
+    return Promise.reject(error);
+  }
 }

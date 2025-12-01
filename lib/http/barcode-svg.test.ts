@@ -24,11 +24,19 @@ Deno.test("createBarcodeSVG", async (t) => {
   for (const codeType of codeTypes) {
     await t.step(`codeType: ${codeType}`, async (t) => {
       await t.step("with text", () => {
-        const svg = createBarcodeSVG("1234567890", true, config(codeType as Config["ASN_BARCODE_TYPE"]));
+        const svg = createBarcodeSVG(
+          "1234567890",
+          true,
+          config(codeType as Config["ASN_BARCODE_TYPE"]),
+        );
         assertStringIncludes(svg, "<svg");
       });
       await t.step("without text", () => {
-        const svg = createBarcodeSVG("1234567890", false, config(codeType as Config["ASN_BARCODE_TYPE"]));
+        const svg = createBarcodeSVG(
+          "1234567890",
+          false,
+          config(codeType as Config["ASN_BARCODE_TYPE"]),
+        );
         assertStringIncludes(svg, "<svg");
       });
     });

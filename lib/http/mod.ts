@@ -5,21 +5,21 @@
  * {@link httpApp} is the main HTTP server of the web application.
  */
 import { Hono } from "@hono/hono";
-import { logger } from "@hono/hono/logger";
 import { serveStatic } from "@hono/hono/deno";
 
-import { getFormatDescription } from "$common/mod.ts";
 import denojson from "$/deno.json" with { type: "json" };
+import { getFormatDescription } from "$common/mod.ts";
 
-import { svgRoutes } from "$http/routes/svg.ts";
-import { uiRoutes } from "$http/routes/ui.tsx";
+import { withRequestLogger } from "$common/log.ts";
+import { withUser } from "$http/middleware/oidc.ts";
 import { apiRoutes } from "$http/routes/api.ts";
 import { lookupRoutes } from "$http/routes/lookup.ts";
-import { withUser } from "$http/middleware/oidc.ts";
+import { svgRoutes } from "$http/routes/svg.ts";
+import { uiRoutes } from "$http/routes/ui.tsx";
 
-export * from "$http/lookup-url.ts";
-export * from "$http/barcode-svg.ts";
 export * from "$http/asn-metadata-from-context.ts";
+export * from "$http/barcode-svg.ts";
+export * from "$http/lookup-url.ts";
 
 export type { Hono as HonoApp } from "@hono/hono";
 
@@ -36,7 +36,7 @@ export type { Hono as HonoApp } from "@hono/hono";
  */
 export const httpApp: Hono = new Hono();
 
-httpApp.use(logger());
+httpApp.use(withRequestLogger);
 httpApp.get(
   "/about",
   (c) => c.text(`${denojson.name} v${denojson.version} is running!`),
