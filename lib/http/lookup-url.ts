@@ -6,7 +6,10 @@ import { type Config, getConfig, isValidASN } from "$common/mod.ts";
  * @returns the URL to lookup the ASN if the ASN lookup is enabled
  * @throws {Error} when the ASN lookup is disabled or the ASN is invalid
  */
-export function getLookupURL(asn: string, config: Config = getConfig()): string {
+export function getLookupURL(
+  asn: string,
+  config: Config = getConfig(),
+): string {
   const baseUrl = config.ASN_LOOKUP_URL;
 
   if (!baseUrl) {

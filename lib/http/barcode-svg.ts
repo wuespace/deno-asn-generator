@@ -1,5 +1,5 @@
 import * as bwip from "@metafloor/bwip-js";
-import { getConfig } from "$common/config.ts";
+import { type Config, getConfig } from "$common/config.ts";
 
 /**
  * Creates an SVG barcode for the given data and current configuration.
@@ -7,7 +7,11 @@ import { getConfig } from "$common/config.ts";
  * @param embedded whether the barcode gets embedded on the page or viewed as a standalone image
  * @returns an SVG string representing the barcode, which also includes the human-readable text if `embedded` is `false`
  */
-export function createBarcodeSVG(data: string, embedded = false, config = getConfig()): string {
+export function createBarcodeSVG(
+  data: string,
+  embedded = false,
+  config: Config = getConfig(),
+): string {
   return bwip.toSVG({
     bcid: config.ASN_BARCODE_TYPE.toLowerCase(), // Barcode type
     text: data, // Text to encode

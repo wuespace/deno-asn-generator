@@ -1,8 +1,8 @@
 # Configuration Environment Variables
 
-Note that for every parameter, you can also set "[PARAMETER]_FILE"
-to a file that contains the value. This is especially useful for things
-like mounted secrets in Docker Swarm or Kubernetes.
+Note that for every parameter, you can also set "[PARAMETER]_FILE" to a file
+that contains the value. This is especially useful for things like mounted
+secrets in Docker Swarm or Kubernetes.
 
 ## ASN Generation Settings
 
@@ -11,11 +11,13 @@ like mounted secrets in Docker Swarm or Kubernetes.
 Additional namespaces managed by the system outside of the ASN_NAMESPACE_RANGE.
 
 Namespaces are notated as "&lt;Namespace Label>&lt;Namespace Label>..." where:
-- Namespace is the numeric ID of the namespace.
-- Label is the label for the namespace.
-Optionally, commas and spaces can be used to separate namespaces.
 
-If empty, no additional namespaces are managed and only the ASN_NAMESPACE_RANGE is used.
+- Namespace is the numeric ID of the namespace.
+- Label is the label for the namespace. Optionally, commas and spaces can be
+  used to separate namespaces.
+
+If empty, no additional namespaces are managed and only the ASN_NAMESPACE_RANGE
+is used.
 
 #### Default Value (used by the application if not provided)
 
@@ -51,18 +53,21 @@ ASN_BARCODE_TYPE=CODE93
 
 ### `ASN_ENABLE_NAMESPACE_EXTENSION` (optional)
 
-Enable namespace extension. If true, the ADDITIONAL_MANAGED_NAMESPACES can have more digits than
-the ASN_NAMESPACE_RANGE.
-If false, the ADDITIONAL_MANAGED_NAMESPACES must have the same number of digits as the ASN_NAMESPACE_RANGE.
+Enable namespace extension. If true, the ADDITIONAL_MANAGED_NAMESPACES can have
+more digits than the ASN_NAMESPACE_RANGE. If false, the
+ADDITIONAL_MANAGED_NAMESPACES must have the same number of digits as the
+ASN_NAMESPACE_RANGE.
 
-This works by reserving leading `9`s for namespace extension:
-For example, let's say the ASN_NAMESPACE_RANGE is 60. Therefore, without the extension, our ADDITIONAL_MANAGED_NAMESPACES
-could only be 6X-9X, meaning we only have 39 available namespaces.
-With the extension, in the two-digit namespace range, we actually lose 9X (leaving 6X-8X). However, leading 9s
-expand the namespace by another digit. This can also be chained, giving us theoretically infinite additional namespaces:
-6X-8X, 90X-98X, 990X-998X, 9990X-9998X, etc.
+This works by reserving leading `9`s for namespace extension: For example, let's
+say the ASN_NAMESPACE_RANGE is 60. Therefore, without the extension, our
+ADDITIONAL_MANAGED_NAMESPACES could only be 6X-9X, meaning we only have 39
+available namespaces. With the extension, in the two-digit namespace range, we
+actually lose 9X (leaving 6X-8X). However, leading 9s expand the namespace by
+another digit. This can also be chained, giving us theoretically infinite
+additional namespaces: 6X-8X, 90X-98X, 990X-998X, 9990X-9998X, etc.
 
-Note that behind the leading 9s, the namespace must still be the same number of digits as the ASN_NAMESPACE_RANGE.
+Note that behind the leading 9s, the namespace must still be the same number of
+digits as the ASN_NAMESPACE_RANGE.
 
 #### Default Value (used by the application if not provided)
 
@@ -79,8 +84,9 @@ ASN_ENABLE_NAMESPACE_EXTENSION=true
 ### `ASN_NAMESPACE_RANGE`
 
 The namespace range. The number of digits must not change after the first run.
-For example, if the range is 600, auto-generated ASNs will be in the range of 100XXX to 599XXX.
-600XXX to 999XXX will be reserved for manual ASNs in that case.
+For example, if the range is 600, auto-generated ASNs will be in the range of
+100XXX to 599XXX. 600XXX to 999XXX will be reserved for manual ASNs in that
+case.
 
 #### Default Value (from the example environment file, must be provided)
 
@@ -102,8 +108,8 @@ ASN_PREFIX=ASN
 
 ### `ASN_LOOKUP_URL` (optional)
 
-URL to look up existing ASN data. "{asn}" will be replaced with the ASN.
-If empty, the lookup feature will be disabled.
+URL to look up existing ASN data. "{asn}" will be replaced with the ASN. If
+empty, the lookup feature will be disabled.
 
 #### Default Value (used by the application if not provided)
 
@@ -119,8 +125,8 @@ ASN_LOOKUP_URL="https://dms.example.com/documents?archive_serial_number
 
 ### `ASN_LOOKUP_URL_INCLUDE_PREFIX` (optional)
 
-Include the ASN_PREFIX in the {asn} replacement of the lookup URL. If false, the prefix will be removed.
-Default is false.
+Include the ASN_PREFIX in the {asn} replacement of the lookup URL. If false, the
+prefix will be removed. Default is false.
 
 #### Default Value (used by the application if not provided)
 
@@ -150,8 +156,8 @@ PORT=80
 
 ### `OIDC_AUTH_SECRET`
 
-Secret key used for signing and verifying tokens.
-Must be at least 32 characters long for security purposes.
+Secret key used for signing and verifying tokens. Must be at least 32 characters
+long for security purposes.
 
 #### Default Value (from the example environment file, must be provided)
 
@@ -161,8 +167,8 @@ OIDC_AUTH_SECRET=RANDOM_SECRET_WITH_MIN_32_CHARS_CHANGE_ME_IMMEDIATELY_UPON_COPY
 
 ### `OIDC_CLIENT_ID`
 
-Client ID provided by your OIDC provider.
-Replace "XXX" with your actual client ID.
+Client ID provided by your OIDC provider. Replace "XXX" with your actual client
+ID.
 
 #### Default Value (from the example environment file, must be provided)
 
@@ -172,8 +178,8 @@ OIDC_CLIENT_ID="XXX"
 
 ### `OIDC_CLIENT_SECRET`
 
-Client Secret provided by your OIDC provider.
-Replace "XXX" with your actual client secret.
+Client Secret provided by your OIDC provider. Replace "XXX" with your actual
+client secret.
 
 #### Default Value (from the example environment file, must be provided)
 
@@ -183,8 +189,8 @@ OIDC_CLIENT_SECRET="XXX"
 
 ### `OIDC_ISSUER`
 
-The URL of the OIDC provider's authorization server.
-This is where your application will redirect users to authenticate.
+The URL of the OIDC provider's authorization server. This is where your
+application will redirect users to authenticate.
 
 #### Default Value (from the example environment file, must be provided)
 
@@ -255,8 +261,8 @@ OIDC_ROLES_CLAIM=custom-roles-claim
 
 ### `OIDC_SCOPES`
 
-Scopes requested from the OIDC provider.
-These determine the information returned in the ID token.
+Scopes requested from the OIDC provider. These determine the information
+returned in the ID token.
 
 #### Default Value (from the example environment file, must be provided)
 
@@ -302,10 +308,10 @@ DATA_DIR=data
 
 ### `DB_FILE_NAME` (optional)
 
-Name of the SQLite3 database file within the data directory.
-The database gets created if it does not exist.
-To use a distributed database, set this to a URL beginning with "http" or "https".
-If it starts with "http" or "https", this uses the KV Connect Protocol:
+Name of the SQLite3 database file within the data directory. The database gets
+created if it does not exist. To use a distributed database, set this to a URL
+beginning with "http" or "https". If it starts with "http" or "https", this uses
+the KV Connect Protocol:
 https://github.com/denoland/denokv/blob/main/proto/kv-connect.md
 
 #### Default Value (used by the application if not provided)
@@ -316,9 +322,9 @@ DB_FILE_NAME=denokv.sqlite3
 
 ### `DENO_KV_ACCESS_TOKEN` (optional)
 
-The access token for the KV Connect Protocol.
-This is required if DB_FILE_NAME is a URL.
-The token must be set in the environment variable DENO_KV_ACCESS_TOKEN as per Deno's requirements.
+The access token for the KV Connect Protocol. This is required if DB_FILE_NAME
+is a URL. The token must be set in the environment variable DENO_KV_ACCESS_TOKEN
+as per Deno's requirements.
 
 #### Default Value (used by the application if not provided)
 

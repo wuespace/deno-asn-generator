@@ -3,41 +3,41 @@ import { css, cx, Style } from "@hono/hono/css";
 import { getConfig } from "$common/config.ts";
 
 const bodyClass = css`
-background: var(--primary-color);
-/* display: grid;
-place-items: center;
-align-content: top; */
-margin: 0;
-padding: 1rem;
+  background: var(--primary-color);
+  /* display: grid;
+  place-items: center;
+  align-content: top; */
+  margin: 0;
+  padding: 1rem;
 
-@media print {
-	background: transparent;
-	height: 100%;
-	align-content: stretch;
-	place-items: stretch;
-}
+  @media print {
+    background: transparent;
+    height: 100%;
+    align-content: stretch;
+    place-items: stretch;
+  }
 `;
 
 const mainClass = css`
-background: white;
-font-family: var(--font-family);
-width: clamp(0px, 100%, 30rem);
-margin: 0 auto;
-overflow-x: hidden;
+  background: white;
+  font-family: var(--font-family);
+  width: clamp(0px, 100%, 30rem);
+  margin: 0 auto;
+  overflow-x: hidden;
 
-padding: 1rem;
-border-radius: 0.5rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
 
-@media print {
-	width: 100%;
-	height: 100%;
-}
+  @media print {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 const hideOnPrint = css`
-@media print {
-	display: none;
-}
+  @media print {
+    display: none;
+  }
 `;
 
 export function Wrapper({ children }: { children?: Child }) {
@@ -62,22 +62,22 @@ export function Wrapper({ children }: { children?: Child }) {
         <link rel="stylesheet" href="/static/theme.css" />
         <Style>
           {css`
-				* {
-					box-sizing: border-box;
-				}
+            * {
+              box-sizing: border-box;
+            }
 
-				html, body {
-					height: 100%;
-				}
+            html, body {
+              height: 100%;
+            }
 
-				:focus {
-					outline-color: var(--primary-color);
-				}
+            :focus {
+              outline-color: var(--primary-color);
+            }
 
-        h1 {
-          margin: 0;
-        }
-				`}
+            h1 {
+              margin: 0;
+            }
+          `}
         </Style>
       </head>
       <body class={cx(bodyClass)}>

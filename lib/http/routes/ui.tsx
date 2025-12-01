@@ -1,7 +1,7 @@
 import { Hono } from "@hono/hono";
 import { jsxRenderer } from "@hono/hono/jsx-renderer";
 
-import { getConfig, generateASN } from "$common/mod.ts";
+import { generateASN, getConfig } from "$common/mod.ts";
 
 import { createMetadata } from "../mod.ts";
 

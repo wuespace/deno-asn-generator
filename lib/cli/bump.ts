@@ -1,8 +1,8 @@
 import z from "@collinhacks/zod";
 import {
   allManagedNamespaces,
-  getConfig,
   generateASN,
+  getConfig,
   isManagedNamespace,
 } from "$common/mod.ts";
 

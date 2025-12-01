@@ -26,7 +26,8 @@ export async function runStats(args: unknown) {
   );
 
   const strings = stats.map((stats) => {
-    return `${getConfig().ASN_PREFIX}${stats.namespace}XXX: ` + stats.toString();
+    return `${getConfig().ASN_PREFIX}${stats.namespace}XXX: ` +
+      stats.toString();
   });
 
   console.log(strings.join("\n"));
