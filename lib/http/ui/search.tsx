@@ -3,52 +3,50 @@ import { css } from "@hono/hono/css";
 import { BUTTON_STYLE } from "$http/ui/common/button-styles.ts";
 
 const formStyle = css`
-display: flex;
-margin-block: 1rem;
-font-size: 1rem;
+  display: flex;
+  margin-block: 1rem;
+  font-size: 1rem;
 `;
 
 const prefixStyle = (isLookupEnabled: boolean) =>
   css`
-display: block;
-border: 1px solid var(--primary-color);
-padding: 0.5rem;
-user-select: none;
+    display: block;
+    border: 1px solid var(--primary-color);
+    padding: 0.5rem;
+    user-select: none;
 
-display: grid;
-place-items: center;
-align-items: center;
+    display: grid;
+    place-items: center;
+    align-items: center;
 
-border-start-start-radius: .25rem;
-border-end-start-radius: .25rem;
+    border-start-start-radius: 0.25rem;
+    border-end-start-radius: 0.25rem;
 
-${isLookupEnabled ? "" : "opacity: 0.5;"}
-`;
+    ${isLookupEnabled ? "" : "opacity: 0.5;"};
+  `;
 
 const inputStyle = css`
-min-width: 3rem;
-flex: 1;
-font-size: 1rem;
-padding: 0.5rem;
-border-radius: none;
-border-inline: none;
-border-block: 1px solid var(--primary-color);
+  min-width: 3rem;
+  flex: 1;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border-radius: none;
+  border-inline: none;
+  border-block: 1px solid var(--primary-color);
 
-&:disabled {
-	opacity: 0.5;
-}
+  &:disabled {
+    opacity: 0.5;
+  }
 `;
 
 const submitStyle = css`
-${BUTTON_STYLE}
+  ${BUTTON_STYLE} padding: 0.5rem;
 
-padding: 0.5rem;
+  border: 1px solid var(--primary-color);
 
-border: 1px solid var(--primary-color);
-
-&:disabled {
-	opacity: 0.5;
-}
+  &:disabled {
+    opacity: 0.5;
+  }
 `;
 
 export function Search() {

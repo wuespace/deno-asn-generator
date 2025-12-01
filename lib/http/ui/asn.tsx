@@ -4,46 +4,46 @@ import { BUTTON_STYLE } from "$http/ui/common/button-styles.ts";
 import type { ASNData } from "$common/mod.ts";
 
 const hideOnPrint = css`
-@media print {
-	display: none;
-}
+  @media print {
+    display: none;
+  }
 `;
 
 const asnTextClass = css`
-text-align: center;
-user-select: all;
+  text-align: center;
+  user-select: all;
 `;
 
 const mainClass = css`
-height: 100%;
-display: flex;
-flex-direction: column;
-gap: 0rem;
-justify-content: center;
-align-items: stretch;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0rem;
+  justify-content: center;
+  align-items: stretch;
 `;
 
 const buttonRowClass = css`
-display: flex;
-gap: .25rem;
-justify-content: end;
+  display: flex;
+  gap: 0.25rem;
+  justify-content: end;
 `;
 
 const buttonClass = css`
-display: block;
-aspect-ratio: 1 / 1;
-width: 3rem;
-padding: .25rem;
-border-radius: .25rem;
-overflow: hidden;
+  display: block;
+  aspect-ratio: 1 / 1;
+  width: 3rem;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  overflow: hidden;
 
-border: none;
+  border: none;
 
-${BUTTON_STYLE}
+  ${BUTTON_STYLE};
 `;
 
 const spacerClass = css`
-flex-grow: 1;
+  flex-grow: 1;
 `;
 
 export function ASNPage({ asn }: { asn: ASNData }) {
@@ -62,7 +62,8 @@ export function ASNPage({ asn }: { asn: ASNData }) {
           <button
             autofocus
             class={buttonClass}
-            onclick={"globalThis.copy()"}
+            type="button"
+            onclick="globalThis.copy()"
             title="Copy ASN to clipboard"
           >
             <div className="material-symbols-outlined">
@@ -70,8 +71,9 @@ export function ASNPage({ asn }: { asn: ASNData }) {
             </div>
           </button>
           <button
-            onclick={"location.reload()"}
+            onclick="location.reload()"
             class={buttonClass}
+            type="button"
             title="Generate a new ASN"
           >
             <span class="material-symbols-outlined">
@@ -80,7 +82,8 @@ export function ASNPage({ asn }: { asn: ASNData }) {
           </button>
           <button
             class={buttonClass}
-            onclick={"globalThis.print()"}
+            type="button"
+            onclick="globalThis.print()"
             title="Print ASN Barcode"
           >
             <span class="material-symbols-outlined">

@@ -52,7 +52,7 @@ if (import.meta.main) {
   // Load config
   await initConfig();
   await validateDB();
-  
+
   // CLI Stuff
   const args = parseArgs(Deno.args);
 

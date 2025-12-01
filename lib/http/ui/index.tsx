@@ -2,25 +2,24 @@ import type { Config } from "$common/mod.ts";
 import { Search } from "$http/ui/search.tsx";
 import { css, cx } from "@hono/hono/css";
 import { BUTTON_STYLE } from "$http/ui/common/button-styles.ts";
-import type { Child } from "jsr:@hono/hono@^4.5.11/jsx";
+import type { Child } from "@hono/hono/jsx";
 
 const linkCardStyle = css`
-grid-template-columns: auto 1fr;
+  grid-template-columns: auto 1fr;
 
-border: 1px solid var(--primary-color);
-border-radius: 0.25rem;
+  border: 1px solid var(--primary-color);
+  border-radius: 0.25rem;
 
-${BUTTON_STYLE}
-place-items: start;
-grid-column-gap: .5rem;
+  ${BUTTON_STYLE} place-items: start;
+  grid-column-gap: 0.5rem;
 
-font-size: 1rem;
+  font-size: 1rem;
 `;
 
 const linkCardIconStyle = css`
-display: block;
-place-self: center;
-padding: .5rem;
+  display: block;
+  place-self: center;
+  padding: 0.5rem;
 `;
 
 export function IndexPage({ config }: { config: Config }) {
@@ -43,7 +42,7 @@ export function IndexPage({ config }: { config: Config }) {
           numbers are numbers that are not assigned to any document and are
           accessible to all members of the organization.
         </p>
-        <LinkCard icon={"add"} href="/asn" autofocus>
+        <LinkCard icon="add" href="/asn" autofocus>
           Generate generic {config.ASN_PREFIX} number
           <br />
           <small>
@@ -64,7 +63,7 @@ export function IndexPage({ config }: { config: Config }) {
           : ""}
         {config.ADDITIONAL_MANAGED_NAMESPACES.map(({ namespace, label }) => (
           <LinkCard
-            icon={"note_add"}
+            icon="note_add"
             href={`/asn?namespace=${namespace}`}
           >
             {label}

@@ -23,7 +23,9 @@ export function allManagedNamespaces(config: Config = getConfig()): number[] {
  * This is the maximum value smaller than the `ASN_NAMESPACE_RANGE` configuration parameter.
  * @returns the maximum namespace value for the generic range
  */
-export function getMaximumGenericRangeNamespace(config: Config = getConfig()): number {
+export function getMaximumGenericRangeNamespace(
+  config: Config = getConfig(),
+): number {
   return config.ASN_NAMESPACE_RANGE - 1;
 }
 
@@ -33,7 +35,9 @@ export function getMaximumGenericRangeNamespace(config: Config = getConfig()): n
  * the `ASN_NAMESPACE_RANGE` configuration parameter.
  * @returns the minimum namespace value for the generic range
  */
-export function getMinimumGenericRangeNamespace(config: Config = getConfig()): number {
+export function getMinimumGenericRangeNamespace(
+  config: Config = getConfig(),
+): number {
   return Number.parseInt(
     "1" + "0".repeat(config.ASN_NAMESPACE_RANGE.toString().length - 1),
   );
@@ -54,7 +58,10 @@ export function getMinimumGenericRangeNamespace(config: Config = getConfig()): n
  * @param namespace the namespace to check
  * @returns `true` if the namespace is a valid namespace, `false` otherwise
  */
-export function isValidNamespace(namespace: number, config: Config = getConfig()): boolean {
+export function isValidNamespace(
+  namespace: number,
+  config: Config = getConfig(),
+): boolean {
   if (
     !Number.isSafeInteger(namespace) ||
     namespace < getMinimumGenericRangeNamespace(config)
