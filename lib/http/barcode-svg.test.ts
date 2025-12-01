@@ -1,4 +1,4 @@
-import { Config } from "$common/config.ts";
+import type { Config } from "$common/config.ts";
 import { assertStringIncludes } from "@std/assert";
 import { createBarcodeSVG } from "./barcode-svg.ts";
 
