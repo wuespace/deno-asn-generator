@@ -169,12 +169,13 @@ export function formatASN(
   if (!isValidCounter(counter)) {
     throw new Error(
       "Invalid counter: " + counter +
-      " (must be a safe integer >= 0)",
+        " (must be a safe integer >= 0)",
     );
   }
 
-  return `${config.ASN_PREFIX}${namespace}${counter.toString().padStart(3, "0")
-    }`;
+  return `${config.ASN_PREFIX}${namespace}${
+    counter.toString().padStart(3, "0")
+  }`;
 }
 
 /**
@@ -202,10 +203,11 @@ export function getFormatDescription(config: Config = getConfig()): string {
 
   const namespaceExtensionRanges = ASN_ENABLE_NAMESPACE_EXTENSION
     ? ",\n" +
-    `    - ${nthNinerExtensionRange(1, ASN_NAMESPACE_RANGE).join("-")},\n` +
-    `    - ${nthNinerExtensionRange(2, ASN_NAMESPACE_RANGE).join("-")},\n` +
-    `    - ${nthNinerExtensionRange(3, ASN_NAMESPACE_RANGE).join("-")
-    }, etc., are`
+      `    - ${nthNinerExtensionRange(1, ASN_NAMESPACE_RANGE).join("-")},\n` +
+      `    - ${nthNinerExtensionRange(2, ASN_NAMESPACE_RANGE).join("-")},\n` +
+      `    - ${
+        nthNinerExtensionRange(3, ASN_NAMESPACE_RANGE).join("-")
+      }, etc., are`
     : " is";
 
   return `Configured ASN Format:\n` +
@@ -257,7 +259,8 @@ export function nthNinerExtensionRange(
  */
 export function isValidASN(asn: string, config: Config = getConfig()): boolean {
   return new RegExp(
-    `^(${config.ASN_PREFIX})?(\\d{${`${config.ASN_NAMESPACE_RANGE}`.length
+    `^(${config.ASN_PREFIX})?(\\d{${
+      `${config.ASN_NAMESPACE_RANGE}`.length
     }})(\\d{3})\\d*$`,
   ).test(asn);
 }

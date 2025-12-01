@@ -1,6 +1,10 @@
 import metadata from "$/deno.json" with { type: "json" };
 import { getLogger } from "$common/log.ts";
-import { getConfig, getDataDirectoryPath, getDatabasePath } from "$common/mod.ts";
+import {
+  getConfig,
+  getDatabasePath,
+  getDataDirectoryPath,
+} from "$common/mod.ts";
 import { z } from "@collinhacks/zod";
 import { httpApp } from "../http/mod.ts";
 
@@ -18,9 +22,11 @@ export function runServer(args: unknown): Promise<void> {
       host: z.string().default("0.0.0.0"),
     });
     logger.withContext({
-      args, metadata: {
-        name: metadata.name, version: metadata.version
-      }
+      args,
+      metadata: {
+        name: metadata.name,
+        version: metadata.version,
+      },
     });
 
     const parsedArgs = serverArgs.parse(args);
@@ -32,12 +38,13 @@ export function runServer(args: unknown): Promise<void> {
     logger.withContext({
       dataDirectoryPath: getDataDirectoryPath(config),
       dbFilePath: getDatabasePath(config),
-    })
-
+    });
 
     const ac = new AbortController();
     const handler = (signal: Deno.Signal) => {
-      getLogger().withMetadata({ signal }).info(`Caught signal. Closing server...`);
+      getLogger().withMetadata({ signal }).info(
+        `Caught signal. Closing server...`,
+      );
       ac.abort(signal);
     };
     (["SIGHUP", "SIGINT", "SIGTERM"] as Deno.Signal[]).forEach((signal) =>
@@ -46,10 +53,14 @@ export function runServer(args: unknown): Promise<void> {
 
     const server = Deno.serve(
       {
-        port: parsedArgs.port, hostname: parsedArgs.host, signal: ac.signal, onListen: listen => {
-
-          logger.withMetadata({ listen }).info("Deno ASN Generator is running!");
-        }
+        port: parsedArgs.port,
+        hostname: parsedArgs.host,
+        signal: ac.signal,
+        onListen: (listen) => {
+          logger.withMetadata({ listen }).info(
+            "Deno ASN Generator is running!",
+          );
+        },
       },
       httpApp.fetch,
     );

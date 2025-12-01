@@ -212,7 +212,7 @@ export async function initConfig() {
 
     // Additional checks
     const config = getConfig();
-    logger.withContext({ config })
+    logger.withContext({ config });
 
     if (
       config.ASN_ENABLE_NAMESPACE_EXTENSION &&
@@ -225,11 +225,12 @@ export async function initConfig() {
       }).fatal("ASN namespace range invalid with namespace extension enabled");
       throw new Error(
         `Semantic configuration error: ASN_NAMESPACE_RANGE includes namespaces with leading 9s.\n` +
-        `This is not allowed when ASN_ENABLE_NAMESPACE_EXTENSION is true.`,
+          `This is not allowed when ASN_ENABLE_NAMESPACE_EXTENSION is true.`,
         {
           cause: {
             ASN_NAMESPACE_RANGE: config.ASN_NAMESPACE_RANGE,
-            ASN_ENABLE_NAMESPACE_EXTENSION: config.ASN_ENABLE_NAMESPACE_EXTENSION,
+            ASN_ENABLE_NAMESPACE_EXTENSION:
+              config.ASN_ENABLE_NAMESPACE_EXTENSION,
             invalidGenericNamespace: config.ASN_NAMESPACE_RANGE - 1,
           },
         },
@@ -240,7 +241,7 @@ export async function initConfig() {
       .ADDITIONAL_MANAGED_NAMESPACES.every((a) =>
         isValidAdditionalManagedNamespace(a.namespace, config)
       );
-    logger.withContext({ hasInvalidAdditionalNamespaces })
+    logger.withContext({ hasInvalidAdditionalNamespaces });
 
     if (
       hasInvalidAdditionalNamespaces
@@ -253,22 +254,27 @@ export async function initConfig() {
           .filter(
             (a) => !isValidAdditionalManagedNamespace(a.namespace, config),
           ).map((v) => `${config.ASN_PREFIX}${v.namespace}XXX - ${v.label}`),
-      }).fatal("Additional managed namespaces contain invalid namespace numbers");
+      }).fatal(
+        "Additional managed namespaces contain invalid namespace numbers",
+      );
       throw new Error(
         `Semantic configuration error: Additional managed namespaces contain invalid namespace numbers.\n` +
-        `The namespace numbers must have the same amount of digits as ASN_NAMESPACE_RANGE.\n` +
-        `If ASN_ENABLE_NAMESPACE_EXTENSION is true, the leading 9s are stripped from this calculation.\n` +
-        `For example, if your ASN_NAMESPACE_RANGE has two digits, instead of only XX, you can then also have 9XX, 99XX, etc.\n` +
-        `Note that in this case, 9X would not be valid.`,
+          `The namespace numbers must have the same amount of digits as ASN_NAMESPACE_RANGE.\n` +
+          `If ASN_ENABLE_NAMESPACE_EXTENSION is true, the leading 9s are stripped from this calculation.\n` +
+          `For example, if your ASN_NAMESPACE_RANGE has two digits, instead of only XX, you can then also have 9XX, 99XX, etc.\n` +
+          `Note that in this case, 9X would not be valid.`,
         {
           cause: {
-            ASN_ENABLE_NAMESPACE_EXTENSION: config.ASN_ENABLE_NAMESPACE_EXTENSION,
+            ASN_ENABLE_NAMESPACE_EXTENSION:
+              config.ASN_ENABLE_NAMESPACE_EXTENSION,
             ASN_NAMESPACE_RANGE: config.ASN_NAMESPACE_RANGE,
             invalidAdditionalManagedNamespaces: config
               .ADDITIONAL_MANAGED_NAMESPACES
               .filter(
                 (a) => !isValidAdditionalManagedNamespace(a.namespace, config),
-              ).map((v) => `${config.ASN_PREFIX}${v.namespace}XXX - ${v.label}`),
+              ).map((v) =>
+                `${config.ASN_PREFIX}${v.namespace}XXX - ${v.label}`
+              ),
           },
         },
       );
@@ -326,7 +332,9 @@ export async function validateDB(config: Config = getConfig()): Promise<void> {
     const dbConfigRes = await db.get([DB_CONFIG_KEY]);
     if (!dbConfigRes.value) {
       await db.set([DB_CONFIG_KEY], config);
-      logger.info("No existing configuration found in database, storing current configuration");
+      logger.info(
+        "No existing configuration found in database, storing current configuration",
+      );
       return;
     }
 
@@ -338,27 +346,31 @@ export async function validateDB(config: Config = getConfig()): Promise<void> {
       logger.fatal("Database ASN_PREFIX does not match current configuration");
       throw new Error(
         `Database configuration mismatch: ASN_PREFIX.\n` +
-        `  Old: ${dbConfig.ASN_PREFIX},\n` +
-        `  New: ${config.ASN_PREFIX}.\n` +
-        `The prefix must be the same.`,
+          `  Old: ${dbConfig.ASN_PREFIX},\n` +
+          `  New: ${config.ASN_PREFIX}.\n` +
+          `The prefix must be the same.`,
       );
     }
 
     if (
       dbConfig.ASN_NAMESPACE_RANGE?.toString().length !==
-      config.ASN_NAMESPACE_RANGE.toString().length
+        config.ASN_NAMESPACE_RANGE.toString().length
     ) {
-      logger.fatal("Database ASN_NAMESPACE_RANGE does not match current configuration");
+      logger.fatal(
+        "Database ASN_NAMESPACE_RANGE does not match current configuration",
+      );
       throw new Error(
         `Database configuration mismatch: ASN_NAMESPACE_RANGE.\n` +
-        `  Old: ${dbConfig.ASN_NAMESPACE_RANGE},\n` +
-        `  New: ${config.ASN_NAMESPACE_RANGE}.\n` +
-        `The number of digits must be the same.`,
+          `  Old: ${dbConfig.ASN_NAMESPACE_RANGE},\n` +
+          `  New: ${config.ASN_NAMESPACE_RANGE}.\n` +
+          `The number of digits must be the same.`,
       );
     }
 
     if (dbConfig.ASN_BARCODE_TYPE !== config.ASN_BARCODE_TYPE) {
-      logger.warn("ASN_BARCODE_TYPE has changed. This will affect the barcode generation.");
+      logger.warn(
+        "ASN_BARCODE_TYPE has changed. This will affect the barcode generation.",
+      );
     }
 
     await db.set([DB_CONFIG_KEY], config);

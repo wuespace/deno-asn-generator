@@ -46,35 +46,38 @@ export function runWithLogContext<T>(
   return ctx.run(getLogger().child().withContext(context), fn);
 }
 
-export const withRequestLogger = createMiddleware(async (c, next) => {
-  const requestId = c.req.header("X-Request-ID") ?? crypto.randomUUID();
-  c.res.headers.set("X-Request-ID", requestId);
-  const logger = getLogger().child().withContext({
-    requestId: requestId,
-    method: c.req.method,
-    url: c.req.url,
-  });
-  // logger.info(`Incoming request: ${c.req.method} ${c.req.url}`);
-
-  try {
-    await ctx.run(logger, next);
-  } finally {
-    const loggerWithMetadata = logger.withMetadata({
-      status: c.res.status,
+export const withRequestLogger: ReturnType<typeof createMiddleware> =
+  createMiddleware(async (c, next) => {
+    const requestId = c.req.header("X-Request-ID") ?? crypto.randomUUID();
+    c.res.headers.set("X-Request-ID", requestId);
+    const logger = getLogger().child().withContext({
+      requestId: requestId,
+      method: c.req.method,
+      url: c.req.url,
     });
-    if (c.res.status >= 400) {
-      loggerWithMetadata.warn(
-        `Request completed with error status.`,
-      );
-    } else {
-      loggerWithMetadata.debug(
-        `Successful request.`,
-      );
-    }
-  }
-});
+    // logger.info(`Incoming request: ${c.req.method} ${c.req.url}`);
 
-export const withMetadataLogger = (context: Record<string, unknown>) =>
+    try {
+      await ctx.run(logger, next);
+    } finally {
+      const loggerWithMetadata = logger.withMetadata({
+        status: c.res.status,
+      });
+      if (c.res.status >= 400) {
+        loggerWithMetadata.warn(
+          `Request completed with error status.`,
+        );
+      } else {
+        loggerWithMetadata.debug(
+          `Successful request.`,
+        );
+      }
+    }
+  });
+
+export const withMetadataLogger: (
+  context: Record<string, unknown>,
+) => ReturnType<typeof createMiddleware> = (context: Record<string, unknown>) =>
   createMiddleware(async (_c, next) => {
     const logger = getLogger().child().withContext(context);
     await ctx.run(logger, next);

@@ -49,8 +49,6 @@ export * from "$common/mod.ts";
 export * from "./lib/http/mod.ts";
 export * from "$cli/mod.ts";
 
-const logger = getLogger("[main]");
-
 if (import.meta.main) {
   try {
     // Load config
