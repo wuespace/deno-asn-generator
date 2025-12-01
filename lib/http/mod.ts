@@ -16,6 +16,7 @@ import { uiRoutes } from "$http/routes/ui.tsx";
 import { apiRoutes } from "$http/routes/api.ts";
 import { lookupRoutes } from "$http/routes/lookup.ts";
 import { withUser } from "$http/middleware/oidc.ts";
+import { withRequestLogger } from "$common/log.ts";
 
 export * from "$http/lookup-url.ts";
 export * from "$http/barcode-svg.ts";
@@ -36,7 +37,7 @@ export type { Hono as HonoApp } from "@hono/hono";
  */
 export const httpApp: Hono = new Hono();
 
-httpApp.use(logger());
+httpApp.use(withRequestLogger);
 httpApp.get(
   "/about",
   (c) => c.text(`${denojson.name} v${denojson.version} is running!`),

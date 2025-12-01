@@ -26,14 +26,6 @@ export function getDatabasePath(config: Config = getConfig()): string {
 }
 
 /**
- * Logs relevant paths to the console.
- */
-export function logPaths(config: Config = getConfig()) {
-  console.log(`DATA_PATH: ${getDataDirectoryPath(config)}`);
-  console.log(`DB_FILE_PATH: ${getDatabasePath(config)}`);
-}
-
-/**
  * Builds a path to a log file for the given ASN that contains the ASN data (if the ASN exists).
  * @param namespace the ASN namespace
  * @param counter the ASN counter

@@ -43,37 +43,45 @@ import { printHelp } from "$cli/help.ts";
 import { runGenerate } from "$cli/generate.ts";
 import { runStats } from "$cli/stats.ts";
 import { runBump } from "$cli/bump.ts";
+import { getLogger } from "$common/log.ts";
 
 export * from "$common/mod.ts";
 export * from "./lib/http/mod.ts";
 export * from "$cli/mod.ts";
 
+const logger = getLogger("[main]");
+
 if (import.meta.main) {
-  // Load config
-  await initConfig();
-  await validateDB();
+  try {
+    // Load config
+    await initConfig();
+    await validateDB();
 
-  // CLI Stuff
-  const args = parseArgs(Deno.args);
+    // CLI Stuff
+    const args = parseArgs(Deno.args);
 
-  if (args.help) {
-    printHelp();
-    Deno.exit();
-  }
+    if (args.help) {
+      printHelp();
+      Deno.exit();
+    }
 
-  if (args._[0] === "generate") {
-    await runGenerate(args);
-  }
+    if (args._[0] === "generate") {
+      await runGenerate(args);
+    }
 
-  if (args._[0] === "stats") {
-    await runStats(args);
-  }
+    if (args._[0] === "stats") {
+      await runStats(args);
+    }
 
-  if (args._[0] === "bump") {
-    await runBump(args);
-  }
+    if (args._[0] === "bump") {
+      await runBump(args);
+    }
 
-  if (args._[0] === "server" || args._.length === 0) {
-    await runServer(args);
+    if (args._[0] === "server" || args._.length === 0) {
+      await runServer(args);
+    }
+  } catch (error) {
+    getLogger("[main]").withError(error).fatal("Failed to run ASN Generator.");
+    Deno.exit(1);
   }
 }
